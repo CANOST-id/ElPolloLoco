@@ -9,6 +9,7 @@ class Character extends MovableObject {
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-26.png'
     ];
     currentImageIndex = 0;
+    world;
 
     constructor() {
         super().loadImage('assets/img_pollo_locco/img/2_character_pepe/2_walk/W-21.png');
@@ -19,16 +20,32 @@ class Character extends MovableObject {
         this.height = 250;
         this.width = 100;
         this.y = 175;
-        this.x = 50;
+        this.x = 70;
     }
 
     animate() {
+
         setInterval(() => {
-            let i = this.currentImageIndex % this.images_walking.length;
-            let path = this.images_walking[i];
-            this.img = this.imageCache[path];
-            this.currentImageIndex++;
-        }, 1000 / 10);
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                this.x = this.x + 7;
+                this.world.camera_x = this.world.camera_x - 7;
+                this.otherDirection = false;
+            }
+
+            if (this.world.keyboard.LEFT && this.x > 70) {
+                this.x = this.x - 7;
+                this.world.camera_x = this.world.camera_x + 7;
+
+                this.otherDirection = true;
+            }
+        }, 1000 / 60);
+
+
+        setInterval(() => {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                this.playAnimation(this.images_walking);
+            }
+        }, 1000 / 30);
     }
 
     jump() {
