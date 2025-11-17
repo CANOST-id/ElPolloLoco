@@ -29,7 +29,7 @@ canvas {
 /* info section style */
 .info {
     height: 25%;
-    width: 70%;
+    width: 720px;
     color: #333333;
     font-family: 'Special Elite', monospace;
     font-size: 20px;
@@ -46,7 +46,7 @@ canvas {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 /* info buttons style incl. hover and active states */
@@ -62,7 +62,7 @@ canvas {
 }
 
 .info form button:hover {
-    background-color: #333333;
+    background-color: #774300;
     color: #f0f0f0;
 }
 
