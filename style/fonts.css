@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Rye';
+    src: url('../assets/fonts/Rye/Rye-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Special Elite';
+    src: url('../assets/fonts/Special_Elite/SpecialElite-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.font-rye {
+    font-family: 'Rye', serif;
+}
+
+.font-special-elite {
+    font-family: 'Special Elite', monospace;
+}
