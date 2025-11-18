@@ -5,6 +5,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    statusBar = new StatusBar();
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -12,10 +13,22 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
+    }
+
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach(enemy => {
+                if (this.character.isColliding(enemy)) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            });
+        }, 1000 / 25);
     }
 
     draw() {
@@ -30,6 +43,8 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
+        this.addToMap(this.statusBar);
+
         requestAnimationFrame(() => this.draw());
     }
 
@@ -40,21 +55,28 @@ class World {
     }
 
     addToMap(mo) {
-        // Prüfe ob das Bild existiert und vollständig geladen ist
         if (!mo.img || !mo.img.complete || mo.img.naturalWidth === 0) {
-            return; // Überspringe das Zeichnen wenn Bild nicht bereit ist
+            return; 
         }
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+        }
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);
+        if (mo.otherDirection) {
+            this.flipImageBack(mo);
+        }
+    }
 
-        if (mo.otherDirection) {
-            this.ctx.save();
-            this.ctx.translate(mo.width, 0);
-            this.ctx.scale(-1, 1);
-            mo.x = mo.x * -1;
-        }
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
-        if (mo.otherDirection) {
-            mo.x = mo.x * -1;
-            this.ctx.restore();
-        }
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
     }
 }
