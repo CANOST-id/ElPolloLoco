@@ -24,6 +24,7 @@ h1 {
 canvas {
     border: 10px solid black;
     border-radius: 15px;
+    display: block;
 }
 
 /* info section style */
@@ -42,7 +43,7 @@ canvas {
 }
 
 /* info form style */
-.info form {
+.info .button-align {
     width: 100%;
     display: flex;
     align-items: center;
@@ -50,7 +51,7 @@ canvas {
 }
 
 /* info buttons style incl. hover and active states */
-.info form button {
+.info .button-align button {
     font-family: 'Special Elite', monospace;
     font-size: 24px;
     padding: 20px 30px;
@@ -61,12 +62,12 @@ canvas {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.info form button:hover {
+.info .button-align button:hover {
     background-color: #774300;
     color: #f0f0f0;
 }
 
-.info form button:active {
+.info .button-align button:active {
     transform: scale(0.95);
 }
 
@@ -86,4 +87,101 @@ footer a:hover {
 
 footer a:active {
     color: #333333;
+}
+
+/* dialog style */
+dialog {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.dialog-content {
+    margin: 0;
+    padding: 20px;
+    position: absolute;
+    height: 320px;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    background-color: #f0741573;
+    backdrop-filter: blur(10px);
+    border: 4px solid #000000;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: 'Special Elite', monospace;
+    cursor: default;
+}
+
+.dialog-content h2 {
+    margin-top: 0;
+    font-size: 28px;
+}
+
+.dialog-content p {
+    margin: 0 0 20px 0;
+}
+
+.dialog-content h3{
+    font-weight: bold;
+    margin: 0;
+    text-decoration: underline
+}
+
+.dialog-content .movement-instructions {
+    width: 100%;
+}
+
+.dialog-content .movement-instructions ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.dialog-content .movement-instructions ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Close button style */
+.close-button {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.close-button:active {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.close-button svg {
+    color: #662900;
 }
