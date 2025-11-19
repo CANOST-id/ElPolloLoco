@@ -74,6 +74,15 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    hitBoss() {
+        if (this.energy <= 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+            this.energy -= 20;
+        }
+    }
+
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
         return timePassed < 500;
