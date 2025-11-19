@@ -12,6 +12,7 @@ class Endboss extends MovableObject {
 
     ];
     currentImageIndex = 0;
+    energy = 100;
 
     constructor() {
         super().loadImage(this.chicken_walk_images[0]);
