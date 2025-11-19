@@ -63,11 +63,6 @@ function enableStartGameButton() {
     startButton.style.backgroundColor = '#f074155d';
 }
 
-function fullscreen() {
-    let elem = document.getElementById('fullscreen');
-    enterFullscreen(elem);
-}
-
 function enterFullscreen(element) {
     if (element.requestFullscreen) {
         element.requestFullscreen();
