@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="icon" type="image/png" href="assets/img_pollo_locco/favicon/polloLoco_favicon.png"/>
+    <link rel="icon" type="image/png" href="assets/img_pollo_locco/favicon/polloLoco_favicon.png" />
 
     <title>𝕰𝕷 𝕻𝖔𝖑𝖑𝖔 𝕷𝖔𝖈𝖔</title>
 
@@ -14,46 +14,51 @@
 
 
     <script src="models/drawable-object.class.js"></script>
-    <script src="models/status-bar.class.js"></script> 
+    <script src="models/status-bar.class.js"></script>
     <script src="models/move-object.class.js"></script>
     <script src="models/keyboard.class.js"></script>
     <script src="models/level.class.js"></script>
-    
+
     <script src="models/character.class.js"></script>
     <script src="models/chicken.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/clouds.class.js"></script>
     <script src="models/background-object.class.js"></script>
     <script src="models/throwable-object.class.js"></script>
-    
+
     <script src="levels/level1.js"></script>
-    
+
     <script src="models/world.class.js"></script>
-    
+
     <script src="script/game.js"></script>
     <script src="script/dialog.js"></script>
 
 </head>
 
-<body onload="init()">
+<body onload="startScreen()">
+
 
     <h1>El Pollo Loco</h1>
 
-    <canvas width="720" height="480" id="canvas"></canvas>
+    <section id="fullscreen">
 
-    <section class="info">
-        <section class="button-align">
-            <button>Start Game</button>
-            <button onclick="openDialog()">Info</button>
+        <canvas width="720" height="480" id="canvas"></canvas>
+
+    </section>
+        <section class="info">
+            <section class="button-align">
+                <button id="start-button" onclick="startGame()">Start Game</button>
+                <button onclick="enterFullscreen(document.getElementById('fullscreen'))">Fullscreen</button>
+                <button onclick="openDialog()">Info</button>
+            </section>
         </section>
 
         <footer>
             <a href="legal_notice.html">Legal Notice</a>
         </footer>
 
-    </section>
 
-    <dialog id="dialog"  onclick="closeDialog()"></dialog>
+    <dialog id="dialog" onclick="closeDialog()"></dialog>
 </body>
 
 </html>
