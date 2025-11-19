@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/fonts.css">
+    <link rel="stylesheet" href="style/responsive.css">
 
 
     <script src="models/drawable-object.class.js"></script>
@@ -30,6 +31,7 @@
     <script src="models/world.class.js"></script>
     
     <script src="script/game.js"></script>
+    <script src="script/dialog.js"></script>
 
 </head>
 
@@ -40,10 +42,10 @@
     <canvas width="720" height="480" id="canvas"></canvas>
 
     <section class="info">
-        <form action="">
+        <section class="button-align">
             <button>Start Game</button>
-            <button>Info</button>
-        </form>
+            <button onclick="openDialog()">Info</button>
+        </section>
 
         <footer>
             <a href="legal_notice.html">Legal Notice</a>
@@ -51,7 +53,7 @@
 
     </section>
 
-    <dialog></dialog>
+    <dialog id="dialog"  onclick="closeDialog()"></dialog>
 </body>
 
 </html>
