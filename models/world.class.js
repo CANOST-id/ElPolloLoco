@@ -5,7 +5,11 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
+    statusBarHealth = new HealthBar();
+    statusBarBottles = new BottleBar();
+    statusBarCoins = new CoinBar();
+    statusBarBossHealth = new BossHealthBar();
+
     throwableObjects = [];
 
     constructor(canvas, keyboard) {
@@ -23,29 +27,29 @@ class World {
 
     run() {
         setInterval(() => {
-        this.checkCollisions();
-        this.checkThrowObjects();
+            this.checkCollisions();
+            this.checkThrowObjects();
         }, 1000 / 25);
     }
 
     checkCollisions() {
-            this.level.enemies.forEach(enemy => {
-                if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
-                }
-            });
+        this.level.enemies.forEach(enemy => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBarHealth.setPercentage(this.character.energy);
+            }
+        });
     }
 
     checkThrowObjects() {
-            if (this.keyboard.D && !this.bottleThrown) {
-                let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-                this.throwableObjects.push(bottle);
-                this.bottleThrown = true;
-            }
-            if (!this.keyboard.D) {
-                this.bottleThrown = false;
-            }
+        if (this.keyboard.D && !this.bottleThrown) {
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            this.throwableObjects.push(bottle);
+            this.bottleThrown = true;
+        }
+        if (!this.keyboard.D) {
+            this.bottleThrown = false;
+        }
     }
 
     draw() {
@@ -61,9 +65,26 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
 
-        this.addToMap(this.statusBar);
+        this.drawStatusBars();
 
         requestAnimationFrame(() => this.draw());
+    }
+
+    drawStatusBars() {
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarCoins);
+        this.drawBossHealthBar();
+    }
+
+    drawBossHealthBar() {
+        let endbossX = 1600;
+        let endbossY = 50;
+        this.statusBarBossHealth.setPosition(
+            endbossX + this.camera_x + 150,
+            endbossY - 20
+        );
+        this.addToMap(this.statusBarBossHealth);
     }
 
     addObjectsToMap(objects) {
