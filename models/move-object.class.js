@@ -6,6 +6,7 @@ class MovableObject extends DrawableObject {
     acceleration = 1.5;
     energy = 100;
     lastHit = 0;
+    currentImageIndex = 0;
 
 
     applyGravity() {
@@ -34,11 +35,6 @@ class MovableObject extends DrawableObject {
         }, 1000 / 60);
     }
 
-    chickenDeathAnimation() {
-        clearInterval(this.animateChicken);
-        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
-    }
-
     moveCharacterLeft() {
         this.x = this.x - 7;
         this.world.camera_x = this.world.camera_x + 7;
@@ -51,6 +47,11 @@ class MovableObject extends DrawableObject {
         this.otherDirection = false;
     }
 
+    jump() {
+        if (this.isAboveGround()) return;
+        this.speedY = 20;
+    }
+
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
         let path = images[i];
@@ -58,10 +59,11 @@ class MovableObject extends DrawableObject {
         this.currentImageIndex++;
     }
 
-    jump() {
-        if (this.isAboveGround()) return;
-        this.speedY = 20;
+    chickenDeathAnimation() {
+        clearInterval(this.animateChicken);
+        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
     }
+
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
@@ -75,7 +77,7 @@ class MovableObject extends DrawableObject {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
-            this.energy -= 5;
+            this.energy -= 1;
         }
     }
 
@@ -94,6 +96,6 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 }
