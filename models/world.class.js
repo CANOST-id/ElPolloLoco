@@ -29,13 +29,20 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-            this.checkJumpCollisions();
         }, 1000 / 25);
     }
 
     checkCollisions() {
+        if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy)) {
+            if (enemy.isDead() || !this.character.isColliding(enemy)) return;
+            let characterBottom = this.character.y + this.character.height;
+            let enemyTop = enemy.y;
+            let characterIsAbove = characterBottom + this.character.speedY < enemyTop;
+            if (characterIsAbove) {
+                enemy.hit(20);
+                this.character.speedY = -5;
+            } else {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.energy);
             }
@@ -63,15 +70,6 @@ class World {
             });
             if (bottle.energy <= 0) {
                 this.throwableObjects.splice(bottleIndex, 1);
-            }
-        });
-    }
-
-    checkJumpCollisions() {
-        this.level.enemies.forEach(enemy => {
-            if (this.character.isColliding(enemy) && this.character.speedY < 0) {
-                enemy.hit(20);
-                clearInterval(this.movementInterval);
             }
         });
     }
@@ -136,5 +134,9 @@ class World {
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+
+    isDead() {
+        return this.character.energy <= 0;
     }
 }
