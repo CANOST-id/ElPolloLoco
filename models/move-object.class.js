@@ -34,6 +34,11 @@ class MovableObject extends DrawableObject {
         }, 1000 / 60);
     }
 
+    chickenDeathAnimation() {
+        clearInterval(this.animateChicken);
+        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+    }
+
     moveCharacterLeft() {
         this.x = this.x - 7;
         this.world.camera_x = this.world.camera_x + 7;
