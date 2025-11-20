@@ -1,7 +1,6 @@
 class Chicken extends MovableObject {
     speed = 0.25;
     energy = 20;
-    isDead = false;
 
     chicken_walk_images = [
         'assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -24,7 +23,7 @@ class Chicken extends MovableObject {
     animateChicken() {
         this.moveLeft();
         this.walkInterval = setInterval(() => {
-            if (!this.isDead) {
+            if (!this.isDead()) {
                 this.playAnimation(this.chicken_walk_images);
             }
         }, 1000 / 10);
@@ -34,17 +33,12 @@ class Chicken extends MovableObject {
         this.energy -= damage;
         if (this.energy <= 0) {
             this.energy = 0;
-            this.isDead = true;
+            this.speed = 0;
             this.chickenDeathAnimation();
         }
-        console.log(`Chicken hit! Energy: ${this.energy}`);
     }
 
-
-
     isDead() {
-        
         return this.energy <= 0;
-
     }
 }
