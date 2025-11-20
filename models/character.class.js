@@ -165,7 +165,7 @@ class Character extends MovableObject {
     }
 
     checkMovement() {
-        let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP;
+        let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.D;
         if (isMoving) {
             this.playAnimation(this.images_walking);
             this.idleTime = 0;
