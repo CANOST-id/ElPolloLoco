@@ -33,7 +33,7 @@ class ThrowableObject extends MovableObject {
     }
 
     throw() {
-        this.speedY = 15;
+        this.speedY = 20;
         this.speedX = 5;
         this.applyGravity();
         
@@ -69,7 +69,13 @@ class ThrowableObject extends MovableObject {
         this.hasCollided = true;
         this.speedX = 0;
         this.speedY = 0;
-        enemy.hit(20);
+        
+        if (enemy instanceof Endboss) {
+            enemy.hit(20);
+        } else {
+            enemy.hit(20); 
+        }
+        
         clearInterval(this.rotationInterval);
         this.playSplashAnimation();
     }
