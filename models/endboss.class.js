@@ -1,22 +1,16 @@
 class Endboss extends MovableObject {
-
-    chicken_walk_images = [
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G6.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G7.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G8.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G9.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G10.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G11.png',
-        'assets/img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G12.png'
-
-    ];
+    
     currentImageIndex = 0;
     energy = 100;
+    isHurting = false;
+    isDying = false;
+    animationInterval;
 
     constructor() {
-        super().loadImage(this.chicken_walk_images[0]);
-        this.loadImages(this.chicken_walk_images);
+        super().loadImage(ENDBOSS_IMAGES.chicken_walk_images[0]);
+        this.loadImages(ENDBOSS_IMAGES.chicken_walk_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_hurt_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_dead_images);
         this.y = 50;
         this.x = 1600;
         this.height = 400;
@@ -24,10 +18,46 @@ class Endboss extends MovableObject {
         this.animateEndboss();
     }
 
-
     animateEndboss() {
-        setInterval(() => {
-            this.playAnimation(this.chicken_walk_images);
+        this.animationInterval = setInterval(() => {
+            if (this.isDead() && !this.isDying) {
+                this.isDying = true;
+                this.playDeathAnimation();
+            } else if (this.isHurting) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
+            } else if (!this.isDead()) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
+            }
+        }, 300);
+    }
+
+    hit(damage = 20) {
+        if (this.isDead()) return;
+        
+        this.energy -= damage;
+        if (this.energy <= 0) {
+            this.energy = 0;
+        } else {
+            this.isHurting = true;
+            this.lastHit = new Date().getTime();
+            setTimeout(() => {
+                this.isHurting = false;
+            }, 900);
+        }
+    }
+
+    playDeathAnimation() {
+        clearInterval(this.animationInterval);
+        let deathAnimationIndex = 0;
+        
+        let deathInterval = setInterval(() => {
+            if (deathAnimationIndex < ENDBOSS_IMAGES.chicken_dead_images.length) {
+                let path = ENDBOSS_IMAGES.chicken_dead_images[deathAnimationIndex];
+                this.img = this.imageCache[path];
+                deathAnimationIndex++;
+            } else {
+                clearInterval(deathInterval);
+            }
         }, 300);
     }
 }
