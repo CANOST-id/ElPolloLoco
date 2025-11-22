@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     currentImageIndex = 0;
+    gameStarted = true;
 
 
     applyGravity() {
@@ -27,12 +28,17 @@ class MovableObject extends DrawableObject {
     }
 
     moveLeft() {
+        if (this.gameStarted) {
         setInterval(() => {
             this.x -= this.speed;
             if (this.x < -720) {
                 this.x = 600;
             }
         }, 1000 / 60);
+        } else {
+            this.gameStarted = false;
+            return;
+        }
     }
 
     moveCharacterLeft() {
@@ -66,6 +72,9 @@ class MovableObject extends DrawableObject {
 
 
     isColliding(mo) {
+        if (this.isDead() || mo.isDead()) {
+            return false;
+        }
         return this.x + this.width > mo.x &&
             this.x < mo.x + mo.width &&
             this.y + this.height > mo.y &&
