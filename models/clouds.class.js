@@ -1,5 +1,4 @@
 class Cloud extends MovableObject {
-
     speed = 0.15;
 
     constructor() {
@@ -10,6 +9,7 @@ class Cloud extends MovableObject {
         this.width = 720;
         this.height = 480;
     }
+
     animate() {
         this.moveLeft();
     }
