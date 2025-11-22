@@ -9,8 +9,10 @@ class World {
     statusBarBottles = new BottleBar();
     statusBarCoins = new CoinBar();
     statusBarBossHealth = new BossHealthBar();
-
     throwableObjects = [];
+    bottleThrown = false;
+    gameRunning = true;
+    gameInterval;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
@@ -26,19 +28,69 @@ class World {
     }
 
     run() {
-        setInterval(() => {
+        this.gameInterval = setInterval(() => {
+            if (!this.gameRunning) return;
             this.checkCollisions();
             this.checkThrowObjects();
+            this.checkGameEnd();
         }, 1000 / 25);
     }
 
+    checkGameEnd() {
+        if (this.character.isDead()) {
+            this.endGame(false);
+            return;
+        }
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss && endboss.isDead()) {
+            this.endGame(true);
+            return;
+        }
+    }
+
+    endGame(isWin) {
+        this.gameRunning = false;
+        clearInterval(this.gameInterval);
+        setTimeout(() => {
+            this.stopAllAnimations();
+            new Endscreen(this.canvas, isWin);
+        }, 2000);
+    }
+
+    stopAllAnimations() {
+        clearInterval(this.character.animationInterval);
+        clearInterval(this.character.movementInterval);
+        this.level.enemies.forEach(enemy => {
+            this.stopEnemieAnimations(enemy);
+        });
+        this.throwableObjects.forEach(bottle => {
+            if (bottle.rotationInterval) {
+                clearInterval(bottle.rotationInterval);
+            }
+        });
+    }
+
+    stopEnemieAnimations(enemy) {
+        if (enemy.animationInterval) {
+            clearInterval(enemy.animationInterval);
+        }
+        if (enemy.walkInterval) {
+            clearInterval(enemy.walkInterval);
+            clearInterval(enemy.animateChicken);
+            enemy.speed = 0;
+            enemy.speedY = 0;
+        }
+    }
+    
     checkCollisions() {
         if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
-            if (enemy.isDead() || !this.character.isColliding(enemy)) return;
+            if (!this.character.isColliding(enemy)) return;
+
             let characterBottom = this.character.y + this.character.height;
             let enemyTop = enemy.y;
             let characterIsAbove = characterBottom + this.character.speedY < enemyTop;
+
             if (characterIsAbove) {
                 enemy.hit(20);
                 this.character.speedY = -5;
@@ -51,7 +103,7 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D && !this.bottleThrown) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 80);
             this.throwableObjects.push(bottle);
             this.bottleThrown = true;
         }
@@ -66,6 +118,9 @@ class World {
             this.level.enemies.forEach(enemy => {
                 if (bottle.isColliding(enemy)) {
                     bottle.hitEnemy(enemy);
+                    if (enemy instanceof Endboss) {
+                        this.statusBarBossHealth.setPercentage(enemy.energy);
+                    }
                 }
             });
             if (bottle.energy <= 0) {
