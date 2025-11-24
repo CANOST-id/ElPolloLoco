@@ -17,16 +17,20 @@ class Chicken extends MovableObject {
         this.width = 80;
         this.speed = 0.25 + Math.random() * 0.6;
         this.energy = 20;
+        this.gameStarted = false;
         this.animateChicken();
     }
 
     animateChicken() {
         this.moveLeft();
         this.walkInterval = setInterval(() => {
-            if (!this.isDead()) {
+            if (this.gameStarted && !this.isDead()) {
                 this.playAnimation(this.chicken_walk_images);
             }
         }, 1000 / 10);
+    }
+    startMovement() {
+        this.gameStarted = true;
     }
 
     hit(damage = 20) {
