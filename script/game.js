@@ -7,6 +7,45 @@ function init() {
     world = new World(canvas, keyboard);
 }
 
+function startOverlay() {
+    canvas = document.getElementById('canvas'); 
+    let ctx = canvas.getContext('2d');
+    let startImage = new Image();
+    startImage.src = 'assets/img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png';
+    startImage.onload = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
+    };
+}
+
+// function createStartButton() {
+//     if (document.getElementById('start-button')) return;
+    
+//     let startButton = document.createElement('button');
+//     startButton.id = 'start-button';
+//     startButton.innerHTML = 'START GAME';
+//     startButton.style.position = 'absolute';
+//     startButton.style.left = '50%';
+//     startButton.style.top = '70%';
+//     startButton.style.transform = 'translateX(-50%)';
+//     startButton.style.padding = '15px 30px';
+//     startButton.style.fontSize = '20px';
+//     startButton.style.fontWeight = 'bold';
+//     startButton.style.backgroundColor = '#ff6b35';
+//     startButton.style.color = 'white';
+//     startButton.style.border = 'none';
+//     startButton.style.borderRadius = '10px';
+//     startButton.style.cursor = 'pointer';
+//     startButton.style.zIndex = '1000';
+    
+//     startButton.addEventListener('click', () => {
+//         startGame();
+//         document.body.removeChild(startButton); // Button nach Klick entfernen
+//     });
+    
+//     document.body.appendChild(startButton);
+// }
+
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
         keyboard.RIGHT = true;
@@ -42,10 +81,6 @@ window.addEventListener('keyup', (e) => {
     }
 });
 
-function startScreen() {
-
-}
-
 function startGame() {
     init();
     disableStartGameButton();
@@ -63,22 +98,33 @@ function enableStartGameButton() {
     startButton.style.backgroundColor = '#f074155d';
 }
 
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        enterFullscreen(document.documentElement);  
+    } else {
+        exitFullscreen(); 
+    }
+}
+
 function enterFullscreen(element) {
+    document.getElementById('canvas').classList.add('scale-1-5');
     if (element.requestFullscreen) {
         element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) { 
+    } else if (element.mozRequestFullScreen) {
         element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) { 
+    } else if (element.webkitRequestFullscreen) {
         element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) { 
+    } else if (element.msRequestFullscreen) {
         element.msRequestFullscreen();
     }
 }
 
 function exitFullscreen() {
-  if(document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if(document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  }
+    document.getElementById('canvas').classList.remove('scale-1-5');
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+
 }
