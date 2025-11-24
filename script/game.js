@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let buttons = new Buttons();
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -17,34 +18,6 @@ function startOverlay() {
         ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
     };
 }
-
-// function createStartButton() {
-//     if (document.getElementById('start-button')) return;
-    
-//     let startButton = document.createElement('button');
-//     startButton.id = 'start-button';
-//     startButton.innerHTML = 'START GAME';
-//     startButton.style.position = 'absolute';
-//     startButton.style.left = '50%';
-//     startButton.style.top = '70%';
-//     startButton.style.transform = 'translateX(-50%)';
-//     startButton.style.padding = '15px 30px';
-//     startButton.style.fontSize = '20px';
-//     startButton.style.fontWeight = 'bold';
-//     startButton.style.backgroundColor = '#ff6b35';
-//     startButton.style.color = 'white';
-//     startButton.style.border = 'none';
-//     startButton.style.borderRadius = '10px';
-//     startButton.style.cursor = 'pointer';
-//     startButton.style.zIndex = '1000';
-    
-//     startButton.addEventListener('click', () => {
-//         startGame();
-//         document.body.removeChild(startButton); // Button nach Klick entfernen
-//     });
-    
-//     document.body.appendChild(startButton);
-// }
 
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
