@@ -3,7 +3,10 @@ body {
     margin: 0;
     height: 100vh;
     overflow: hidden;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-image: url(../assets/img_pollo_locco/img/5_background/background_desert.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -27,10 +30,6 @@ canvas {
 
 /* info section style */
 .info {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
     height: 25%;
     width: 720px;
     color: #333333;
@@ -198,7 +197,7 @@ dialog {
 
 /* canvas buttons */
 /* back-to-home button */
-.back-to-home-button {
+.canvas-button-style {
     font-family: 'Special Elite', monospace;
     font-size: 24px;
     padding: 15px 25px;
@@ -207,19 +206,15 @@ dialog {
     background-color: #f074155d;
     backdrop-filter: blur(5px);
     cursor: pointer;
-    position: absolute;
-    left: 50%;
-    top: 20%;
-    transform: translate(-50%, -50%);
     transition: background-color 0.3s, color 0.3s;
 }
 
-.back-to-home-button:hover {
+.canvas-button-style:hover {
     background-color: #774300;
     color: #f0f0f0;
 }
 
-.back-to-home-button:active {
+.canvas-button-style:active {
     background-color: transparent;
     backdrop-filter: none;
 }
@@ -234,20 +229,6 @@ dialog {
     height: 350px;
     z-index: 999;
     pointer-events: none;
-}
-
-/* fullscreen align */
-.fullscreen-align {
-    width: 100vw;
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.scale-1-5 {
-    scale: 1.5;
 }
 
 @keyframes fadeIn {
