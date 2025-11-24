@@ -20,6 +20,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.draw();
         this.setWorld();
+        this.startEnemyMovement();
         this.run();
     }
 
@@ -34,6 +35,64 @@ class World {
             this.checkThrowObjects();
             this.checkGameEnd();
         }, 1000 / 25);
+    }
+
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+        this.ctx.translate(-this.camera_x, 0);
+        this.drawStatusBars();
+        requestAnimationFrame(() => this.draw());
+    }
+
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o);
+        });
+    }
+
+    addToMap(mo) {
+        if (!mo.img || !mo.img.complete || mo.img.naturalWidth === 0) {
+            return;
+        }
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+        }
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);
+        if (mo.otherDirection) {
+            this.flipImageBack(mo);
+        }
+    }
+
+    drawStatusBars() {
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarCoins);
+        this.drawBossHealthBar();
+    }
+
+    drawBossHealthBar() {
+        let endbossX = 1600;
+        let endbossY = 50;
+        this.statusBarBossHealth.setPosition(
+            endbossX + this.camera_x + 150,
+            endbossY - 20
+        );
+        this.addToMap(this.statusBarBossHealth);
+    }
+
+    startEnemyMovement() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy.startMovement) {
+                enemy.startMovement();
+            }
+        });
     }
 
     checkGameEnd() {
@@ -57,31 +116,6 @@ class World {
         }, 2000);
     }
 
-    stopAllAnimations() {
-        clearInterval(this.character.animationInterval);
-        clearInterval(this.character.movementInterval);
-        this.level.enemies.forEach(enemy => {
-            this.stopEnemieAnimations(enemy);
-        });
-        this.throwableObjects.forEach(bottle => {
-            if (bottle.rotationInterval) {
-                clearInterval(bottle.rotationInterval);
-            }
-        });
-    }
-
-    stopEnemieAnimations(enemy) {
-        if (enemy.animationInterval) {
-            clearInterval(enemy.animationInterval);
-        }
-        if (enemy.walkInterval) {
-            clearInterval(enemy.walkInterval);
-            clearInterval(enemy.animateChicken);
-            enemy.speed = 0;
-            enemy.speedY = 0;
-        }
-    }
-    
     checkCollisions() {
         if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
@@ -129,56 +163,6 @@ class World {
         });
     }
 
-    draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.throwableObjects);
-        this.ctx.translate(-this.camera_x, 0);
-        this.drawStatusBars();
-        requestAnimationFrame(() => this.draw());
-    }
-
-    drawStatusBars() {
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarBottles);
-        this.addToMap(this.statusBarCoins);
-        this.drawBossHealthBar();
-    }
-
-    drawBossHealthBar() {
-        let endbossX = 1600;
-        let endbossY = 50;
-        this.statusBarBossHealth.setPosition(
-            endbossX + this.camera_x + 150,
-            endbossY - 20
-        );
-        this.addToMap(this.statusBarBossHealth);
-    }
-
-    addObjectsToMap(objects) {
-        objects.forEach(o => {
-            this.addToMap(o);
-        });
-    }
-
-    addToMap(mo) {
-        if (!mo.img || !mo.img.complete || mo.img.naturalWidth === 0) {
-            return;
-        }
-        if (mo.otherDirection) {
-            this.flipImage(mo);
-        }
-        mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
-    }
-
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -193,5 +177,33 @@ class World {
 
     isDead() {
         return this.character.energy <= 0;
+    }
+
+    stopAllAnimations() {
+        clearInterval(this.character.animationInterval);
+        clearInterval(this.character.movementInterval);
+        this.level.enemies.forEach(enemy => {
+            this.stopEnemieAnimations(enemy);
+        });
+        this.throwableObjects.forEach(bottle => {
+            if (bottle.rotationInterval) {
+                clearInterval(bottle.rotationInterval);
+            }
+        });
+    }
+
+    stopEnemieAnimations(enemy) {
+        if (enemy.animationInterval) {
+            clearInterval(enemy.animationInterval);
+        }
+        if (enemy.walkInterval) {
+            clearInterval(enemy.walkInterval);
+        }
+        if (enemy.moveInterval) {
+            clearInterval(enemy.moveInterval);
+        }
+        enemy.gameStarted = false;
+        enemy.speed = 0;
+        enemy.speedY = 0;
     }
 }
