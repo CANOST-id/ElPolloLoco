@@ -3,9 +3,7 @@ body {
     margin: 0;
     height: 100vh;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+
     background-image: url(../assets/img_pollo_locco/img/5_background/background_desert.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -29,6 +27,10 @@ canvas {
 
 /* info section style */
 .info {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     height: 25%;
     width: 720px;
     color: #333333;
@@ -75,9 +77,12 @@ canvas {
 }
 
 /* footer link style incl. hover and active states */
+footer {
+   position: absolute;
+    bottom: 10px;
+}
 footer a {
     font-family: 'Special Elite', monospace;
-
     font-size: 24px;
     color: #662900;
     text-decoration: none;
@@ -116,7 +121,7 @@ dialog {
     text-align: center;
     transform: translate(-50%, -50%);
     background-color: #f0741573;
-    border: 4px solid #000000;
+    border: 4px solid #0000005e;
     border-radius: 10px;
     font-size: 20px;
     font-family: 'Special Elite', monospace;
@@ -160,7 +165,7 @@ dialog {
     justify-content: space-between;
 }
 
-/* Close button style */
+/* dialog close button style */
 .close-button {
     width: 40px;
     height: 40px;
@@ -188,6 +193,61 @@ dialog {
 
 .close-button svg {
     color: #662900;
+}
+
+
+/* canvas buttons */
+/* back-to-home button */
+.back-to-home-button {
+    font-family: 'Special Elite', monospace;
+    font-size: 24px;
+    padding: 15px 25px;
+    border: 5px solid #000000;
+    border-radius: 10px;
+    background-color: #f074155d;
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.back-to-home-button:hover {
+    background-color: #774300;
+    color: #f0f0f0;
+}
+
+.back-to-home-button:active {
+    background-color: transparent;
+    backdrop-filter: none;
+}
+
+/* you won/you lost image */
+.end-image {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    height: 350px;
+    z-index: 999;
+    pointer-events: none;
+}
+
+/* fullscreen align */
+.fullscreen-align {
+    width: 100vw;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.scale-1-5 {
+    scale: 1.5;
 }
 
 @keyframes fadeIn {
