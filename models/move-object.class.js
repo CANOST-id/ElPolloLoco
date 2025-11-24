@@ -9,7 +9,6 @@ class MovableObject extends DrawableObject {
     currentImageIndex = 0;
     gameStarted = true;
 
-
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
@@ -28,17 +27,14 @@ class MovableObject extends DrawableObject {
     }
 
     moveLeft() {
-        if (this.gameStarted) {
-        setInterval(() => {
-            this.x -= this.speed;
-            if (this.x < -720) {
-                this.x = 600;
+        this.moveInterval = setInterval(() => {
+            if (this.gameStarted && !this.isDead()) {
+                this.x -= this.speed;
+                if (this.x < -720) {
+                    this.x = 600;
+                }
             }
         }, 1000 / 60);
-        } else {
-            this.gameStarted = false;
-            return;
-        }
     }
 
     moveCharacterLeft() {
@@ -69,7 +65,6 @@ class MovableObject extends DrawableObject {
         clearInterval(this.animateChicken);
         this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
     }
-
 
     isColliding(mo) {
         if (this.isDead() || mo.isDead()) {
