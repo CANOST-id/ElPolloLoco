@@ -38,27 +38,30 @@
 
 </head>
 
-<body onload="startScreen()">
+<body onload="startOverlay()">
 
+    <section id="fullscreen" class="fullscreen-align">
 
-    <h1>El Pollo Loco</h1>
+        <h1>El Pollo Loco</h1>
 
         <canvas width="720" height="480" id="canvas"></canvas>
 
         <section class="info">
             <section class="button-align">
                 <button id="start-button" onclick="startGame()">Start Game</button>
-                <button onclick="enterFullscreen(document.getElementById('canvas'))">Fullscreen</button>
+                <button onclick="toggleFullscreen(document.getElementById('fullscreen'))">Fullscreen</button>
                 <button onclick="openDialog()">Info</button>
             </section>
         </section>
 
-        <footer>
-            <a href="legal_notice.html">Legal Notice</a>
-        </footer>
+        <dialog id="dialog" onclick="closeDialog()"></dialog>
 
+    </section>
 
-    <dialog id="dialog" onclick="closeDialog()"></dialog>
+    <footer>
+        <a href="legal_notice.html">Legal Notice</a>
+    </footer>
+
 </body>
 
 </html>
