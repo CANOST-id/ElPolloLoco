@@ -10,7 +10,11 @@ class Endscreen {
         this.ctx = canvas.getContext('2d');
         this.isWin = isWin;
         this.createEndscreen();
-        this.createButton();
+        
+        // Back to Home Button erstellen
+        if (window.buttons) {
+            window.buttons.createBackToHomeButton();
+        }
     }
 
     createEndscreen() {
@@ -20,6 +24,7 @@ class Endscreen {
             'assets/img_pollo_locco/img/win_lost/you_lost.png';
         this.endImageStyle();
         document.body.appendChild(this.endImage);
+        this.backToHomeButton();
     }
 
     createButton() {
@@ -33,20 +38,9 @@ class Endscreen {
         this.endImage.className = 'end-image';
     }
 
-    backToHomeButtonStyle() {
-        this.backToHomeButton.innerHTML = 'Back to Home';
-        this.backToHomeButton.className = 'back-to-home-button';
-    }
-
     buttonListener() {
         this.backToHomeButton.addEventListener('click', () => {
             this.restartGame();
         });
-    }
-
-    restartGame() {
-        document.body.removeChild(this.backToHomeButton);
-        document.body.removeChild(this.endImage);
-        location.reload();
     }
 }
