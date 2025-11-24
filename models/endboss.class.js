@@ -18,19 +18,6 @@ class Endboss extends MovableObject {
         this.animateEndboss();
     }
 
-    animateEndboss() {
-        this.animationInterval = setInterval(() => {
-            if (this.isDead() && !this.isDying) {
-                this.isDying = true;
-                this.playDeathAnimation();
-            } else if (this.isHurting) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
-            } else if (!this.isDead()) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
-            }
-        }, 300);
-    }
-
     hit(damage = 20) {
         if (this.isDead()) return;
         
@@ -44,6 +31,19 @@ class Endboss extends MovableObject {
                 this.isHurting = false;
             }, 900);
         }
+    }
+
+    animateEndboss() {
+        this.animationInterval = setInterval(() => {
+            if (this.isDead() && !this.isDying) {
+                this.isDying = true;
+                this.playDeathAnimation();
+            } else if (this.isHurting) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
+            } else if (!this.isDead()) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
+            }
+        }, 300);
     }
 
     playDeathAnimation() {
