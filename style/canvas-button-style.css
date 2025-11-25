@@ -1,5 +1,36 @@
 .button-container {
-    
+    display: flex;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px 20px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+.canvas-button-style {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #fff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.canvas-button-style:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.mute-button {
+    min-width: 50px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .canvas-buttons {
