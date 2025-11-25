@@ -2,7 +2,6 @@ class Endscreen {
     canvas;
     ctx;
     isWin;
-    backToHomeButton;
     endImage;
 
     constructor(canvas, isWin) {
@@ -24,23 +23,9 @@ class Endscreen {
             'assets/img_pollo_locco/img/win_lost/you_lost.png';
         this.endImageStyle();
         document.body.appendChild(this.endImage);
-        this.backToHomeButton();
-    }
-
-    createButton() {
-        this.backToHomeButton = document.createElement('button');
-        this.backToHomeButtonStyle();
-        document.body.appendChild(this.backToHomeButton);
-        this.buttonListener();
     }
 
     endImageStyle() {
         this.endImage.className = 'end-image';
-    }
-
-    buttonListener() {
-        this.backToHomeButton.addEventListener('click', () => {
-            this.restartGame();
-        });
     }
 }
