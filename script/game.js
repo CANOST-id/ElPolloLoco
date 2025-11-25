@@ -1,7 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let buttons = new Buttons();
+let buttons;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -10,6 +10,7 @@ function init() {
 
 function startOverlay() {
     canvas = document.getElementById('canvas'); 
+    buttons = new Buttons();
     let ctx = canvas.getContext('2d');
     let startImage = new Image();
     startImage.src = 'assets/img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png';
@@ -56,31 +57,20 @@ window.addEventListener('keyup', (e) => {
 
 function startGame() {
     init();
-    disableStartGameButton();
-}
-
-function disableStartGameButton() {
-    let startButton = document.getElementById('start-button');
-    startButton.disabled = true;
-    startButton.style.backgroundColor = 'gray';
-}
-
-function enableStartGameButton() {
-    let startButton = document.getElementById('start-button');
-    startButton.disabled = false;
-    startButton.style.backgroundColor = '#f074155d';
+    buttons.gameRunning = true;
+    buttons.startButtonStyle();
 }
 
 function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        enterFullscreen(document.documentElement);  
+    let canvas = document.getElementById('canvas');
+    if (!canvas) {
+        enterFullscreen(canvas);  
     } else {
         exitFullscreen(); 
     }
 }
 
 function enterFullscreen(element) {
-    document.getElementById('canvas').classList.add('scale-1-5');
     if (element.requestFullscreen) {
         element.requestFullscreen();
     } else if (element.mozRequestFullScreen) {
@@ -93,11 +83,14 @@ function enterFullscreen(element) {
 }
 
 function exitFullscreen() {
-    document.getElementById('canvas').classList.remove('scale-1-5');
     if (document.exitFullscreen) {
         document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
     }
+}
 
+function showEndscreen(isWin) {
+    new Endscreen(canvas, isWin);
+    buttons.createRestartButton();
 }
