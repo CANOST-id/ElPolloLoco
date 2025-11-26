@@ -1,46 +1,115 @@
-.button-container {
+/* Button Container */
+.canvas-button-container {
+    position: absolute;
     display: flex;
-    gap: 15px;
-    background: rgba(0, 0, 0, 0.8);
+    gap: 12px;
     padding: 15px 20px;
-    border-radius: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
+    pointer-events: auto;
+    transform: translateX(-50%);
+    z-index: 1;
 }
 
-.canvas-button-style {
+/* Basis Button Styling */
+.canvas-btn {
+    padding: 12px 20px;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid #fff;
     border-radius: 8px;
-    padding: 12px 16px;
-    cursor: pointer;
     color: #fff;
+    font-family: 'Special Elite', monospace;
+    font-size: 14px;
     font-weight: bold;
+    cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 120px;
-}
-
-.canvas-button-style:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-}
-
-.mute-button {
-    min-width: 50px !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 60px;
 }
 
-.canvas-buttons {
-    font-family: 'Special Elite', monospace;
-    font-size: 24px;
-    padding: 20px 30px;
-    border: 5px solid #000000;
-    border-radius: 10px;
-    background-color: #f074155d;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+/* Button Hover Effect */
+.canvas-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Button Active Effect */
+.canvas-btn:active {
+    transform: scale(0.95);
+}
+
+/* Spezielle Button-Farben */
+.start-btn {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: #4CAF50;
+}
+
+.start-btn:hover {
+    background: rgba(76, 175, 80, 0.5);
+}
+
+.home-btn {
+    background: rgba(33, 150, 243, 0.3);
+    border-color: #2196F3;
+}
+
+.home-btn:hover {
+    background: rgba(33, 150, 243, 0.5);
+}
+
+.mute-btn {
+    background: rgba(255, 152, 0, 0.3);
+    border-color: #FF9800;
+}
+
+.mute-btn:hover {
+    background: rgba(255, 152, 0, 0.5);
+}
+
+.info-btn {
+    background: rgba(156, 39, 176, 0.3);
+    border-color: #9C27B0;
+}
+
+.info-btn:hover {
+    background: rgba(156, 39, 176, 0.5);
+}
+
+.fullscreen-btn {
+    background: rgba(244, 67, 54, 0.3);
+    border-color: #f44336;
+}
+
+.fullscreen-btn:hover {
+    background: rgba(244, 67, 54, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .canvas-btn {
+        padding: 10px 16px;
+        font-size: 12px;
+        min-width: 50px;
+    }
+    
+    .canvas-button-container {
+        gap: 8px;
+        padding: 12px 16px;
+    }
+}
+
+/* Fullscreen Anpassungen */
+body:fullscreen .canvas-button-container,
+body:-webkit-full-screen .canvas-button-container,
+body:-moz-full-screen .canvas-button-container {
+    bottom: 30px;
+    padding: 20px 25px;
+}
+
+body:fullscreen .canvas-btn,
+body:-webkit-full-screen .canvas-btn,
+body:-moz-full-screen .canvas-btn {
+    padding: 15px 25px;
+    font-size: 16px;
 }
