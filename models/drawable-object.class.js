@@ -4,7 +4,6 @@ class DrawableObject {
     imageChickenCache = [];
     currentImageIndex = 0;
 
-
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
