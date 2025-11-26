@@ -13,15 +13,17 @@ class World {
     bottleThrown = false;
     gameRunning = true;
     gameInterval;
+    buttons;
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, existingButtons = null) {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.ctx = canvas.getContext('2d');
+        this.buttons = existingButtons;
         this.draw();
         this.setWorld();
-        this.startEnemyMovement();
         this.run();
+        this.startEnemyMovement();
     }
 
     setWorld() {
@@ -38,16 +40,13 @@ class World {
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.throwableObjects);
-        this.ctx.translate(-this.camera_x, 0);
+        this.drawBackground();
         this.drawStatusBars();
-        requestAnimationFrame(() => this.draw());
+        this.drawMovingElements();
+        let self = this;
+        requestAnimationFrame(function () {
+            self.draw();
+        });
     }
 
     addObjectsToMap(objects) {
@@ -68,6 +67,22 @@ class World {
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }
+    }
+
+    drawBackground() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.translate(this.camera_x, 0);
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
+        this.ctx.translate(-this.camera_x, 0);
+    }
+
+    drawMovingElements() {
+        this.ctx.translate(this.camera_x, 0);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.throwableObjects);
+        this.ctx.translate(-this.camera_x, 0);
     }
 
     drawStatusBars() {
