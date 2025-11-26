@@ -3,21 +3,28 @@ let world;
 let keyboard = new Keyboard();
 let buttons;
 
-function init() {
-    canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
-}
-
 function startOverlay() {
-    canvas = document.getElementById('canvas'); 
+    canvas = document.getElementById('canvas');
     buttons = new Buttons();
     let ctx = canvas.getContext('2d');
     let startImage = new Image();
-    startImage.src = 'assets/img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png';
-    startImage.onload = function() {
+    startImage.src = 'assets/img_pollo_locco/img/9_intro_outro_screens/start/startscreen_2.png';
+    startImage.onload = function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
     };
+}
+
+function init() {
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard, buttons);
+}
+
+function startGame() {
+    init();
+    if (world) {
+        world.startEnemyMovement();
+    }
 }
 
 window.addEventListener('keydown', (e) => {
@@ -55,18 +62,13 @@ window.addEventListener('keyup', (e) => {
     }
 });
 
-function startGame() {
-    init();
-    buttons.gameRunning = true;
-    buttons.startButtonStyle();
-}
-
 function toggleFullscreen() {
     let canvas = document.getElementById('canvas');
-    if (!canvas) {
-        enterFullscreen(canvas);  
+
+    if (!document.fullscreenElement) {
+        enterFullscreen(canvas);
     } else {
-        exitFullscreen(); 
+        exitFullscreen();
     }
 }
 
@@ -85,12 +87,15 @@ function enterFullscreen(element) {
 function exitFullscreen() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
     } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
     }
 }
 
 function showEndscreen(isWin) {
     new Endscreen(canvas, isWin);
-    buttons.createRestartButton();
 }
