@@ -37,15 +37,8 @@ class Character extends MovableObject {
                 this.isDying = true;
                 this.playDeathAnimation();
             } else if (!this.isDead()) {
-                if (this.isHurt()) {
-                    this.playAnimation(CHARACTER_IMAGES.images_hurt);
-                    this.resetIdleTime();
-                } else if (this.isAboveGround()) {
-                    this.playAnimation(CHARACTER_IMAGES.images_jumping);
-                    this.resetIdleTime();
-                } else {
-                    this.checkMovement();
-                }}
+                this.playCharacterAnimation();
+            }
             this.handleJump();
         }, 1000 / 10);
     }
@@ -70,6 +63,16 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
+    playCharacterAnimation() {
+        if (this.isHurt()) {
+            this.playHurtAnimation();
+        } else if (this.isAboveGround()) {
+            this.playJumpAnimation();
+        } else {
+            this.checkMovement();
+        }
+    }
+
     playDeathAnimation() {
         let deathAnimationIndex = 0;
         let deathAnimationInterval = setInterval(() => {
@@ -83,6 +86,16 @@ class Character extends MovableObject {
                 clearInterval(this.movementInterval);
             }
         }, 150);
+    }
+
+    playHurtAnimation() {
+        this.playAnimation(CHARACTER_IMAGES.images_hurt);
+        this.resetIdleTime();
+    }
+
+    playJumpAnimation() {
+        this.playAnimation(CHARACTER_IMAGES.images_jumping);
+        this.resetIdleTime();
     }
 
     handleIdleState() {
