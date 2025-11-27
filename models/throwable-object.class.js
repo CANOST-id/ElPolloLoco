@@ -90,10 +90,6 @@ class ThrowableObject extends MovableObject {
         }, 100);
     }
 
-    collectBottle() {
-
-    }
-
     isColliding(enemy) {
         return this.x + this.width > enemy.x &&
                this.x < enemy.x + enemy.width &&
