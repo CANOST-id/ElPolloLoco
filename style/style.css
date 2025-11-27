@@ -26,53 +26,7 @@ canvas {
     border: 10px solid black;
     border-radius: 15px;
     display: block;
-}
-
-/* info section style */
-.info {
-    height: 25%;
-    width: 720px;
-    color: #333333;
-    font-family: 'Special Elite', monospace;
-    font-size: 20px;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* info form style */
-.info .button-align {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* info buttons style incl. hover and active states */
-.info .button-align button {
-    font-family: 'Special Elite', monospace;
-    font-size: 24px;
-    padding: 20px 30px;
-    border: 5px solid #000000;
-    border-radius: 10px;
-    background-color: #f074155d;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.info .button-align button:hover {
-    background-color: #774300;
-    color: #f0f0f0;
-}
-
-.info .button-align button:active {
-    transform: scale(0.95);
-    background-color: transparent;
-    backdrop-filter: blur(0px);
+    margin-bottom: 250px;
 }
 
 /* footer link style incl. hover and active states */
@@ -113,7 +67,7 @@ dialog {
     position: absolute;
     height: 320px;
     width: 400px;
-    top: 50%;
+    top: 40%;
     left: 50%;
     display: flex;
     flex-direction: column;
@@ -127,6 +81,7 @@ dialog {
     animation: fadeIn 0.5s ease-in-out;
     backdrop-filter: blur(10px);
     cursor: default;
+    z-index: 2;
 }
 
 .dialog-content h2 {
