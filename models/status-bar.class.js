@@ -43,6 +43,7 @@ class HealthBar extends StatusBar {
 }
 
 class CoinBar extends StatusBar {
+    coins = 0;
     constructor(x = 30, y = 20) {
         const images = [
             'assets/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
@@ -57,6 +58,8 @@ class CoinBar extends StatusBar {
 }
 
 class BottleBar extends StatusBar {
+    bottles = 0;
+
     constructor(x = 10, y = 50) {
         const images = [
             'assets/img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/0.png',
@@ -67,6 +70,14 @@ class BottleBar extends StatusBar {
             'assets/img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
         ];
         super(images, x, y);
+        this.setBottles(0);
+    }
+
+    setBottles(bottles) {
+        this.bottles = bottles;
+
+        let percentage = Math.min((this.bottles / 7) * 100, 100);
+        this.setPercentage(percentage);
     }
 }
 
