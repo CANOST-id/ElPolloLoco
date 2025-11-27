@@ -20,7 +20,6 @@ class Endboss extends MovableObject {
 
     hit(damage = 20) {
         if (this.isDead()) return;
-        
         this.energy -= damage;
         if (this.energy <= 0) {
             this.energy = 0;
@@ -49,7 +48,6 @@ class Endboss extends MovableObject {
     playDeathAnimation() {
         clearInterval(this.animationInterval);
         let deathAnimationIndex = 0;
-        
         let deathInterval = setInterval(() => {
             if (deathAnimationIndex < ENDBOSS_IMAGES.chicken_dead_images.length) {
                 let path = ENDBOSS_IMAGES.chicken_dead_images[deathAnimationIndex];
