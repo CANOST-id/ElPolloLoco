@@ -135,11 +135,9 @@ class World {
         if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
             if (!this.character.isColliding(enemy)) return;
-
             let characterBottom = this.character.y + this.character.height;
             let enemyTop = enemy.y;
             let characterIsAbove = characterBottom + this.character.speedY < enemyTop;
-
             if (characterIsAbove) {
                 enemy.hit(20);
                 this.character.speedY = -5;
