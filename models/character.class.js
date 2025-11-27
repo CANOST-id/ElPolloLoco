@@ -89,7 +89,7 @@ class Character extends MovableObject {
         this.idleTime += 0.1;
         if (this.idleTime >= 5) {
             this.playAnimation(CHARACTER_IMAGES.images_sleeping);
-        } else if (this.idleTime >= 1) {
+        } else if (this.idleTime >= 0) {
             this.playAnimation(CHARACTER_IMAGES.images_standing);
         }
     }
