@@ -103,13 +103,14 @@ class World {
     }
 
     drawBossHealthBar() {
-        let endbossX = 1600;
-        let endbossY = 50;
-        this.statusBarBossHealth.setPosition(
-            endbossX + this.camera_x + 150,
-            endbossY - 20
-        );
-        this.addToMap(this.statusBarBossHealth);
+        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (endboss && endboss.energy < 100) {
+            this.statusBarBossHealth.setPosition(
+                endboss.x + this.camera_x + 150,
+                endboss.y - 20
+            );
+            this.addToMap(this.statusBarBossHealth);
+        }
     }
 
     drawCollectibles() {
