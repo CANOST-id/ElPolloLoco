@@ -20,7 +20,7 @@ class Endscreen {
         this.endImage = document.createElement('img');
         this.endImage.src = this.isWin ?
             'assets/img_pollo_locco/img/win_lost/you_win.png' :
-            'assets/img_pollo_locco/img/win_lost/you_lost.png';
+            'assets/img_pollo_locco/img/win_lost/game_over_a.png';
         this.endImageStyle();
         document.body.appendChild(this.endImage);
     }
