@@ -82,6 +82,7 @@ class BottleBar extends StatusBar {
 }
 
 class BossHealthBar extends StatusBar {
+
     constructor() {
         const images = [
             'assets/img_pollo_locco/img/7_statusbars/2_statusbar_endboss/green/green0.png',
@@ -97,5 +98,12 @@ class BossHealthBar extends StatusBar {
     setPosition(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    updatePosition() {
+        if (this.endboss) {
+            this.x = this.endboss.x + 50;
+            this.y = this.endboss.y - 20;
+        }
     }
 }
