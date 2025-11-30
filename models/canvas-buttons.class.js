@@ -27,8 +27,8 @@ class Buttons extends DrawableObject {
         this.startButton = this.createButton('START', 'canvas-btn start-btn', () => this.toggleGame());
         this.homeButton = this.createButton('HOME', 'canvas-btn home-btn', () => location.reload());
         this.muteButton = this.createButton('🔊', 'canvas-btn mute-btn', () => this.toggleMute());
+        this.fullscreenButton = this.createButton('◱', 'canvas-btn fullscreen-btn', () => this.toggleFullscreen());
         this.infoButton = this.createButton('INFO', 'canvas-btn info-btn', () => this.toggleInfo());
-        this.fullscreenButton = this.createButton('FULLSCREEN', 'canvas-btn fullscreen-btn', () => this.toggleFullscreen());
     }
 
     createButton(content, className, clickHandler) {
