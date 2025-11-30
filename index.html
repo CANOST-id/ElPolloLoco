@@ -47,6 +47,47 @@
 
     <canvas width="720" height="480" id="canvas"></canvas>
 
+    <section class="rotate-device">
+        <img class="rotate-device-image" src="./assets/img_pollo_locco/img/rotate-device.png" alt="">
+    </section>
+
+    <section class="touch-buttons">
+        <!-- Left Arrow Button -->
+        <button id="btn-left" class="touch-btn">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
+                <path d="M35 20 L25 30 L35 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
+        <!-- Right Arrow Button -->
+        <button id="btn-right" class="touch-btn">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
+                <path d="M25 20 L35 30 L25 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
+        <!-- Up/Jump Arrow Button -->
+        <button id="btn-jump" class="touch-btn">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
+                <path d="M20 35 L30 25 L40 35" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
+        <!-- Throw Button -->
+        <button id="btn-throw" class="touch-btn">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
+                <!-- Throwing hand/bottle icon -->
+                <path d="M22 35 Q30 20 38 35" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="38" cy="35" r="2" fill="#fff"/>
+                <path d="M20 37 L24 33 L28 37" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </section>
+
     <dialog id="dialog" onclick="closeDialog()"></dialog>
 
 
