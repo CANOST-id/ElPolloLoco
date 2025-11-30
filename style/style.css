@@ -6,7 +6,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     background-image: url(../assets/img_pollo_locco/img/5_background/background_desert.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -26,13 +25,13 @@ canvas {
     border: 10px solid black;
     border-radius: 15px;
     display: block;
-    margin-bottom: 250px;
 }
 
 /* footer link style incl. hover and active states */
 footer {
    position: absolute;
     bottom: 10px;
+    right: 20px;
 }
 footer a {
     font-family: 'Special Elite', monospace;
@@ -150,31 +149,6 @@ dialog {
     color: #662900;
 }
 
-
-/* canvas buttons */
-/* back-to-home button */
-.canvas-button-style {
-    font-family: 'Special Elite', monospace;
-    font-size: 24px;
-    padding: 15px 25px;
-    border: 5px solid #000000;
-    border-radius: 10px;
-    background-color: #f074155d;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.canvas-button-style:hover {
-    background-color: #774300;
-    color: #f0f0f0;
-}
-
-.canvas-button-style:active {
-    background-color: transparent;
-    backdrop-filter: none;
-}
-
 /* you won/you lost image */
 .end-image {
     position: absolute;
@@ -187,6 +161,22 @@ dialog {
     pointer-events: none;
 }
 
+.rotate-device {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: auto;
+    z-index: 2000;
+    display: none;
+    pointer-events: none;
+}
+
+.rotate-device-image {
+    width: 100%;
+    height: auto;
+}
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -197,4 +187,35 @@ dialog {
         opacity: 1;
         backdrop-filter: blur(10px);
     }
+}
+
+/* touch buttons */
+.touch-buttons {
+    position: fixed;
+    bottom: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.touch-btn {
+    width: 80px;
+    height: 60px;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.touch-btn:hover,
+.touch-btn:active {
+    opacity: 1;
+}
+
+.touch-btn svg {
+    display: block;
 }

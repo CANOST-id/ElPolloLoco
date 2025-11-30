@@ -1,19 +1,73 @@
-/* smartphone align */
-@media only screen and (max-width: 780px) {
+/* responsive touch buttons - only show on small screens */
+@media (min-width: 1369px) {
+    .touch-buttons {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
     canvas {
         width: 90%;
         height: auto;
     }
 
-    .info {
-        width: 90%;
+    .canvas-button-container {
+        width: 70%;
     }
 }
 
-@media only screen and (max-height: 480px) {
+@media (max-width: 455px) {
     canvas {
-        height: 100vh;
-        width: auto;
+        display: none;
     }
-    
+
+    .touch-buttons {
+        display: none;
+    }
+
+    .rotate-device {
+        display: block;
+    }
+}
+
+@media (max-height: 825px) {
+    .touch-buttons {
+        bottom: 100px;
+    }
+}
+
+@media (max-height: 800px) {
+    h1 {
+        font-size: 38px;
+        margin: 10px 0;
+    }
+}
+
+@media (max-height: 700px) {
+    .touch-buttons {
+        bottom: 80px;
+    }
+
+    .touch-btn {
+        width: 70px;
+        height: 50px;
+    }
+}
+
+@media (max-height: 620px) {
+    .touch-buttons {
+        bottom: 60px;
+    }
+
+    .touch-btn {
+        width: 60px;
+        height: 40px;
+    }
+}
+
+@media (max-height: 590px) {
+    canvas {
+        height: 60%;
+        width: 60%;
+    }
 }
