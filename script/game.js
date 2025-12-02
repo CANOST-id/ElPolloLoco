@@ -90,9 +90,22 @@ function showEndscreen(isWin) {
     new Endscreen(canvas, isWin);
 }
 
+function restartGame() {
+    if (world) {
+        world.stopAllIntervals();
+        world = null;
+    }
+    keyboard = new Keyboard();
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    if (world) {
+        world.startEnemyMovement();
+    }
+}
+
 // Touch Button Events
 document.addEventListener('DOMContentLoaded', () => {
-    // Left Button
     document.getElementById('btn-left').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
@@ -101,8 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.LEFT = false;
     });
-
-    // Right Button  
     document.getElementById('btn-right').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.RIGHT = true;
@@ -111,8 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.RIGHT = false;
     });
-
-    // Jump Button
     document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.SPACE = true;
@@ -121,8 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.SPACE = false;
     });
-
-    // Throw Button
     document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.D = true;
