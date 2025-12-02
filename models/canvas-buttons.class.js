@@ -66,7 +66,7 @@ class Buttons extends DrawableObject {
             this.startButton.innerHTML = 'RESTART';
             startGame(); 
         } else {
-            location.reload();
+            restartGame();
         }
     }
 
