@@ -285,4 +285,13 @@ class World {
         enemy.speed = 0;
         enemy.speedY = 0;
     }
+
+    stopAllIntervals() {
+        if (this.enemyMovementInterval) {
+            clearInterval(this.enemyMovementInterval);
+        }
+        if (this.gameLoopInterval) {
+            clearInterval(this.gameLoopInterval);
+        }
+    }
 }
