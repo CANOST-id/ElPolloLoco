@@ -31,7 +31,7 @@ class Buttons extends DrawableObject {
     }
 
     createButton(content, className, clickHandler) {
-        const button = document.createElement('button');
+        let button = document.createElement('button');
         button.innerHTML = content;
         button.className = className;
         button.addEventListener('click', clickHandler);
@@ -51,7 +51,7 @@ class Buttons extends DrawableObject {
     }
 
     updateContainerPosition() {
-        const canvas = document.getElementById('canvas');
+        let canvas = document.getElementById('canvas');
         if (!canvas) return;
         const canvasRect = canvas.getBoundingClientRect();
         this.buttonContainer.style.left = (canvasRect.left + canvasRect.width / 2) + 'px';
