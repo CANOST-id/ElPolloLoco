@@ -9,11 +9,6 @@ class Endscreen {
         this.ctx = canvas.getContext('2d');
         this.isWin = isWin;
         this.createEndscreen();
-        
-        // Back to Home Button erstellen
-        if (window.buttons) {
-            window.buttons.createBackToHomeButton();
-        }
     }
 
     createEndscreen() {
@@ -27,5 +22,6 @@ class Endscreen {
 
     endImageStyle() {
         this.endImage.className = 'end-image';
+        this.endImage.id = 'endscreen_image';
     }
 }
