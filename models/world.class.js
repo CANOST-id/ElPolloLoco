@@ -221,7 +221,6 @@ class World {
         this.checkBottleCollisions();
     }
 
-
     checkCoinCollisions() {
         this.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -289,9 +288,6 @@ class World {
     stopAllIntervals() {
         if (this.enemyMovementInterval) {
             clearInterval(this.enemyMovementInterval);
-        }
-        if (this.gameLoopInterval) {
-            clearInterval(this.gameLoopInterval);
         }
     }
 }
