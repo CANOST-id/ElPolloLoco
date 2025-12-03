@@ -152,6 +152,7 @@ dialog {
 /* you won/you lost image */
 .end-image {
     position: absolute;
+    display: block;
     left: 50%;
     top: 40%;
     transform: translate(-50%, -50%);
@@ -218,4 +219,8 @@ dialog {
 
 .touch-btn svg {
     display: block;
+}
+
+.d_none {
+    display: none;
 }
