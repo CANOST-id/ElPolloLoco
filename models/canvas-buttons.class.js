@@ -27,7 +27,6 @@ class Buttons extends DrawableObject {
         this.startButton = this.createButton('START', 'canvas-btn start-btn', () => this.toggleGame());
         this.homeButton = this.createButton('HOME', 'canvas-btn home-btn', () => location.reload());
         this.muteButton = this.createButton('🔊', 'canvas-btn mute-btn', () => this.toggleMute());
-        this.fullscreenButton = this.createButton('◱', 'canvas-btn fullscreen-btn', () => this.toggleFullscreen());
         this.infoButton = this.createButton('INFO', 'canvas-btn info-btn', () => this.toggleInfo());
     }
 
@@ -44,7 +43,6 @@ class Buttons extends DrawableObject {
         document.addEventListener('fullscreenchange', () => {
             this.updateContainerPosition();
         });
-        
         window.addEventListener('resize', () => {
             this.updateContainerPosition();
         });
@@ -82,10 +80,6 @@ class Buttons extends DrawableObject {
 
     toggleInfo() {
         openDialog();
-    }
-
-    toggleFullscreen() {
-        toggleFullscreen();
     }
 
     enableSound() {
