@@ -3,6 +3,11 @@ let world;
 let keyboard = new Keyboard();
 let buttons;
 
+function init() {
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard, buttons);
+}
+
 function startOverlay() {
     canvas = document.getElementById('canvas');
     buttons = new Buttons();
@@ -15,11 +20,6 @@ function startOverlay() {
     };
 }
 
-function init() {
-    canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard, buttons);
-}
-
 function startGame() {
     init();
     if (world) {
@@ -27,6 +27,35 @@ function startGame() {
     }
 }
 
+function restartGame() {
+    resetEnemyAnimation();
+    removeEndscreen();
+    startGame();
+}
+
+function showEndscreen(isWin) {
+    new Endscreen(canvas, isWin);
+}
+
+function removeEndscreen() {
+    let endImage = document.getElementById('endscreen_image');
+    if (endImage) {
+        endImage.classList.add('d_none');
+    }
+}
+
+function resetEnemyAnimation() {
+    if (world && world.level) {
+        world.level.enemies = [];
+        for (let i = 0; i < 5; i++) {
+            world.level.enemies.push(new Chicken());
+        }
+        world.level.enemies.push(new Endboss());
+        world.startEnemyMovement();
+    }
+}
+
+// Keyboard Events
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
         keyboard.RIGHT = true;
@@ -61,30 +90,6 @@ window.addEventListener('keyup', (e) => {
         keyboard.D = false;
     }
 });
-
-function showEndscreen(isWin) {
-    new Endscreen(canvas, isWin);
-}
-
-function restartGame() {
-    if (world) {
-        world.stopAllIntervals();
-        removeEndscreen();
-        world = null;
-    }
-    keyboard = new Keyboard();
-    let ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    if (world) {
-        world.startEnemyMovement();
-    }
-}
-
-function removeEndscreen() {
-    let endImage = document.querySelector('.end-image');
-    endImage.classList.add('d_none');
-}
 
 // Touch Button Events
 document.addEventListener('DOMContentLoaded', () => {
