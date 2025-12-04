@@ -28,8 +28,9 @@ function startGame() {
 }
 
 function restartGame() {
-    resetEnemyAnimation();
     removeEndscreen();
+    resetCharacter();
+    resetEnemyAnimation();
     startGame();
 }
 
@@ -40,7 +41,7 @@ function showEndscreen(isWin) {
 function removeEndscreen() {
     let endImage = document.getElementById('endscreen_image');
     if (endImage) {
-        endImage.classList.add('d_none');
+        endImage.remove();
     }
 }
 
@@ -53,6 +54,13 @@ function resetEnemyAnimation() {
         world.level.enemies.push(new Endboss());
         world.startEnemyMovement();
     }
+}
+
+function resetCharacter() {
+    world.character.energy = 100;
+    world.character.x = 120;
+    world.character.y = 80;
+    world.character.speedY = 0;
 }
 
 // Keyboard Events
