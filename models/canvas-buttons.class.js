@@ -17,9 +17,9 @@ class Buttons extends DrawableObject {
     }
 
     createContainer() {
-        this.buttonContainer = document.createElement('div');
+        this.buttonContainer = document.createElement('nav');
         this.buttonContainer.className = 'canvas-button-container';
-        document.body.appendChild(this.buttonContainer);
+        document.querySelector('header').appendChild(this.buttonContainer);
         this.updateContainerPosition();
     }
 
