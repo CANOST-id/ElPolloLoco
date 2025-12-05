@@ -12,12 +12,33 @@ body {
     background-position: center;
 }
 
-/* headline style */
+/* header style */
+header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+/* nav align */
+header nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding-right: 20px;
+}
+
+/* title style */
 h1 {
     font-family: 'Rye', serif;
     font-size: 62px;
     color: #662900;
     text-shadow: 2px 2px 4px #000000;
+    margin: 0;
+    padding-left: 20px;
 }
 
 /* canvas style */
@@ -25,28 +46,6 @@ canvas {
     border: 10px solid black;
     border-radius: 15px;
     display: block;
-}
-
-/* footer link style incl. hover and active states */
-footer {
-   position: absolute;
-    bottom: 10px;
-    right: 20px;
-}
-footer a {
-    font-family: 'Special Elite', monospace;
-    font-size: 24px;
-    color: #662900;
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: #000000;
-    text-decoration: underline;
-}
-
-footer a:active {
-    color: #333333;
 }
 
 /* dialog style */
@@ -61,6 +60,7 @@ dialog {
     z-index: 3;
 }
 
+/* dialog content style */
 .dialog-content {
     margin: 0;
     padding: 20px;
@@ -84,21 +84,25 @@ dialog {
     z-index: 4;
 }
 
+/* dialog title style */
 .dialog-content h2 {
     margin-top: 0;
     font-size: 28px;
 }
 
+/* dialog paragraph style */
 .dialog-content p {
     margin: 0 0 20px 0;
 }
 
+/* dialog subtitle style */
 .dialog-content h3 {
     font-weight: bold;
     margin: 0;
     text-decoration: underline
 }
 
+/* dialog movement instructions style and alignment */
 .dialog-content .movement-instructions {
     width: 100%;
 }
@@ -162,6 +166,7 @@ dialog {
     pointer-events: none;
 }
 
+/* rotate device section */
 .rotate-device {
     position: absolute;
     top: 50%;
@@ -174,33 +179,24 @@ dialog {
     pointer-events: none;
 }
 
+/* rotate device image */
 .rotate-device-image {
     width: 100%;
     height: auto;
 }
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        backdrop-filter: blur(0px);
-    }
 
-    to {
-        opacity: 1;
-        backdrop-filter: blur(10px);
-    }
-}
-
-/* touch buttons */
+/* touch buttons container */
 .touch-buttons {
-    position: fixed;
-    bottom: 150px;
+    position: absolute;
+    bottom: 120px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 15px;
-    z-index: 1000;
+    z-index: 10;
 }
 
+/* touch button style */
 .touch-btn {
     width: 80px;
     height: 60px;
@@ -221,6 +217,43 @@ dialog {
     display: block;
 }
 
+/* footer alignment */
+footer {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+}
+
+/* footer link style incl. hover and active states */
+footer a {
+    font-family: 'Special Elite', monospace;
+    font-size: 24px;
+    color: #662900;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+footer a:active {
+    color: #333333;
+}
+
 .d_none {
     display: none;
+}
+
+/* fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+
+    to {
+        opacity: 1;
+        backdrop-filter: blur(10px);
+    }
 }
