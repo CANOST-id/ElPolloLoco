@@ -1,15 +1,4 @@
-/* Button Container */
-.canvas-button-container {
-    position: absolute;
-    display: flex;
-    gap: 12px;
-    padding: 15px 20px;
-    pointer-events: auto;
-    transform: translateX(-50%);
-    z-index: 1;
-}
-
-/* Basis Button Styling */
+/* basis button styling */
 .canvas-btn {
     padding: 12px 20px;
     background: rgba(255, 255, 255, 0.1);
@@ -24,23 +13,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 60px;
     z-index: 2;
 }
 
-/* Button Hover Effect */
+/* button hover effect */
 .canvas-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
-/* Button Active Effect */
+/* button active effect */
 .canvas-btn:active {
     transform: scale(0.95);
 }
 
-/* Spezielle Button-Farben */
+/* style for single buttons */
 .start-btn {
     background: rgba(76, 175, 80, 0.3);
     border-color: #4CAF50;
@@ -75,28 +63,4 @@
 
 .info-btn:hover {
     background: rgba(156, 39, 176, 0.5);
-}
-
-.fullscreen-btn {
-    background: rgba(244, 67, 54, 0.3);
-    border-color: #f44336;
-}
-
-.fullscreen-btn:hover {
-    background: rgba(244, 67, 54, 0.5);
-}
-
-/* Fullscreen Anpassungen */
-body:fullscreen .canvas-button-container,
-body:-webkit-full-screen .canvas-button-container,
-body:-moz-full-screen .canvas-button-container {
-    bottom: 30px;
-    padding: 20px 25px;
-}
-
-body:fullscreen .canvas-btn,
-body:-webkit-full-screen .canvas-btn,
-body:-moz-full-screen .canvas-btn {
-    padding: 15px 25px;
-    font-size: 16px;
 }
