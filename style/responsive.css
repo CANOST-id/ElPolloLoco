@@ -1,7 +1,13 @@
-/* responsive touch buttons - only show on small screens */
+/* width */
 @media (min-width: 1369px) {
     .touch-buttons {
         display: none;
+    }
+}
+
+@media (max-width: 895px) {
+    header h1 {
+        font-size: 44Px;
     }
 }
 
@@ -10,13 +16,16 @@
         width: 90%;
         height: auto;
     }
+}
 
-    .canvas-button-container {
-        width: 70%;
+@media (max-width: 710px) {
+    header h1 {
+        text-align: center;
+        padding-right: 20px;
     }
 }
 
-@media (max-width: 455px) {
+@media (max-width: 580px) {
     canvas {
         display: none;
     }
@@ -28,35 +37,45 @@
     .rotate-device {
         display: block;
     }
-}
 
-@media (max-height: 825px) {
-    .touch-buttons {
-        bottom: 100px;
+    header nav {
+        display: none;
+    }
+
+    header h1 {
+        font-size: 32px;
     }
 }
 
-@media (max-height: 800px) {
-    h1 {
+/* height */
+@media (max-height: 830px) {
+    .touch-buttons {
+        bottom: 60px;
+    }
+}
+
+@media (max-height: 858px) {
+    header h1 {
         font-size: 38px;
         margin: 10px 0;
     }
 }
 
 @media (max-height: 700px) {
-    .touch-buttons {
-        bottom: 80px;
-    }
-
     .touch-btn {
         width: 70px;
         height: 50px;
     }
+
+    footer a {
+        font-size: 14px;
+    }
 }
 
-@media (max-height: 620px) {
-    .touch-buttons {
-        bottom: 60px;
+@media (max-height: 670px) {
+    header h1 {
+        font-size: 32px;
+        margin: 8px 0;
     }
 
     .touch-btn {
@@ -65,9 +84,40 @@
     }
 }
 
-@media (max-height: 590px) {
+@media (max-height: 650px) {
+    .touch-buttons {
+        bottom: 20px;
+    }
+}
+
+@media (max-height: 610px) {
     canvas {
         height: 60%;
-        width: 60%;
+        width: auto;
+    }
+}
+
+@media (max-height: 520px) {
+    header h1 {
+        font-size: 28px;
+        margin: 5px 0;
+    }
+
+    .canvas-btn {
+        padding: 8px 12px !important;
+        font-size: 14px;
+    }
+}
+
+@media (max-height: 470px) {
+    dialog {
+        z-index: 100;
+    }
+
+    dialog .dialog-content {
+        font-size: 18px;
+        height: 80%;
+        top: 50%;
+        overflow: auto;
     }
 }
