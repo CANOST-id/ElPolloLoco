@@ -45,4 +45,13 @@ class Chicken extends MovableObject {
     isDead() {
         return this.energy <= 0;
     }
+
+    getHitboxMargins() {
+        return { 
+            top: 10, 
+            bottom: 10, 
+            left: 10, 
+            right: 10 
+        };
+    }
 }

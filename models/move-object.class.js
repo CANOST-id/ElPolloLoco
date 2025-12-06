@@ -70,10 +70,19 @@ class MovableObject extends DrawableObject {
         if (this.isDead() || mo.isDead()) {
             return false;
         }
-        return this.x + this.width > mo.x &&
-            this.x < mo.x + mo.width &&
-            this.y + this.height > mo.y &&
-            this.y < mo.y + mo.height;
+        
+        // Individuelle Margins für jedes Objekt
+        let thisMargins = this.getHitboxMargins();
+        let otherMargins = mo.getHitboxMargins();
+        
+        return this.x + thisMargins.left < mo.x + mo.width - otherMargins.right &&
+            this.x + this.width - thisMargins.right > mo.x + otherMargins.left &&
+            this.y + thisMargins.top < mo.y + mo.height - otherMargins.bottom &&
+            this.y + this.height - thisMargins.bottom > mo.y + otherMargins.top;
+    }
+
+    getHitboxMargins() {
+        return { top: 0, bottom: 0, left: 0, right: 0 };
     }
 
     hit() {

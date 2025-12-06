@@ -121,4 +121,13 @@ class Endboss extends MovableObject {
     isDead() {
         return this.energy <= 0;
     }
+
+    getHitboxMargins() {
+        return { 
+            top: 50,
+            bottom: 30, 
+            left: 40, 
+            right: 40 
+        };
+    }
 }

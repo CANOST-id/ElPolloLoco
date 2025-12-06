@@ -120,4 +120,13 @@ class Character extends MovableObject {
     resetIdleTime() {
         this.idleTime = 0;
     }
+
+    getHitboxMargins() {
+        return { 
+            top: 80,
+            bottom: 5,  
+            left: 15,
+            right: 15 
+        };
+    }
 }
