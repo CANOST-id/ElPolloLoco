@@ -25,18 +25,6 @@ class DrawableObject {
         });
     }
 
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
-            if (!this.isDead || !this.isDead()) {
-                ctx.beginPath();
-                ctx.rect(this.x, this.y + 80, this.width - 20, this.height - 80);
-                ctx.strokeStyle = 'red';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-        }
-    }
-
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }

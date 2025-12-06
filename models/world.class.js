@@ -91,6 +91,7 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
+        this.drawHitboxes();
         this.ctx.translate(-this.camera_x, 0);
     }
 
@@ -289,5 +290,34 @@ class World {
         if (this.enemyMovementInterval) {
             clearInterval(this.enemyMovementInterval);
         }
+    }
+
+    drawHitboxes() {
+        this.ctx.strokeStyle = 'red';
+        this.ctx.lineWidth = 2;
+        this.createCHaracterHitbox();
+        this.createEnemyHitboxes();
+    }
+
+    createCHaracterHitbox() {
+        let charMargins = this.character.getHitboxMargins();
+        this.ctx.strokeRect(
+            this.character.x + charMargins.left,
+            this.character.y + charMargins.top,
+            this.character.width - charMargins.left - charMargins.right,
+            this.character.height - charMargins.top - charMargins.bottom
+        );
+    }
+
+    createEnemyHitboxes() {
+        this.level.enemies.forEach(enemy => {
+            let enemyMargins = enemy.getHitboxMargins();
+            this.ctx.strokeRect(
+                enemy.x + enemyMargins.left,
+                enemy.y + enemyMargins.top,
+                enemy.width - enemyMargins.left - enemyMargins.right,
+                enemy.height - enemyMargins.top - enemyMargins.bottom
+            );
+        });
     }
 }
