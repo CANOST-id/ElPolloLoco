@@ -86,6 +86,7 @@ class ThrowableObject extends MovableObject {
             } else {
                 this.energy = 0;
                 clearInterval(this.splashInterval);
+                this.removeBottle = true;
             }
         }, 100);
     }
@@ -96,4 +97,13 @@ class ThrowableObject extends MovableObject {
                this.y + this.height > enemy.y &&
                this.y < enemy.y + enemy.height;
     }  
+
+    getHitboxMargins() {
+        return { 
+            top: 5,
+            bottom: 5,   
+            left: 5,    
+            right: 5    
+        };
+    }
 }

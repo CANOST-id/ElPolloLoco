@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
 
     startMovingToCharacter() {
         this.isMoving = true;
-        this.speed = 2;
+        this.speed = 3;
         this.moveLeftToCharacter();
     }
 
@@ -69,7 +69,6 @@ class Endboss extends MovableObject {
         }
         this.movementInterval = setInterval(() => {
             if (!this.isDead() && this.isMoving) {
-
                 this.x -= this.speed;
                 if (this.x <= 100) {
                     this.stopMovement();
