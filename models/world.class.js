@@ -120,9 +120,8 @@ class World {
 
     createCoins() {
         const startX = 200;
-        const endX = 1500;
-        const spacing = (endX - startX) / 7;
-
+        const endX = 1200;
+        let spacing = (endX - startX) / 7;
         for (let i = 0; i < 8; i++) {
             let x = startX + (i * spacing) + (Math.random() * 100 - 50);
             let y = 100 + Math.random() * 120;
@@ -132,9 +131,8 @@ class World {
 
     createBottles() {
         const startX = 250;
-        const endX = 1450;
-        const spacing = (endX - startX) / 6;
-
+        const endX = 1150;
+        let spacing = (endX - startX) / 6;
         for (let i = 0; i < 7; i++) {
             let x = startX + (i * spacing) + (Math.random() * 60 - 30);
             this.bottles.push(new SalsaBottle(x, 315));
@@ -173,18 +171,35 @@ class World {
     checkCollisions() {
         if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
-            if (!this.character.isColliding(enemy)) return;
-            let characterBottom = this.character.y + this.character.height;
-            let enemyTop = enemy.y;
-            let characterIsAbove = characterBottom + this.character.speedY < enemyTop;
-            if (characterIsAbove) {
-                enemy.hit(20);
-                this.character.speedY = -5;
+            if (enemy.isDead() || !this.character.isColliding(enemy)) return;
+            if (this.isCharacterJumpingOnEnemy(enemy)) {
+                this.handleJumpAttack(enemy);
             } else {
-                this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.energy);
+                this.handleNormalCollision(enemy);
             }
         });
+    }
+
+    isCharacterJumpingOnEnemy(enemy) {
+        let charMargins = this.character.getHitboxMargins();
+        let enemyMargins = enemy.getHitboxMargins();
+        let characterBottom = this.character.y + this.character.height - charMargins.bottom;
+        let enemyTop = enemy.y + enemyMargins.top;
+        return characterBottom + this.character.speedY < enemyTop;
+    }
+
+    handleJumpAttack(enemy) {
+        enemy.hit(20);
+        this.character.speedY = -15;
+    }
+
+    handleNormalCollision(enemy) {
+        if (enemy instanceof Endboss) {
+            this.character.hitBoss();
+        } else {
+            this.character.hit();
+        }
+        this.statusBarHealth.setPercentage(this.character.energy);
     }
 
     checkThrowObjects() {
