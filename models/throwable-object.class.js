@@ -26,7 +26,7 @@ class ThrowableObject extends MovableObject {
         this.x = x;
         this.y = y;
         this.width = 60;
-        this.height = 80;
+        this.height = 100;
         this.energy = 20;
         this.throw();
         this.animate();
@@ -70,7 +70,7 @@ class ThrowableObject extends MovableObject {
         if (enemy instanceof Endboss) {
             enemy.hit(20);
         } else {
-            enemy.hit(20); 
+            enemy.hit(20);
         }
         clearInterval(this.rotationInterval);
         this.playSplashAnimation();
@@ -93,17 +93,17 @@ class ThrowableObject extends MovableObject {
 
     isColliding(enemy) {
         return this.x + this.width > enemy.x &&
-               this.x < enemy.x + enemy.width &&
-               this.y + this.height > enemy.y &&
-               this.y < enemy.y + enemy.height;
-    }  
+            this.x < enemy.x + enemy.width &&
+            this.y + this.height > enemy.y &&
+            this.y < enemy.y + enemy.height;
+    }
 
     getHitboxMargins() {
-        return { 
+        return {
             top: 5,
-            bottom: 5,   
-            left: 5,    
-            right: 5    
+            bottom: 5,
+            left: 5,
+            right: 5
         };
     }
 }
