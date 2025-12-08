@@ -31,7 +31,7 @@ class MovableObject extends DrawableObject {
             if (this.gameStarted && !this.isDead()) {
                 this.x -= this.speed;
                 if (this.x < -720) {
-                    this.x = 600;
+                    this.x = 500;
                 }
             }
         }, 1000 / 60);
@@ -70,8 +70,6 @@ class MovableObject extends DrawableObject {
         if (this.isDead() || mo.isDead()) {
             return false;
         }
-        
-        // Individuelle Margins für jedes Objekt
         let thisMargins = this.getHitboxMargins();
         let otherMargins = mo.getHitboxMargins();
         
@@ -82,7 +80,7 @@ class MovableObject extends DrawableObject {
     }
 
     getHitboxMargins() {
-        return { top: 0, bottom: 0, left: 0, right: 0 };
+        return { top: 10, bottom: 10, left: 10, right: 10 };
     }
 
     hit() {
