@@ -48,10 +48,10 @@ class Chicken extends MovableObject {
 
     getHitboxMargins() {
         return { 
-            top: 5,
-            bottom: 5,   
-            left: 10,    
-            right: 10    
+            top: 10,
+            bottom: 0,   
+            left: 18,    
+            right: 18    
         };
     }
 }

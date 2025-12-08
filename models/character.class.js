@@ -123,10 +123,10 @@ class Character extends MovableObject {
 
     getHitboxMargins() {
         return { 
-            top: 60,
-            bottom: 0,   
-            left: 20,    
-            right: 20    
+            top: 110,
+            bottom: 20,   
+            left: 30,    
+            right: 30    
         };
     }
 }
