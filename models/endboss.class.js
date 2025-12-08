@@ -16,7 +16,7 @@ class Endboss extends MovableObject {
         this.loadImages(ENDBOSS_IMAGES.chicken_alert_images);
         this.loadImages(ENDBOSS_IMAGES.chicken_attack_images);
         this.y = 50;
-        this.x = 1600;
+        this.x = 1650;
         this.height = 400;
         this.width = 300;
         this.animateEndboss();
@@ -48,8 +48,7 @@ class Endboss extends MovableObject {
             }
             setTimeout(() => {
                 this.isHurting = false;
-            }, 600);
-        }
+            }, 600);}
     }
 
     endbossIsHurting() {
@@ -88,7 +87,6 @@ class Endboss extends MovableObject {
     animateEndboss() {
         this.animationInterval = setInterval(() => {
             if (this.isDead() && !this.isDying) {
-                this.isDying = true;
                 this.playDeathAnimation();
             } else if (this.isAttacking) {
                 this.playAnimation(ENDBOSS_IMAGES.chicken_attack_images);
@@ -114,7 +112,8 @@ class Endboss extends MovableObject {
             } else {
                 clearInterval(deathInterval);
             }
-        }, 300);
+        }, 200);
+            return this.isDying = true;
     }
 
     isDead() {
