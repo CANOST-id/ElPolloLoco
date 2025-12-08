@@ -2,10 +2,12 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 let buttons;
+let sounds;
 
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard, buttons);
+
 }
 
 function startOverlay() {
@@ -21,11 +23,20 @@ function startOverlay() {
 }
 
 function startGame() {
+    if (sounds) {
+        sounds.stopStartSound();
+        sounds.startBackgroundMusic();
+    }
     init();
     if (world) {
         world.startEnemyMovement();
     }
 }
+
+window.addEventListener('load', () => {
+    sounds = new Sounds();
+    sounds.startStartSound();
+});
 
 function restartGame() {
     removeEndscreen();

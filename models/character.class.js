@@ -9,6 +9,9 @@ class Character extends MovableObject {
     movementInterval;
     isDying = false;
     idleTime = 0;
+    isPlayingIdleSound = false;
+    isPlayingSnoringSound = false;
+    isPlayingRunningSound = false;
 
     constructor() {
         super().loadImage(CHARACTER_IMAGES.images_standing[0]);
@@ -53,12 +56,15 @@ class Character extends MovableObject {
     moveInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead()) {
+                let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) ||
+                    (this.world.keyboard.LEFT && this.x > 70);
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     this.moveRight();
                 }
                 if (this.world.keyboard.LEFT && this.x > 70) {
                     this.moveCharacterLeft();
                 }
+                this.handleRunningSound(isWalking);
             }
         }, 1000 / 60);
     }
@@ -101,32 +107,99 @@ class Character extends MovableObject {
     handleIdleState() {
         this.idleTime += 0.1;
         if (this.idleTime >= 5) {
-            this.playAnimation(CHARACTER_IMAGES.images_sleeping);
-        } else if (this.idleTime >= 0) {
-            this.playAnimation(CHARACTER_IMAGES.images_standing);
+            this.handleSleepingState();
+        } else if (this.idleTime >= 2) {
+            this.handleStandingIdleState();
+        } else {
+            this.handleEarlyIdleState();
         }
+    }
+
+    handleSleepingState() {
+        this.playAnimation(CHARACTER_IMAGES.images_sleeping);
+        if (!this.isPlayingSnoringSound && this.world && this.world.sound) {
+            this.world.sound.playSound(this.world.sound.snoringSound);
+            this.isPlayingSnoringSound = true;
+            this.isPlayingIdleSound = false;
+        }
+    }
+
+    handleStandingIdleState() {
+        this.playAnimation(CHARACTER_IMAGES.images_standing);
+        if (!this.isPlayingIdleSound && this.world && this.world.sound) {
+            this.world.sound.playSound(this.world.sound.idleSound);
+            this.isPlayingIdleSound = true;
+            this.isPlayingSnoringSound = false;
+        }
+    }
+
+    handleEarlyIdleState() {
+        this.playAnimation(CHARACTER_IMAGES.images_standing);
+        this.isPlayingIdleSound = false;
+        this.isPlayingSnoringSound = false;
     }
 
     checkMovement() {
         let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.D;
+        let isWalking = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+
         if (isMoving) {
             this.playAnimation(CHARACTER_IMAGES.images_walking);
+            this.handleRunningSound(isWalking);
             this.resetIdleTime();
         } else {
+            this.stopRunningSound();
             this.handleIdleState();
+        }
+    }
+
+    handleRunningSound(isWalking) {
+        if (this.world && this.world.sound) {
+            let runningSound = this.world.sound.runingSound;
+            if (isWalking) {
+                if (runningSound.paused) {
+                    runningSound.play().catch(e => { });
+                }
+            } else {
+                if (!runningSound.paused) {
+                    runningSound.pause();
+                }
+            }
+        }
+    }
+
+    stopRunningSound() {
+        if (this.world && this.world.sound) {
+            this.world.sound.runingSound.pause();
+            this.isPlayingRunningSound = false;
         }
     }
 
     resetIdleTime() {
         this.idleTime = 0;
+        this.stopIdleSounds();
+        this.stopRunningSound();
+    }
+
+    stopIdleSounds() {
+        if (this.isPlayingSnoringSound && this.world && this.world.sound) {
+            this.world.sound.snoringSound.pause();
+            this.world.sound.snoringSound.currentTime = 0;
+        }
+        if (this.isPlayingIdleSound && this.world && this.world.sound) {
+            this.world.sound.idleSound.pause();
+            this.world.sound.idleSound.currentTime = 0;
+        }
+        this.isPlayingIdleSound = false;
+        this.isPlayingSnoringSound = false;
     }
 
     getHitboxMargins() {
-        return { 
+        return {
             top: 110,
-            bottom: 20,   
-            left: 30,    
-            right: 30    
+            bottom: 20,
+            left: 30,
+            right: 30
         };
     }
 }

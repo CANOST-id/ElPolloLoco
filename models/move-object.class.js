@@ -52,6 +52,7 @@ class MovableObject extends DrawableObject {
     jump() {
         if (this.isAboveGround()) return;
         this.speedY = 18;
+            this.world.sound.playSound(this.world.sound.jumpSound);
     }
 
     playAnimation(images) {
@@ -84,20 +85,33 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
+        this.lastHit = new Date().getTime();
+        this.energy -= 1;
+        
         if (this.energy <= 0) {
             this.energy = 0;
+            if (this.world && this.world.sound) {
+                this.world.sound.playSound(this.world.sound.deadCharacterSound);
+            }
         } else {
-            this.lastHit = new Date().getTime();
-            this.energy -= 1;
+            if (this.world && this.world.sound) {
+                this.world.sound.playSound(this.world.sound.hurtSound);
+            }
         }
     }
 
     hitBoss() {
+        this.lastHit = new Date().getTime();
+        this.energy -= 20;
         if (this.energy <= 0) {
             this.energy = 0;
+            if (this.world && this.world.sound) {
+                this.world.sound.playSound(this.world.sound.deadCharacterSound);
+            }
         } else {
-            this.lastHit = new Date().getTime();
-            this.energy -= 20;
+            if (this.world && this.world.sound) {
+                this.world.sound.playSound(this.world.sound.hurtSound);
+            }
         }
     }
 

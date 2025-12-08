@@ -18,6 +18,7 @@ class World {
     buttons;
     collectedCoins = 0;
     collectedBottles = 0;
+    sound = new Sounds();
 
     constructor(canvas, keyboard, existingButtons = null) {
         this.canvas = canvas;
@@ -219,10 +220,14 @@ class World {
     bottleEnemyCollision() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.level.enemies.forEach(enemy => {
-                if (bottle.isColliding(enemy)) {
+                if (!enemy.isDead() && bottle.isColliding(enemy)) {
+                    let wasAlive = !enemy.isDead();
                     bottle.hitEnemy(enemy);
                     if (enemy instanceof Endboss) {
                         this.statusBarBossHealth.setPercentage(enemy.energy);
+                        if (wasAlive && enemy.isDead()) {
+                            this.sound.playSound(this.sound.endbossHurtSound);
+                        }
                     }
                 }
             });
