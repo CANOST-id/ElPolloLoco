@@ -1,7 +1,9 @@
 class Sounds {
     constructor() {
+        this.originalVolumes = {};
         this.loadAllSounds();
         this.setupSoundSettings();
+        this.loadMuteState();
     }
 
     loadAllSounds() {
@@ -20,28 +22,58 @@ class Sounds {
     }
 
     setupSoundSettings() {
+        this.originalVolumes = {
+            gameSound: 0.1,
+            jumpSound: 0.5,
+            hurtSound: 0.6,
+            deadCharacterSound: 0.7,
+            chickenBackgroundSound: 0.2,
+            idleSound: 0.2,
+            runingSound: 0.2,
+            gameOverSound: 0.5,
+            winSound: 0.5,
+            startSound: 0.4,
+            snoringSound: 0.3,
+            endbossHurtSound: 0.5
+        };
+
         this.gameSound.loop = true;
-        this.gameSound.volume = 0.1;
-        this.jumpSound.volume = 0.5;
-        this.hurtSound.volume = 0.6;
-        this.deadCharacterSound.volume = 0.7;
+        this.gameSound.volume = this.originalVolumes.gameSound;
+        this.jumpSound.volume = this.originalVolumes.jumpSound;
+        this.hurtSound.volume = this.originalVolumes.hurtSound;
+        this.deadCharacterSound.volume = this.originalVolumes.deadCharacterSound;
         this.chickenBackgroundSound.loop = true;
-        this.chickenBackgroundSound.volume = 0.2;
-        this.idleSound.volume = 0.2;
+        this.chickenBackgroundSound.volume = this.originalVolumes.chickenBackgroundSound;
+        this.idleSound.volume = this.originalVolumes.idleSound;
         this.runingSound.loop = true;
-        this.runingSound.volume = 0.2;
-        this.gameOverSound.volume = 0.5;
-        this.winSound.volume = 0.5;
+        this.runingSound.volume = this.originalVolumes.runingSound;
+        this.gameOverSound.volume = this.originalVolumes.gameOverSound;
+        this.winSound.volume = this.originalVolumes.winSound;
         this.startSound.loop = true;
-        this.startSound.volume = 0.4;
+        this.startSound.volume = this.originalVolumes.startSound;
         this.snoringSound.loop = true;
-        this.snoringSound.volume = 0.3;
+        this.snoringSound.volume = this.originalVolumes.snoringSound;
+        this.endbossHurtSound.volume = this.originalVolumes.endbossHurtSound;
     }
 
     playSound(sound) {
         if (sound) {
+            this.checkAndApplyMute();
             sound.currentTime = 0;
-            sound.play();
+            sound.play().catch(e => {
+                if (!e.message.includes('NotAllowedError')) {
+                    console.log('Sound play failed:', e);
+                }
+            });
+        }
+    }
+
+    checkAndApplyMute() {
+        let isMuted = localStorage.getItem('gameIsMuted') === 'true';
+        if (isMuted) {
+            this.muteState();
+        } else {
+            this.soundState();
         }
     }
 
@@ -65,5 +97,58 @@ class Sounds {
                 sound.currentTime = sound.duration;
             }
         });
+    }
+
+    setGlobalMute(isMuted) {
+        localStorage.setItem('gameIsMuted', isMuted.toString());
+
+        if (isMuted) {
+            this.muteState();
+        } else {
+            this.soundState();
+        }
+    }
+
+    muteState() {
+        this.gameSound.volume = 0;
+        this.jumpSound.volume = 0;
+        this.hurtSound.volume = 0;
+        this.deadCharacterSound.volume = 0;
+        this.chickenBackgroundSound.volume = 0;
+        this.idleSound.volume = 0;
+        this.runingSound.volume = 0;
+        this.gameOverSound.volume = 0;
+        this.winSound.volume = 0;
+        this.startSound.volume = 0;
+        this.snoringSound.volume = 0;
+        this.endbossHurtSound.volume = 0;
+    }
+
+    soundState() {
+        this.gameSound.volume = this.originalVolumes.gameSound;
+        this.jumpSound.volume = this.originalVolumes.jumpSound;
+        this.hurtSound.volume = this.originalVolumes.hurtSound;
+        this.deadCharacterSound.volume = this.originalVolumes.deadCharacterSound;
+        this.chickenBackgroundSound.volume = this.originalVolumes.chickenBackgroundSound;
+        this.idleSound.volume = this.originalVolumes.idleSound;
+        this.runingSound.volume = this.originalVolumes.runingSound;
+        this.gameOverSound.volume = this.originalVolumes.gameOverSound;
+        this.winSound.volume = this.originalVolumes.winSound;
+        this.startSound.volume = this.originalVolumes.startSound;
+        this.snoringSound.volume = this.originalVolumes.snoringSound;
+        this.endbossHurtSound.volume = this.originalVolumes.endbossHurtSound;
+    }
+
+    loadMuteState() {
+        const savedState = localStorage.getItem('gameIsMuted');
+        if (savedState === 'true') {
+            this.setGlobalMute(true);
+        }
+    }
+
+    toggleMute() {
+        const currentlyMuted = localStorage.getItem('gameIsMuted') === 'true';
+        this.setGlobalMute(!currentlyMuted);
+        return !currentlyMuted;
     }
 }

@@ -28,6 +28,7 @@ class Buttons extends DrawableObject {
         this.homeButton = this.createButton('HOME', 'canvas-btn home-btn', () => location.reload());
         this.muteButton = this.createButton('🔊', 'canvas-btn mute-btn', () => this.toggleMute());
         this.infoButton = this.createButton('INFO', 'canvas-btn info-btn', () => this.toggleInfo());
+        setTimeout(() => this.updateMuteButton(), 100);
     }
 
     createButton(content, className, clickHandler) {
@@ -69,24 +70,21 @@ class Buttons extends DrawableObject {
     }
 
     toggleMute() {
-        this.isMuted = !this.isMuted;
-        this.muteButton.innerHTML = this.isMuted ? '🔇' : '🔊';
-        if (this.isMuted) {
-            this.disableSound();
-        } else {
-            this.enableSound();
+        if (typeof sounds !== 'undefined' && sounds) {
+            this.isMuted = sounds.toggleMute();
+            this.muteButton.innerHTML = this.isMuted ? '🔇' : '🔊';
+        }
+    }
+
+    updateMuteButton() {
+        let savedState = localStorage.getItem('gameIsMuted');
+        this.isMuted = savedState === 'true';
+        if (this.muteButton) {
+            this.muteButton.innerHTML = this.isMuted ? '🔇' : '🔊';
         }
     }
 
     toggleInfo() {
         openDialog();
-    }
-
-    enableSound() {
-        console.log('Sound enabled');
-    }
-
-    disableSound() {
-        console.log('Sound disabled');
     }
 }
