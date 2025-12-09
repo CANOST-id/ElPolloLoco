@@ -36,6 +36,9 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.level.enemies.forEach(enemy => {
+            enemy.world = this;
+        });
     }
 
     run() {
@@ -163,6 +166,12 @@ class World {
     endGame(isWin) {
         this.gameRunning = false;
         clearInterval(this.gameInterval);
+        this.sound.stopAllSounds();
+        if (isWin) {
+            this.sound.playSound(this.sound.winSound);
+        } else {
+            this.sound.playSound(this.sound.gameOverSound);
+        }
         setTimeout(() => {
             this.stopAllAnimations();
             new Endscreen(this.canvas, isWin);
@@ -196,11 +205,24 @@ class World {
 
     handleNormalCollision(enemy) {
         if (enemy instanceof Endboss) {
+            this.applyBounceBack(this.character, enemy);
+            enemy.performAttack();
             this.character.hitBoss();
         } else {
             this.character.hit();
         }
         this.statusBarHealth.setPercentage(this.character.energy);
+    }
+
+    applyBounceBack(character, endboss) {
+        let characterCenter = character.x + (character.width / 2);
+        let endbossCenter = endboss.x + (endboss.width / 2);
+        
+        if (characterCenter < endbossCenter) {
+            endboss.x += 100;
+        } 
+        character.x = Math.max(70, Math.min(character.x, this.level.level_end_x - character.width));
+        endboss.x = Math.max(100, Math.min(endboss.x, this.level.level_end_x - endboss.width));
     }
 
     checkThrowObjects() {
