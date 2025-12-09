@@ -43,12 +43,10 @@ class Endboss extends MovableObject {
             this.stopMovement();
         } else {
             this.endbossIsHurting();
-            if (!this.isMoving && this.energy < 100) {
-                this.startMovingToCharacter();
-            }
             setTimeout(() => {
                 this.isHurting = false;
-            }, 600);}
+            }, 600);
+        }
     }
 
     endbossIsHurting() {
@@ -68,12 +66,37 @@ class Endboss extends MovableObject {
         }
         this.movementInterval = setInterval(() => {
             if (!this.isDead() && this.isMoving) {
+                this.checkCharacterCollision();
                 this.x -= this.speed;
                 if (this.x <= 100) {
                     this.stopMovement();
                 }
             }
         }, 1000 / 60);
+    }
+
+    checkCharacterCollision() {
+        if (this.world && this.world.character) {
+            let distance = Math.abs(this.x - this.world.character.x);
+            if (distance < 300 && !this.isMoving && !this.isDead()) {
+                this.startMovingToCharacter();
+            }
+            if (distance < 10 && !this.isAttacking) {
+                this.startAttacking();
+            } else if (distance > 200 && this.isAttacking) {
+                this.stopAttacking();
+            }
+        }
+    }
+
+    startAttacking() {
+        this.isAttacking = true;
+        this.isMoving = false;
+    }
+
+    stopAttacking() {
+        this.isAttacking = false;
+        this.isMoving = true;
     }
 
     stopMovement() {
@@ -86,6 +109,7 @@ class Endboss extends MovableObject {
 
     animateEndboss() {
         this.animationInterval = setInterval(() => {
+            this.checkCharacterCollision();
             if (this.isDead() && !this.isDying) {
                 this.playDeathAnimation();
             } else if (this.isAttacking) {
