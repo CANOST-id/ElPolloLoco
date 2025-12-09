@@ -59,10 +59,14 @@ class Character extends MovableObject {
                 let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) ||
                     (this.world.keyboard.LEFT && this.x > 70);
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                    this.moveRight();
+                    if (this.canMoveRight()) {
+                        this.moveRight();
+                    }
                 }
                 if (this.world.keyboard.LEFT && this.x > 70) {
-                    this.moveCharacterLeft();
+                    if (this.canMoveLeft()) {
+                        this.moveCharacterLeft();
+                    }
                 }
                 this.handleRunningSound(isWalking);
             }
@@ -192,6 +196,28 @@ class Character extends MovableObject {
         }
         this.isPlayingIdleSound = false;
         this.isPlayingSnoringSound = false;
+    }
+
+    canMoveRight() {
+        let endboss = this.world.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (!endboss || endboss.isDead()) return true;
+        
+        let charMargins = this.getHitboxMargins();
+        let endbossMargins = endboss.getHitboxMargins();
+        
+        let charRightEdge = this.x + this.width - charMargins.right + 7;
+        let endbossLeftEdge = endboss.x + endbossMargins.left;
+        return charRightEdge < endbossLeftEdge + 60 || this.x > endboss.x;
+    }
+
+    canMoveLeft() {
+        let endboss = this.world.level.enemies.find(enemy => enemy instanceof Endboss);
+        if (!endboss || endboss.isDead()) return true;
+        let charMargins = this.getHitboxMargins();
+        let endbossMargins = endboss.getHitboxMargins();
+        let charLeftEdge = this.x + charMargins.left - 7;
+        let endbossRightEdge = endboss.x + endboss.width - endbossMargins.right;
+        return charLeftEdge > endbossRightEdge - 60 || this.x < endboss.x;
     }
 
     getHitboxMargins() {
