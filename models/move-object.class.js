@@ -31,7 +31,7 @@ class MovableObject extends DrawableObject {
             if (this.gameStarted && !this.isDead()) {
                 this.x -= this.speed;
                 if (this.x < -720) {
-                    this.x = 500;
+                    this.x = 400;
                 }
             }
         }, 1000 / 60);
