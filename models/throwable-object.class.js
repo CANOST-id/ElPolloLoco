@@ -92,10 +92,16 @@ class ThrowableObject extends MovableObject {
     }
 
     isColliding(enemy) {
-        return this.x + this.width > enemy.x &&
-            this.x < enemy.x + enemy.width &&
-            this.y + this.height > enemy.y &&
-            this.y < enemy.y + enemy.height;
+        if (this.isDead() || enemy.isDead()) {
+            return false;
+        }
+        let thisMargins = this.getHitboxMargins();
+        let otherMargins = enemy.getHitboxMargins();
+        
+        return this.x + thisMargins.left < enemy.x + enemy.width - otherMargins.right &&
+            this.x + this.width - thisMargins.right > enemy.x + otherMargins.left &&
+            this.y + thisMargins.top < enemy.y + enemy.height - otherMargins.bottom &&
+            this.y + this.height - thisMargins.bottom > enemy.y + otherMargins.top;
     }
 
     getHitboxMargins() {
