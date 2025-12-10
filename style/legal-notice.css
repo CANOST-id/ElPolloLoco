@@ -1,0 +1,48 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url(../assets/img_pollo_locco/img/5_background/background_desert.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* legal notice h1 style */
+header h1 {
+    font-family: 'Rye', serif;
+    font-size: 48px;
+    color: #662900;
+    text-shadow: 2px 2px 4px #000000;
+    margin: 20px 0 10px 0;
+}
+
+/* legal notice content style */
+.legal-notice-content {
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    text-align: center;
+}
+
+.legal-notice-content ul {
+    overflow: auto;
+    list-style: none;
+}
+
+/* footer style */
+footer a {
+    font-family: 'Special Elite', monospace;
+    font-size: 32px;
+    color: #662900;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+footer a:active {
+    color: #333333;
+}
