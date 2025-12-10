@@ -27,7 +27,7 @@ class Sounds {
             jumpSound: 0.5,
             hurtSound: 0.6,
             deadCharacterSound: 0.7,
-            chickenBackgroundSound: 0.2,
+            chickenBackgroundSound: 0.1,
             idleSound: 0.2,
             runingSound: 0.2,
             gameOverSound: 0.5,
@@ -79,6 +79,7 @@ class Sounds {
 
     startBackgroundMusic() {
         this.playSound(this.gameSound);
+        this.playSound(this.chickenBackgroundSound);
     }
 
     startStartSound() {
@@ -97,6 +98,23 @@ class Sounds {
                 sound.currentTime = sound.duration;
             }
         });
+    }
+
+    stopChickenBackgroundSound() {
+        this.chickenBackgroundSound.pause();
+        this.chickenBackgroundSound.currentTime = 0;
+    }
+
+    stopAllExceptGameSound() {
+        this.chickenBackgroundSound.pause();
+        this.endbossHurtSound.pause();
+        this.deadCharacterSound.pause();
+        this.hurtSound.pause();
+        this.idleSound.pause();
+        this.jumpSound.pause();
+        this.runingSound.pause();
+        this.snoringSound.pause();
+        this.startSound.pause();
     }
 
     setGlobalMute(isMuted) {

@@ -43,6 +43,7 @@ class Endboss extends MovableObject {
             this.stopMovement();
         } else {
             this.endbossIsHurting();
+            this.world.sound.playSound(this.world.sound.endbossHurtSound);
             setTimeout(() => {
                 this.isHurting = false;
             }, 600);
@@ -127,7 +128,7 @@ class Endboss extends MovableObject {
     playDeathAnimation() {
         this.stopMovement();
         clearInterval(this.animationInterval);
-        
+
         let deathAnimationIndex = 0;
         let deathInterval = setInterval(() => {
             if (deathAnimationIndex < ENDBOSS_IMAGES.chicken_dead_images.length) {
@@ -138,7 +139,7 @@ class Endboss extends MovableObject {
                 clearInterval(deathInterval);
             }
         }, 200);
-            return this.isDying = true;
+        return this.isDying = true;
     }
 
     isDead() {
@@ -146,11 +147,11 @@ class Endboss extends MovableObject {
     }
 
     getHitboxMargins() {
-        return { 
+        return {
             top: 90,
-            bottom: 50, 
-            left: 40, 
-            right: 40 
+            bottom: 50,
+            left: 40,
+            right: 40
         };
     }
 }
