@@ -95,7 +95,6 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
-        this.drawHitboxes();
         this.ctx.translate(-this.camera_x, 0);
     }
 
