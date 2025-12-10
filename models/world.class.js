@@ -166,7 +166,7 @@ class World {
     endGame(isWin) {
         this.gameRunning = false;
         clearInterval(this.gameInterval);
-        this.sound.stopAllSounds();
+        this.stopAllCharacterSounds();
         if (isWin) {
             this.sound.playSound(this.sound.winSound);
         } else {
@@ -176,6 +176,17 @@ class World {
             this.stopAllAnimations();
             new Endscreen(this.canvas, isWin);
         }, 2000);
+    }
+
+    stopAllCharacterSounds() {
+        this.sound.chickenBackgroundSound.pause();
+        this.sound.chickenBackgroundSound.currentTime = 0;
+        this.sound.runingSound.pause();
+        this.sound.runingSound.currentTime = 0;
+        this.sound.idleSound.pause();
+        this.sound.idleSound.currentTime = 0;
+        this.sound.snoringSound.pause();
+        this.sound.snoringSound.currentTime = 0;
     }
 
     checkCollisions() {
@@ -217,11 +228,10 @@ class World {
     applyBounceBack(character, endboss) {
         let characterCenter = character.x + (character.width / 2);
         let endbossCenter = endboss.x + (endboss.width / 2);
-        
+
         if (characterCenter < endbossCenter) {
             endboss.x += 100;
-        } 
-        character.x = Math.max(70, Math.min(character.x, this.level.level_end_x - character.width));
+        }
         endboss.x = Math.max(100, Math.min(endboss.x, this.level.level_end_x - endboss.width));
     }
 
@@ -243,20 +253,21 @@ class World {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.level.enemies.forEach(enemy => {
                 if (!enemy.isDead() && bottle.isColliding(enemy)) {
-                    let wasAlive = !enemy.isDead();
                     bottle.hitEnemy(enemy);
                     if (enemy instanceof Endboss) {
                         this.statusBarBossHealth.setPercentage(enemy.energy);
-                        if (wasAlive && enemy.isDead()) {
-                            this.sound.playSound(this.sound.endbossHurtSound);
-                        }
+                        this.sound.playSound(this.sound.endbossHurtSound);
                     }
                 }
             });
-            if (bottle.energy <= 0) {
-                this.throwableObjects.splice(bottleIndex, 1);
-            }
+            this.spliceBottle(bottle, bottleIndex);
         });
+    }
+
+    spliceBottle(bottle, bottleIndex) {
+        if (bottle.energy <= 0) {
+            this.throwableObjects.splice(bottleIndex, 1);
+        }
     }
 
     checkCollisionsCollectibles() {
@@ -303,6 +314,8 @@ class World {
     stopAllAnimations() {
         clearInterval(this.character.animationInterval);
         clearInterval(this.character.movementInterval);
+        this.character.stopIdleSounds();
+        this.character.stopRunningSound();
         this.level.enemies.forEach(enemy => {
             this.stopEnemieAnimations(enemy);
         });
