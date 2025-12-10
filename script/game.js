@@ -59,9 +59,11 @@ function removeEndscreen() {
 function resetEnemyAnimation() {
     if (world && world.level) {
         world.level.enemies = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 3; i++) {
             world.level.enemies.push(new Chicken());
         }
+        world.level.enemies.push(new SmallChicken());
+        world.level.enemies.push(new SmallChicken());
         world.level.enemies.push(new Endboss());
         world.startEnemyMovement();
     }
