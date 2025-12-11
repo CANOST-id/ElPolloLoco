@@ -57,7 +57,6 @@ function renderDialog() {
         </section>
     `;
     
-    // Event Listener für das Dialog-Content hinzufügen
     let dialogContent = document.querySelector('.dialog-content');
     dialogContent.addEventListener('click', function(event) {
         event.stopPropagation();
