@@ -1,4 +1,9 @@
+/**  * Sounds class to manage game audio elements.
+ */
 class Sounds {
+
+    /** * Creates a Sounds instance, loads all sounds, sets up their settings, and loads mute state.
+     */
     constructor() {
         this.originalVolumes = {};
         this.loadAllSounds();
@@ -6,6 +11,8 @@ class Sounds {
         this.loadMuteState();
     }
 
+    /** * Loads all sound files into Audio objects.
+     */
     loadAllSounds() {
         this.chickenBackgroundSound = new Audio('assets/sounds/chicken-background-sound.mp3');
         this.endbossHurtSound = new Audio('assets/sounds/chicken-hurt-sound.mp3');
@@ -21,7 +28,23 @@ class Sounds {
         this.startSound = new Audio('assets/sounds/start-sound.mp3');
     }
 
+    /**  * Sets up sound settings including volume levels and looping behavior.
+     */
     setupSoundSettings() {
+        this.setupOriginalVolumes();
+        this.soundState();
+        this.gameSound.loop = true;
+        this.chickenBackgroundSound.loop = true;
+        this.runingSound.loop = true;
+        this.startSound.loop = true;
+        this.snoringSound.loop = true;
+    }
+
+    /** 
+     * Initializes the original volume levels for each sound.
+     * @returns {Object} The original volume levels for each sound
+     */
+    setupOriginalVolumes() {
         this.originalVolumes = {
             gameSound: 0.1,
             jumpSound: 0.5,
@@ -36,38 +59,23 @@ class Sounds {
             snoringSound: 0.3,
             endbossHurtSound: 0.5
         };
-
-        this.gameSound.loop = true;
-        this.gameSound.volume = this.originalVolumes.gameSound;
-        this.jumpSound.volume = this.originalVolumes.jumpSound;
-        this.hurtSound.volume = this.originalVolumes.hurtSound;
-        this.deadCharacterSound.volume = this.originalVolumes.deadCharacterSound;
-        this.chickenBackgroundSound.loop = true;
-        this.chickenBackgroundSound.volume = this.originalVolumes.chickenBackgroundSound;
-        this.idleSound.volume = this.originalVolumes.idleSound;
-        this.runingSound.loop = true;
-        this.runingSound.volume = this.originalVolumes.runingSound;
-        this.gameOverSound.volume = this.originalVolumes.gameOverSound;
-        this.winSound.volume = this.originalVolumes.winSound;
-        this.startSound.loop = true;
-        this.startSound.volume = this.originalVolumes.startSound;
-        this.snoringSound.loop = true;
-        this.snoringSound.volume = this.originalVolumes.snoringSound;
-        this.endbossHurtSound.volume = this.originalVolumes.endbossHurtSound;
+        return this.originalVolumes;
     }
 
+    /** 
+     * Plays the specified sound, applying mute settings if necessary.
+     * @param {Audio} sound - The sound to be played
+     */
     playSound(sound) {
         if (sound) {
             this.checkAndApplyMute();
             sound.currentTime = 0;
-            sound.play().catch(e => {
-                if (!e.message.includes('NotAllowedError')) {
-                    console.log('Sound play failed:', e);
-                }
-            });
+            sound.play();
         }
     }
 
+    /** * Checks the mute state from local storage and applies it to all sounds.
+     */
     checkAndApplyMute() {
         let isMuted = localStorage.getItem('gameIsMuted') === 'true';
         if (isMuted) {
@@ -77,20 +85,28 @@ class Sounds {
         }
     }
 
+    /**  * Starts the background music when game starts.
+     */
     startBackgroundMusic() {
         this.playSound(this.gameSound);
         this.playSound(this.chickenBackgroundSound);
     }
 
+    /**  * Starts the start sound for home.
+     */
     startStartSound() {
         this.playSound(this.startSound);
     }
 
+    /**  * Stops the start sound for home.
+     */
     stopStartSound() {
         this.startSound.pause();
         this.startSound.currentTime = 0;
     }
 
+    /**  * Stops all sounds in the game.
+     */
     stopAllSounds() {
         Object.values(this).forEach(sound => {
             if (sound instanceof Audio) {
@@ -100,11 +116,22 @@ class Sounds {
         });
     }
 
-    stopChickenBackgroundSound() {
-        this.chickenBackgroundSound.pause();
-        this.chickenBackgroundSound.currentTime = 0;
+    /** 
+     * Sets the global mute state and updates local storage.
+     * @param {boolean} isMuted - Indicates whether to mute or unmute the sounds
+     */
+    setGlobalMute(isMuted) {
+        localStorage.setItem('gameIsMuted', isMuted.toString());
+
+        if (isMuted) {
+            this.muteState();
+        } else {
+            this.soundState();
+        }
     }
 
+    /**  * Stops all sounds except the game sound.
+     */
     stopAllExceptGameSound() {
         this.chickenBackgroundSound.pause();
         this.endbossHurtSound.pause();
@@ -117,16 +144,8 @@ class Sounds {
         this.startSound.pause();
     }
 
-    setGlobalMute(isMuted) {
-        localStorage.setItem('gameIsMuted', isMuted.toString());
-
-        if (isMuted) {
-            this.muteState();
-        } else {
-            this.soundState();
-        }
-    }
-
+    /**  * Sets all sound volumes to zero (mute state).
+     */
     muteState() {
         this.gameSound.volume = 0;
         this.jumpSound.volume = 0;
@@ -142,6 +161,8 @@ class Sounds {
         this.endbossHurtSound.volume = 0;
     }
 
+    /**  * Restores all sound volumes to their original levels (unmute state).
+     */
     soundState() {
         this.gameSound.volume = this.originalVolumes.gameSound;
         this.jumpSound.volume = this.originalVolumes.jumpSound;
@@ -157,6 +178,8 @@ class Sounds {
         this.endbossHurtSound.volume = this.originalVolumes.endbossHurtSound;
     }
 
+    /**  * Loads the mute state from local storage and applies it to the sounds.
+     */
     loadMuteState() {
         const savedState = localStorage.getItem('gameIsMuted');
         if (savedState === 'true') {
@@ -164,6 +187,8 @@ class Sounds {
         }
     }
 
+    /**  * Toggles the mute state and updates local storage.
+     */
     toggleMute() {
         const currentlyMuted = localStorage.getItem('gameIsMuted') === 'true';
         this.setGlobalMute(!currentlyMuted);
