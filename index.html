@@ -13,24 +13,24 @@
     <link rel="stylesheet" href="style/responsive.css">
     <link rel="stylesheet" href="style/nav-button-style.css">
 
-    <script src="models/sounds.class.js"></script>
-    <script src="models/character-images.class.js"></script>
-    <script src="models/endboss-images.class.js"></script>
-    <script src="models/endscreen.class.js"></script>
-    <script src="models/drawable-object.class.js"></script>
-    <script src="models/canvas-buttons.class.js"></script>
-    <script src="models/status-bar.class.js"></script>
-    <script src="models/move-object.class.js"></script>
-    <script src="models/collectibles.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
-    <script src="models/level.class.js"></script>
+    <script src="models/game-elements/sounds.class.js"></script>
+    <script src="models/class-images/character-images.class.js"></script>
+    <script src="models/class-images/endboss-images.class.js"></script>
+    <script src="models/game-elements/endscreen.class.js"></script>
+    <script src="models/game-elements/drawable-object.class.js"></script>
+    <script src="models/game-elements/canvas-buttons.class.js"></script>
+    <script src="models/game-elements/status-bar.class.js"></script>
+    <script src="models/game-mechanic/move-object.class.js"></script>
+    <script src="models/game-elements/collectibles.class.js"></script>
+    <script src="models/game-mechanic/keyboard.class.js"></script>
+    <script src="models/game-mechanic/level.class.js"></script>
 
-    <script src="models/clouds.class.js"></script>
-    <script src="models/character.class.js"></script>
-    <script src="models/chicken.class.js"></script>
-    <script src="models/endboss.class.js"></script>
-    <script src="models/background-object.class.js"></script>
-    <script src="models/throwable-object.class.js"></script>
+    <script src="models/game-elements/clouds.class.js"></script>
+    <script src="models/trope/character.class.js"></script>
+    <script src="models/trope/chicken.class.js"></script>
+    <script src="models/trope/endboss.class.js"></script>
+    <script src="models/game-elements/background-object.class.js"></script>
+    <script src="models/game-mechanic/throwable-object.class.js"></script>
 
     <script src="levels/level1.js"></script>
 
@@ -54,38 +54,37 @@
     </section>
 
     <section class="touch-buttons">
-        <!-- Left Arrow Button -->
         <button id="btn-left" class="touch-btn">
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
-                <path d="M35 20 L25 30 L35 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2" />
+                <path d="M35 20 L25 30 L35 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" />
             </svg>
         </button>
 
-        <!-- Right Arrow Button -->
         <button id="btn-right" class="touch-btn">
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
-                <path d="M25 20 L35 30 L25 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2" />
+                <path d="M25 20 L35 30 L25 40" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" />
             </svg>
         </button>
 
-        <!-- Up/Jump Arrow Button -->
         <button id="btn-jump" class="touch-btn">
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
-                <path d="M20 35 L30 25 L40 35" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2" />
+                <path d="M20 35 L30 25 L40 35" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" />
             </svg>
         </button>
 
-        <!-- Throw Button -->
         <button id="btn-throw" class="touch-btn">
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2"/>
-                <!-- Throwing hand/bottle icon -->
-                <path d="M22 35 Q30 20 38 35" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-                <circle cx="38" cy="35" r="2" fill="#fff"/>
-                <path d="M20 37 L24 33 L28 37" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="30" cy="30" r="28" fill="transparent" stroke="#fff" stroke-width="2" />
+                <path d="M22 35 Q30 20 38 35" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                <circle cx="38" cy="35" r="2" fill="#fff" />
+                <path d="M20 37 L24 33 L28 37" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
             </svg>
         </button>
     </section>
