@@ -1,3 +1,5 @@
+/** * Character Images for the main character.
+ */
 const CHARACTER_IMAGES = {
      images_walking: [
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-21.png',
