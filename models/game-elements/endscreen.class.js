@@ -5,7 +5,7 @@ class Endscreen {
     ctx;
     isWin;
     endImage;
-    
+
     /**
      * Creates an endscreen on the given canvas based on win/loss status.
      * @param {HTMLCanvasElement} canvas - The canvas element to draw the endscreen on

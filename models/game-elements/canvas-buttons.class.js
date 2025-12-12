@@ -1,3 +1,7 @@
+/**
+ * Canvas Buttons Class manages the buttons displayed on the game canvas for user interaction.
+ * Inherits from DrawableObject.
+ */
 class Buttons extends DrawableObject {
     buttonContainer;
     startButton;
@@ -8,6 +12,9 @@ class Buttons extends DrawableObject {
     isMuted = false;
     gameRunning = false;
 
+    /**
+     * Initializes the Buttons instance by creating the button container, buttons, and setting up event listeners.
+     */
     constructor() {
         super();
         this.createContainer();
@@ -16,6 +23,8 @@ class Buttons extends DrawableObject {
         this.buttonContainer.buttonsInstance = this;
     }
 
+    /** * Creates the button container and appends it to the header.
+     */
     createContainer() {
         this.buttonContainer = document.createElement('nav');
         this.buttonContainer.className = 'canvas-button-container';
@@ -23,6 +32,8 @@ class Buttons extends DrawableObject {
         this.updateContainerPosition();
     }
 
+    /** * Creates all buttons and appends them to the button container.
+     */
     createAllButtons() {
         this.startButton = this.createButton('START', 'canvas-btn start-btn', () => this.toggleGame());
         this.homeButton = this.createButton('HOME', 'canvas-btn home-btn', () => location.reload());
@@ -31,6 +42,11 @@ class Buttons extends DrawableObject {
         setTimeout(() => this.updateMuteButton(), 100);
     }
 
+    /** * Creates a button element with specified content, class, and click handler.
+     * @param {string} content - The inner HTML content of the button
+     * @param {string} className - The CSS class name for styling the button
+     * @param {Function} clickHandler - The function to call when the button is clicked
+     */
     createButton(content, className, clickHandler) {
         let button = document.createElement('button');
         button.innerHTML = content;
@@ -40,6 +56,8 @@ class Buttons extends DrawableObject {
         return button;
     }
 
+    /** * Sets up event listeners for fullscreen changes and window resizing to update button container position.
+     */
     setupEventListeners() {
         document.addEventListener('fullscreenchange', () => {
             this.updateContainerPosition();
@@ -51,6 +69,8 @@ class Buttons extends DrawableObject {
         setInterval(() => this.updateContainerPosition(), 1000);
     }
 
+    /** * Updates the position of the button container to align with the canvas element.
+     */
     updateContainerPosition() {
         let canvas = document.getElementById('canvas');
         if (!canvas) return;
@@ -59,6 +79,8 @@ class Buttons extends DrawableObject {
         this.buttonContainer.style.top = (canvasRect.bottom - 80) + 'px';
     }
 
+    /** * Toggles the game state between running and not running.
+     */
     toggleGame() {
         if (!this.gameRunning) {
             this.gameRunning = true;
@@ -69,6 +91,8 @@ class Buttons extends DrawableObject {
         }
     }
 
+    /** * Toggles the mute state of the game sounds and changes the mute button icon.
+     */
     toggleMute() {
         if (typeof sounds !== 'undefined' && sounds) {
             this.isMuted = sounds.toggleMute();
@@ -76,6 +100,9 @@ class Buttons extends DrawableObject {
         }
     }
 
+    /** * Updates the mute button display based on the saved mute state in local storage.
+     * Updates the isMuted property accordingly and changes the button icon.
+     */
     updateMuteButton() {
         let savedState = localStorage.getItem('gameIsMuted');
         this.isMuted = savedState === 'true';
@@ -84,6 +111,8 @@ class Buttons extends DrawableObject {
         }
     }
 
+    /** * Toggles the information dialog display.
+     */
     toggleInfo() {
         openDialog();
     }

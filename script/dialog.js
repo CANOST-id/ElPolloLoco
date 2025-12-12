@@ -1,18 +1,28 @@
+/** Opens the instruction dialog by setting its display to block and rendering its content.
+*/
+
 function openDialog() {
     let dialog = document.getElementById("dialog");
     dialog.style.display = "block";
     renderDialog();
 }
 
+/** Closes the instruction dialog by setting its display to none.
+*/
 function closeDialog() {
     let dialog = document.getElementById("dialog");
     dialog.style.display = "none";
 }
 
+/** Stops the propagation of the click event to prevent closing the dialog when clicking inside it.
+* @param {Event} event - The click event
+*/
 function stopPropagation(event) {
     event.stopPropagation();
 }
 
+/** Renders the content of the instruction dialog, including controls and instructions.
+*/
 function renderDialog() {
     let dialog = document.getElementById("dialog");
     dialog.innerHTML = `

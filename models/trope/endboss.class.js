@@ -1,3 +1,6 @@
+/** * Represents the endboss character in the game, extending the MovableObject class.
+ * @extends {MovableObject}
+  */
 class Endboss extends MovableObject {
     currentImageIndex = 0;
     energy = 100;
@@ -8,6 +11,8 @@ class Endboss extends MovableObject {
     movementInterval;
     isMoving = false;
 
+    /** * Creates a new Endboss instance.
+     */
     constructor() {
         super().loadImage(ENDBOSS_IMAGES.chicken_walk_images[0]);
         this.loadImages(ENDBOSS_IMAGES.chicken_walk_images);
@@ -22,6 +27,11 @@ class Endboss extends MovableObject {
         this.animateEndboss();
     }
 
+    /** * Performs an attack action by the endboss.
+     * @param {number} energy - The current energy level of the endboss
+     * @param {boolean} isAttacking - Indicates if the endboss is currently attacking
+     * @returns {boolean} - True if the attack was initiated, false otherwise
+     */
     performAttack() {
         if (this.isDead() || this.isAttacking) return false;
         this.isAttacking = true;
@@ -35,6 +45,9 @@ class Endboss extends MovableObject {
         return true;
     }
 
+    /** * Reduces the endboss's energy when hit and triggers hurt or death animations.
+     * @param {number} damage - The amount of damage to inflict on the endboss
+     */
     hit(damage = 20) {
         if (this.isDead()) return;
         this.energy -= damage;
@@ -50,17 +63,23 @@ class Endboss extends MovableObject {
         }
     }
 
+    /** * Sets the endboss to a hurting state and records the last hit time.
+     */
     endbossIsHurting() {
         this.isHurting = true;
         this.lastHit = new Date().getTime();
     }
 
+    /** * Starts the endboss moving towards the character.
+     */
     startMovingToCharacter() {
         this.isMoving = true;
         this.speed = 3;
         this.moveLeftToCharacter();
     }
 
+    /** * Moves the endboss left towards the character.
+     */
     moveLeftToCharacter() {
         if (this.movementInterval) {
             clearInterval(this.movementInterval);
@@ -76,6 +95,8 @@ class Endboss extends MovableObject {
         }, 1000 / 60);
     }
 
+    /** * Checks the distance to the character and initiates movement or attack as needed.
+     */
     checkCharacterCollision() {
         if (this.world && this.world.character) {
             let distance = Math.abs(this.x - this.world.character.x);
@@ -90,16 +111,22 @@ class Endboss extends MovableObject {
         }
     }
 
+    /** * Starts the endboss attacking the character.
+     */
     startAttacking() {
         this.isAttacking = true;
         this.isMoving = false;
     }
 
+    /** * Stops the endboss attacking the character.
+     */
     stopAttacking() {
         this.isAttacking = false;
         this.isMoving = true;
     }
 
+    /** * Stops the endboss's movement.
+     */
     stopMovement() {
         this.isMoving = false;
         if (this.movementInterval) {
@@ -108,6 +135,8 @@ class Endboss extends MovableObject {
         }
     }
 
+    /** * Animates the endboss by checking its state and playing the appropriate animation.
+     */
     animateEndboss() {
         this.animationInterval = setInterval(() => {
             this.checkCharacterCollision();
@@ -125,6 +154,8 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
+    /** * Plays the death animation for the endboss.
+     */
     playDeathAnimation() {
         this.stopMovement();
         clearInterval(this.animationInterval);
@@ -142,10 +173,16 @@ class Endboss extends MovableObject {
         return this.isDying = true;
     }
 
+    /** * Checks if the endboss is dead.
+     * @returns {boolean} - True if the endboss's energy is 0 or less, false otherwise
+     */
     isDead() {
         return this.energy <= 0;
     }
 
+    /** * Returns the hitbox margins for collision detection.
+     * @returns {Object} - An object containing the top, bottom, left, and right margins
+     */
     getHitboxMargins() {
         return {
             top: 90,
