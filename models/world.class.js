@@ -1,3 +1,7 @@
+/**
+ * World class that manages the game world, including characters, enemies, objects, and game logic.
+ * Handles rendering, collision detection, game state, and audio management.
+ */
 class World {
     character = new Character();
     level = level1;
@@ -20,6 +24,12 @@ class World {
     collectedBottles = 0;
     sound = new Sounds();
 
+    /**
+     * Creates a new World instance and initializes the game.
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering
+     * @param {Keyboard} keyboard - The keyboard input handler
+     * @param {Buttons} [existingButtons=null] - Optional existing button instance
+     */
     constructor(canvas, keyboard, existingButtons = null) {
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -34,6 +44,8 @@ class World {
         this.checkCollisionsCollectibles();
     }
 
+    /** * Sets world reference for character and enemies to enable cross-object communication.
+     */
     setWorld() {
         this.character.world = this;
         this.level.enemies.forEach(enemy => {
@@ -41,6 +53,9 @@ class World {
         });
     }
 
+    /** * Starts the main game loop with collision detection, object handling, and game state checks.
+     * Runs at 25 FPS.
+     */
     run() {
         this.gameInterval = setInterval(() => {
             if (!this.gameRunning) return;
@@ -51,6 +66,8 @@ class World {
         }, 1000 / 25);
     }
 
+    /** * Main drawing function that renders all game elements using requestAnimationFrame.
+     */
     draw() {
         this.drawBackground();
         this.drawStatusBars();
@@ -61,12 +78,18 @@ class World {
         });
     }
 
+    /** * Draws an array of objects to the canvas.
+     * @param {MovableObject[]} objects - Array of objects to render
+     */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
     }
 
+    /** * Draws a single movable object to the canvas with proper image flipping if needed.
+     * @param {MovableObject} mo - The movable object to render
+     */
     addToMap(mo) {
         if (!mo.img || !mo.img.complete || mo.img.naturalWidth === 0) {
             return;
@@ -80,6 +103,8 @@ class World {
         }
     }
 
+    /** * Renders the background elements (background objects and clouds) with camera translation.
+     */
     drawBackground() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_x, 0);
@@ -88,6 +113,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /** * Renders all moving game elements (character, enemies, objects) with camera translation.
+     */
     drawMovingElements() {
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
@@ -98,6 +125,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
+    /** * Renders all UI status bars (health, bottles, coins, boss health).
+     */
     drawStatusBars() {
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarBottles);
@@ -105,6 +134,8 @@ class World {
         this.drawBossHealthBar();
     }
 
+    /** * Renders the boss health bar when the endboss is active and damaged.
+     */
     drawBossHealthBar() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
         if (endboss && endboss.energy < 100) {
@@ -116,11 +147,16 @@ class World {
         }
     }
 
+    /** * Renders all collectible items (coins and bottles) to the canvas.
+     */
     drawCollectibles() {
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
     }
 
+    /** * Creates and initializes coin collectibles at random positions across the level.
+     * Distributes coins evenly across the level width with random position variations.
+     */
     createCoins() {
         const startX = 200;
         const endX = 1200;
@@ -132,6 +168,9 @@ class World {
         }
     }
 
+    /** * Creates and initializes bottle collectibles at random positions across the level.
+     * Distributes bottles evenly across the level width with random position variations.
+     */
     createBottles() {
         const startX = 250;
         const endX = 1150;
@@ -142,6 +181,8 @@ class World {
         }
     }
 
+    /** * Starts movement for all enemies in the level that have a startMovement method.
+     */
     startEnemyMovement() {
         this.level.enemies.forEach(enemy => {
             if (enemy.startMovement) {
@@ -150,6 +191,8 @@ class World {
         });
     }
 
+    /** * Checks win/loss conditions and triggers game end if conditions are met.
+     */
     checkGameEnd() {
         if (this.character.isDead()) {
             this.endGame(false);
@@ -162,6 +205,9 @@ class World {
         }
     }
 
+    /** * Ends the game with win/loss state and shows appropriate screen and sounds.
+     * @param {boolean} isWin - Whether the game was won (true) or lost (false)
+     */
     endGame(isWin) {
         this.gameRunning = false;
         clearInterval(this.gameInterval);
@@ -174,9 +220,11 @@ class World {
         setTimeout(() => {
             this.stopAllAnimations();
             new Endscreen(this.canvas, isWin);
-        }, 2000);
+        }, 1000);
     }
 
+    /** * Stops all character-related sound effects (walking, jumping, hurt sounds).
+     */
     stopAllCharacterSounds() {
         this.sound.chickenBackgroundSound.pause();
         this.sound.chickenBackgroundSound.currentTime = 0;
@@ -188,6 +236,8 @@ class World {
         this.sound.snoringSound.currentTime = 0;
     }
 
+    /** * Checks collisions between the character and all enemies in the level.
+     */
     checkCollisions() {
         if (this.character.isDead()) return;
         this.level.enemies.forEach(enemy => {
@@ -200,6 +250,10 @@ class World {
         });
     }
 
+    /** * Determines if the character is jumping on an enemy for a jump attack.
+     * @param {Object} enemy - The enemy object to check against
+     * @returns {boolean} True if character is performing a jump attack
+     */
     isCharacterJumpingOnEnemy(enemy) {
         let charMargins = this.character.getHitboxMargins();
         let enemyMargins = enemy.getHitboxMargins();
@@ -208,11 +262,17 @@ class World {
         return characterBottom + this.character.speedY < enemyTop;
     }
 
+    /** * Handles jump attack mechanics when character lands on enemy.
+     * @param {Object} enemy - The enemy being attacked
+     */
     handleJumpAttack(enemy) {
         enemy.hit(20);
         this.character.speedY = -15;
     }
 
+    /** * Handles normal collision between character and enemy (damage to character).
+     * @param {Object} enemy - The enemy colliding with the character
+     */
     handleNormalCollision(enemy) {
         if (enemy instanceof Endboss) {
             this.applyBounceBack(this.character, enemy);
@@ -224,6 +284,10 @@ class World {
         this.statusBarHealth.setPercentage(this.character.energy);
     }
 
+    /** * Applies bounce-back physics between character and endboss during collision.
+     * @param {Character} character - The character object
+     * @param {Endboss} endboss - The endboss object
+     */
     applyBounceBack(character, endboss) {
         let characterCenter = character.x + (character.width / 2);
         let endbossCenter = endboss.x + (endboss.width / 2);
@@ -234,6 +298,8 @@ class World {
         endboss.x = Math.max(100, Math.min(endboss.x, this.level.level_end_x - endboss.width));
     }
 
+    /** * Handles bottle throwing mechanics and input detection.
+     */
     checkThrowObjects() {
         if (this.keyboard.D && !this.bottleThrown && this.collectedBottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 80);
@@ -248,6 +314,8 @@ class World {
         this.bottleEnemyCollision();
     }
 
+    /** * Handles collision detection between thrown bottles and enemies.
+     */
     bottleEnemyCollision() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
             this.level.enemies.forEach(enemy => {
@@ -263,17 +331,25 @@ class World {
         });
     }
 
+    /** * Removes a bottle from the game when it's destroyed or expired.
+     * @param {ThrowableObject} bottle - The bottle object to check for removal
+     * @param {number} bottleIndex - The index of the bottle in the array
+     */
     spliceBottle(bottle, bottleIndex) {
         if (bottle.energy <= 0) {
             this.throwableObjects.splice(bottleIndex, 1);
         }
     }
 
+    /** * Checks collisions with all collectible items (coins and bottles).
+     */
     checkCollisionsCollectibles() {
         this.checkCoinCollisions();
         this.checkBottleCollisions();
     }
 
+    /** * Handles collision detection and collection of coins by the character.
+     */
     checkCoinCollisions() {
         this.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
@@ -284,6 +360,8 @@ class World {
         });
     }
 
+    /** * Handles collision detection and collection of bottles by the character.
+     */
     checkBottleCollisions() {
         this.bottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
@@ -294,6 +372,9 @@ class World {
         });
     }
 
+    /** * Flips an image horizontally for rendering (e.g., character facing left).
+     * @param {Object} mo - The moveable object to flip
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
@@ -301,15 +382,23 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    /** * Restores the image to its original orientation after flipping.
+     * @param {Object} mo - The moveable object to restore
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
 
+    /** * Checks if the character is dead (energy depleted).
+     * @returns {boolean} True if character has no energy left
+     */
     isDead() {
         return this.character.energy <= 0;
     }
 
+    /** * Stops all running animation intervals to prevent memory leaks.
+     */
     stopAllAnimations() {
         clearInterval(this.character.animationInterval);
         clearInterval(this.character.movementInterval);
@@ -325,6 +414,9 @@ class World {
         });
     }
 
+    /** * Stops all animation intervals for a specific enemy to prevent memory leaks.
+     * @param {Object} enemy - The enemy object whose animations to stop
+     */
     stopEnemieAnimations(enemy) {
         if (enemy.animationInterval) {
             clearInterval(enemy.animationInterval);
@@ -340,12 +432,16 @@ class World {
         enemy.speedY = 0;
     }
 
+    /** * Stops all remaining intervals when game ends.
+     */
     stopAllIntervals() {
         if (this.enemyMovementInterval) {
             clearInterval(this.enemyMovementInterval);
         }
     }
 
+    /** * Draws hitboxes for all game objects for debugging purposes.
+     */
     drawHitboxes() {
         this.ctx.strokeStyle = 'red';
         this.ctx.lineWidth = 2;
@@ -353,6 +449,8 @@ class World {
         this.createEnemyHitboxes();
     }
 
+    /** * Creates and draws the hitbox for the main character.
+     */
     createCHaracterHitbox() {
         let charMargins = this.character.getHitboxMargins();
         this.ctx.strokeRect(
@@ -363,6 +461,8 @@ class World {
         );
     }
 
+    /** * Creates and draws hitboxes for all enemies in the level.
+     */
     createEnemyHitboxes() {
         this.level.enemies.forEach(enemy => {
             let enemyMargins = enemy.getHitboxMargins();
