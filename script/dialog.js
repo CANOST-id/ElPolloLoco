@@ -66,9 +66,9 @@ function renderDialog() {
             </section>
         </section>
     `;
-    
-    let dialogContent = document.querySelector('.dialog-content');
-    dialogContent.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
 }
+
+let dialogContent = document.querySelector('.dialog-content');
+dialogContent.addEventListener('click', function (event) {
+    event.stopPropagation();
+});
