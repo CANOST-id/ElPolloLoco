@@ -7,6 +7,8 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    min-height: 100vh;
+    
 }
 
 /* legal notice h1 style */
