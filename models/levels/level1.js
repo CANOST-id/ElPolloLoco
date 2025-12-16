@@ -1,3 +1,5 @@
+/** * Level 1 configuration including enemies, clouds, and background objects.
+ */
 const level1 = new Level(
     [
         new Chicken(),
