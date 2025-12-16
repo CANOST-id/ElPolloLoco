@@ -2,16 +2,25 @@
  * @extends {MovableObject}
   */
 class Endboss extends MovableObject {
+    /** @type {number} Index of the current image in animation sequences */
     currentImageIndex = 0;
+    /** @type {number} Health points of the endboss */
     energy = 100;
+    /** @type {boolean} Flag indicating if the endboss is currently hurt */
     isHurting = false;
+    /** @type {boolean} Flag indicating if the endboss is currently dying */
     isDying = false;
+    /** @type {boolean} Flag indicating if the endboss is currently attacking */
     isAttacking = false;
+    /** @type {number} Interval ID for animation loop */
     animationInterval;
+    /** @type {number} Interval ID for movement loop */
     movementInterval;
+    /** @type {boolean} Flag indicating if the endboss is currently moving */
     isMoving = false;
 
     /** * Creates a new Endboss instance.
+     * Initializes position, size, images, and starts animation.
      */
     constructor() {
         super().loadImage(ENDBOSS_IMAGES.chicken_walk_images[0]);
@@ -28,9 +37,8 @@ class Endboss extends MovableObject {
     }
 
     /** * Performs an attack action by the endboss.
-     * @param {number} energy - The current energy level of the endboss
-     * @param {boolean} isAttacking - Indicates if the endboss is currently attacking
-     * @returns {boolean} - True if the attack was initiated, false otherwise
+     * Initiates attack state and temporarily disables movement.
+     * @returns {boolean} True if the attack was initiated, false if already dead or attacking
      */
     performAttack() {
         if (this.isDead() || this.isAttacking) return false;
@@ -46,7 +54,7 @@ class Endboss extends MovableObject {
     }
 
     /** * Reduces the endboss's energy when hit and triggers hurt or death animations.
-     * @param {number} damage - The amount of damage to inflict on the endboss
+     * @param {number} [damage=20] - The amount of damage to inflict on the endboss
      */
     hit(damage = 20) {
         if (this.isDead()) return;
@@ -79,6 +87,7 @@ class Endboss extends MovableObject {
     }
 
     /** * Moves the endboss left towards the character.
+     * Sets up movement interval and handles boundary checking.
      */
     moveLeftToCharacter() {
         if (this.movementInterval) {
@@ -96,6 +105,7 @@ class Endboss extends MovableObject {
     }
 
     /** * Checks the distance to the character and initiates movement or attack as needed.
+     * Handles proximity-based behavior changes.
      */
     checkCharacterCollision() {
         if (this.world && this.world.character) {
@@ -126,6 +136,7 @@ class Endboss extends MovableObject {
     }
 
     /** * Stops the endboss's movement.
+     * Clears movement intervals and resets movement flags.
      */
     stopMovement() {
         this.isMoving = false;
@@ -136,6 +147,7 @@ class Endboss extends MovableObject {
     }
 
     /** * Animates the endboss by checking its state and playing the appropriate animation.
+     * Runs at 5 FPS (every 200ms) and handles state-based animation switching.
      */
     animateEndboss() {
         this.animationInterval = setInterval(() => {
@@ -155,6 +167,8 @@ class Endboss extends MovableObject {
     }
 
     /** * Plays the death animation for the endboss.
+     * Stops movement, clears intervals, and cycles through death images.
+     * @returns {boolean} Always returns true after setting isDying flag
      */
     playDeathAnimation() {
         this.stopMovement();
@@ -174,14 +188,18 @@ class Endboss extends MovableObject {
     }
 
     /** * Checks if the endboss is dead.
-     * @returns {boolean} - True if the endboss's energy is 0 or less, false otherwise
+     * @returns {boolean} True if the endboss's energy is 0 or less, false otherwise
      */
     isDead() {
         return this.energy <= 0;
     }
 
     /** * Returns the hitbox margins for collision detection.
-     * @returns {Object} - An object containing the top, bottom, left, and right margins
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels (90)
+     * @returns {number} returns.bottom - Bottom margin in pixels (50)
+     * @returns {number} returns.left - Left margin in pixels (40)
+     * @returns {number} returns.right - Right margin in pixels (40)
      */
     getHitboxMargins() {
         return {

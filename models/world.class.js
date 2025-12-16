@@ -1,32 +1,51 @@
-/**
- * World class that manages the game world, including characters, enemies, objects, and game logic.
+/** * World class that manages the game world, including characters, enemies, objects, and game logic.
  * Handles rendering, collision detection, game state, and audio management.
  */
 class World {
+    /** @type {Character} The main playable character */
     character = new Character();
+    /** @type {Level} The current game level */
     level = level1;
+    /** @type {HTMLCanvasElement} The canvas element for rendering */
     canvas;
+    /** @type {CanvasRenderingContext2D} The 2D rendering context */
     ctx;
+    /** @type {Keyboard} The keyboard input handler */
     keyboard;
+    /** @type {number} Camera horizontal offset for scrolling */
     camera_x = 0;
+    /** @type {HealthBar} Status bar displaying character health */
     statusBarHealth = new HealthBar();
+    /** @type {BottleBar} Status bar displaying collected bottles */
     statusBarBottles = new BottleBar();
+    /** @type {CoinBar} Status bar displaying collected coins */
     statusBarCoins = new CoinBar();
+    /** @type {BossHealthBar} Status bar displaying boss health */
     statusBarBossHealth = new BossHealthBar();
+    /** @type {Coin[]} Array of coin collectibles in the world */
     coins = [];
+    /** @type {SalsaBottle[]} Array of bottle collectibles in the world */
     bottles = [];
+    /** @type {ThrowableObject[]} Array of thrown bottle objects */
     throwableObjects = [];
+    /** @type {boolean} Flag preventing multiple bottle throws */
     bottleThrown = false;
+    /** @type {boolean} Flag indicating if the game is currently running */
     gameRunning = true;
+    /** @type {number} Interval ID for the main game loop */
     gameInterval;
+    /** @type {Buttons} Button manager for UI controls */
     buttons;
+    /** @type {number} Counter for collected coins */
     collectedCoins = 0;
+    /** @type {number} Counter for collected bottles */
     collectedBottles = 0;
+    /** @type {Sounds} Audio manager for game sounds */
     sound = new Sounds();
+    /** @type {CollisionManager} Manager for handling all collision detection */
     collisionManager;
 
-    /**
-     * Creates a new World instance and initializes the game.
+    /** * Creates a new World instance and initializes the game.
      * @param {HTMLCanvasElement} canvas - The canvas element for rendering
      * @param {Keyboard} keyboard - The keyboard input handler
      * @param {Buttons} [existingButtons=null] - Optional existing button instance
@@ -280,7 +299,7 @@ class World {
     }
 
     /** * Flips an image horizontally for rendering (e.g., character facing left).
-     * @param {Object} mo - The moveable object to flip
+     * @param {MovableObject} mo - The moveable object to flip
      */
     flipImage(mo) {
         this.ctx.save();
@@ -290,7 +309,7 @@ class World {
     }
 
     /** * Restores the image to its original orientation after flipping.
-     * @param {Object} mo - The moveable object to restore
+     * @param {MovableObject} mo - The moveable object to restore
      */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
@@ -322,7 +341,7 @@ class World {
     }
 
     /** * Stops all animation intervals for a specific enemy to prevent memory leaks.
-     * @param {Object} enemy - The enemy object whose animations to stop
+     * @param {MovableObject} enemy - The enemy object whose animations to stop
      */
     stopEnemieAnimations(enemy) {
         if (enemy.animationInterval) {

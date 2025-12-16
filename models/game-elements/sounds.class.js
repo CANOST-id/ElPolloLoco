@@ -1,8 +1,34 @@
 /**  * Sounds class to manage game audio elements.
  */
 class Sounds {
+    /** @type {Object} Object storing original volume levels for each sound */
+    originalVolumes = {};
+    /** @type {Audio} Background chicken sound */
+    chickenBackgroundSound;
+    /** @type {Audio} Sound when endboss gets hurt */
+    endbossHurtSound;
+    /** @type {Audio} Sound when character dies */
+    deadCharacterSound;
+    /** @type {Audio} Main game background sound */
+    gameSound;
+    /** @type {Audio} Sound when character gets hurt */
+    hurtSound;
+    /** @type {Audio} Sound during idle state */
+    idleSound;
+    /** @type {Audio} Sound when character jumps */
+    jumpSound;
+    /** @type {Audio} Sound when game is over */
+    gameOverSound;
+    /** @type {Audio} Sound when character is running */
+    runingSound;
+    /** @type {Audio} Sound when player wins */
+    winSound;
+    /** @type {Audio} Sound when character is snoring */
+    snoringSound;
+    /** @type {Audio} Sound for start screen */
+    startSound;
 
-    /** * Creates a Sounds instance, loads all sounds, sets up their settings, and loads mute state.
+    /**  * Creates a Sounds instance, loads all sounds, sets up their settings, and loads mute state.
      */
     constructor() {
         this.originalVolumes = {};
@@ -42,7 +68,6 @@ class Sounds {
 
     /** 
      * Initializes the original volume levels for each sound.
-     * @returns {Object} The original volume levels for each sound
      */
     setupOriginalVolumes() {
         this.originalVolumes = {
@@ -59,7 +84,6 @@ class Sounds {
             snoringSound: 0.3,
             endbossHurtSound: 0.5
         };
-        return this.originalVolumes;
     }
 
     /** 
@@ -92,13 +116,13 @@ class Sounds {
         this.playSound(this.chickenBackgroundSound);
     }
 
-    /**  * Starts the start sound for home.
+    /**  * Starts the start sound for home screen.
      */
     startStartSound() {
         this.playSound(this.startSound);
     }
 
-    /**  * Stops the start sound for home.
+    /**  * Stops the start sound for home screen.
      */
     stopStartSound() {
         this.startSound.pause();
@@ -130,7 +154,7 @@ class Sounds {
         }
     }
 
-    /**  * Stops all sounds except the game sound.
+    /**  * Stops all sounds except the main game sound.
      */
     stopAllExceptGameSound() {
         this.chickenBackgroundSound.pause();
@@ -188,6 +212,7 @@ class Sounds {
     }
 
     /**  * Toggles the mute state and updates local storage.
+     * @returns {boolean} The new mute state (true if now muted, false if now unmuted)
      */
     toggleMute() {
         const currentlyMuted = localStorage.getItem('gameIsMuted') === 'true';

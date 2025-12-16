@@ -1,22 +1,24 @@
+/** @type {HTMLCanvasElement} The main game canvas element */
 let canvas;
+/** @type {World} The game world instance */
 let world;
+/** @type {Keyboard} The keyboard input handler instance */
 let keyboard = new Keyboard();
+/** @type {Buttons} The button manager for UI controls */
 let buttons;
+/** @type {Sounds} The audio manager for game sounds */
 let sounds;
 
-/** * Initializes the game by setting up the canvas and creating the game world.
- * @param {HTMLCanvasElement} canvas - The canvas element where the game will be rendered
- * @param {World} world - The game world instance
+/**
+ * Initializes the game by setting up the canvas and creating the game world.
  */
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard, buttons);
-
 }
 
-/** * Displays the start overlay with the start screen image and initializes buttons.
- * @param {HTMLCanvasElement} canvas - The canvas element where the start screen will be displayed
- * @param {Buttons} buttons - The Buttons instance managing the game buttons
+/**
+ * Displays the start overlay with the start screen image and initializes buttons.
  */
 function startOverlay() {
     canvas = document.getElementById('canvas');
@@ -30,7 +32,9 @@ function startOverlay() {
     };
 }
 
-/** * Starts the game by stopping the start sound, playing background music, initializing the game world, and starting enemy movement.
+/**
+ * Starts the game by stopping the start sound, playing background music, 
+ * initializing the game world, and starting enemy movement.
  */
 function startGame() {
     if (sounds) {
@@ -43,14 +47,18 @@ function startGame() {
     }
 }
 
-/** * Sets up event listeners for loading the game and restarting it.
+/**
+ * Sets up event listeners for loading the game and initializes sounds.
+ * Automatically starts the start screen sound when the page loads.
  */
 window.addEventListener('load', () => {
     sounds = new Sounds();
     sounds.startStartSound();
 });
 
-/** * Restarts the game by removing the endscreen, resetting the character and enemy animations, and starting the game.
+/**
+ * Restarts the game by removing the endscreen, resetting the character 
+ * and enemy animations, and starting the game.
  */
 function restartGame() {
     removeEndscreen();
@@ -59,14 +67,16 @@ function restartGame() {
     startGame();
 }
 
-/** * Displays the endscreen based on win/loss status.
+/**
+ * Displays the endscreen based on win/loss status.
  * @param {boolean} isWin - Indicates if the player has won or lost
  */
 function showEndscreen(isWin) {
     new Endscreen(canvas, isWin);
 }
 
-/** * Removes the endscreen image from the DOM if it exists.
+/**
+ * Removes the endscreen image from the DOM if it exists.
  */
 function removeEndscreen() {
     let endImage = document.getElementById('endscreen_image');
@@ -75,7 +85,9 @@ function removeEndscreen() {
     }
 }
 
-/** * Resets the enemy animations by clearing existing enemies and recreating them.
+/**
+ * Resets the enemy animations by clearing existing enemies and recreating them.
+ * Creates a new set of enemies with 3 regular chickens, 2 small chickens, and 1 endboss.
  */
 function resetEnemyAnimation() {
     if (world && world.level) {
@@ -90,7 +102,9 @@ function resetEnemyAnimation() {
     }
 }
 
-/** * Resets the character's position and energy to initial values.
+/**
+ * Resets the character's position and energy to initial values.
+ * Sets energy to 100, position to (120, 80), and stops vertical movement.
  */
 function resetCharacter() {
     world.character.energy = 100;
@@ -101,7 +115,10 @@ function resetCharacter() {
 
 // Keyboard Events
 
-/** * Sets up event listeners for keyboard keydown and keyup events to update the keyboard state.
+/**
+ * Handles keydown events and updates the keyboard state for game controls.
+ * Supports Arrow keys, Space bar, and 'D' key for various game actions.
+ * @param {KeyboardEvent} e - The keyboard event object
  */
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') {
@@ -109,7 +126,8 @@ window.addEventListener('keydown', (e) => {
     }
     if (e.key === 'ArrowLeft') {
         keyboard.LEFT = true;
-    } if (e.key === 'ArrowUp') {
+    } 
+    if (e.key === 'ArrowUp') {
         keyboard.UP = true;
     }
     if (e.key === ' ') {
@@ -120,7 +138,10 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-/** * Sets up event listeners for keyboard keydown and keyup events to update the keyboard state.
+/**
+ * Handles keyup events and resets the keyboard state when keys are released.
+ * Ensures proper input handling by setting key states to false on release.
+ * @param {KeyboardEvent} e - The keyboard event object
  */
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowRight') {
@@ -142,9 +163,13 @@ window.addEventListener('keyup', (e) => {
 
 // Touch Button Events
 
-/** * Sets up touch event listeners for on-screen buttons to update the keyboard state.
+/**
+ * Sets up touch event listeners for on-screen mobile control buttons.
+ * Handles touchstart and touchend events for left, right, jump, and throw buttons.
+ * Prevents default touch behavior to avoid scrolling and other touch conflicts.
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // Left button events
     document.getElementById('btn-left').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
@@ -153,6 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.LEFT = false;
     });
+    
+    // Right button events
     document.getElementById('btn-right').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.RIGHT = true;
@@ -161,6 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.RIGHT = false;
     });
+    
+    // Jump button events
     document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.SPACE = true;
@@ -169,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         keyboard.SPACE = false;
     });
+    
+    // Throw button events
     document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.D = true;

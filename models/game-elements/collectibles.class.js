@@ -27,7 +27,14 @@ class Collectibles extends MovableObject {
  */
 class Coin extends Collectibles {
 
-    /** * Image paths for coin collectibles.
+    /** @type {number} Original Y position for floating animation */
+    originalY;
+    /** @type {number} Current floating offset value */
+    floatOffset;
+
+    /**
+     * Image paths for coin collectibles.
+     * @type {string[]}
      */
     IMAGES = [
         'assets/img_pollo_locco/img/8_coin/coin_1.png',
@@ -47,8 +54,9 @@ class Coin extends Collectibles {
         this.floatOffset = 0;
     }
 
-    /** * Animates the coin by cycling through images and applying a floating effect.
-    */
+    /**
+     * Animates the coin by cycling through images and applying a floating effect.
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES);
@@ -56,7 +64,9 @@ class Coin extends Collectibles {
         }, 200);
     }
 
-    /** * Applies a floating animation effect to the coin.
+    /**
+     * Applies a floating animation effect to the coin.
+     * Uses sine wave to create smooth up and down movement.
      */
     floatAnimation() {
         this.floatOffset += 0.1;

@@ -1,18 +1,40 @@
+/**
+ * Character class representing the main playable character in the game.
+ * Inherits from MovableObject and handles player input, animations, and interactions.
+ * @extends {MovableObject}
+ */
 class Character extends MovableObject {
 
+    /** @type {number} Y-coordinate position of the character */
     y = 50;
+    /** @type {number} X-coordinate position of the character */
     x = 50;
+    /** @type {number} Height of the character in pixels */
     height = 250;
+    /** @type {number} Width of the character in pixels */
     width = 100;
+    /** @type {World} Reference to the game world object */
     world;
+    /** @type {number} Interval ID for animation loop */
     animationInterval;
+    /** @type {number} Interval ID for movement loop */
     movementInterval;
+    /** @type {boolean} Flag indicating if character is currently dying */
     isDying = false;
+    /** @type {number} Time counter for idle state in seconds */
     idleTime = 0;
+    /** @type {boolean} Flag indicating if idle sound is currently playing */
     isPlayingIdleSound = false;
+    /** @type {boolean} Flag indicating if snoring sound is currently playing */
     isPlayingSnoringSound = false;
+    /** @type {boolean} Flag indicating if running sound is currently playing */
     isPlayingRunningSound = false;
 
+    /**
+     * Creates a new Character instance.
+     * Initializes the character with default image, loads all character images,
+     * applies gravity, and starts animation loops.
+     */
     constructor() {
         super().loadImage(CHARACTER_IMAGES.images_standing[0]);
         this.characterImagesLoaded();
@@ -20,6 +42,10 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Loads all character image sets for different animation states.
+     * Preloads walking, jumping, hurt, dead, standing, and sleeping animations.
+     */
     characterImagesLoaded() {
         this.loadImages(CHARACTER_IMAGES.images_walking);
         this.loadImages(CHARACTER_IMAGES.images_jumping);
@@ -29,11 +55,18 @@ class Character extends MovableObject {
         this.loadImages(CHARACTER_IMAGES.images_sleeping);
     }
 
+    /**
+     * Starts the main animation and movement loops for the character.
+     */
     animate() {
         this.animateInterval();
         this.moveInterval();
     }
 
+    /**
+     * Sets up the animation interval loop.
+     * Handles death animation, character animations, and jump input at 10 FPS.
+     */
     animateInterval() {
         this.animationInterval = setInterval(() => {
             if (this.isDead() && !this.isDying) {
@@ -46,6 +79,10 @@ class Character extends MovableObject {
         }, 1000 / 10);
     }
 
+    /**
+     * Handles jump input from keyboard.
+     * Triggers jump when SPACE or UP key is pressed and resets idle time.
+     */
     handleJump() {
         if (this.world.keyboard.SPACE || this.world.keyboard.UP) {
             this.jump();
@@ -53,6 +90,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Sets up the movement interval loop.
+     * Handles left/right movement and running sounds at 60 FPS.
+     */
     moveInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead()) {
@@ -73,6 +114,10 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Determines and plays the appropriate character animation based on current state.
+     * Prioritizes hurt, jumping, and movement animations.
+     */
     playCharacterAnimation() {
         if (this.isHurt()) {
             this.playHurtAnimation();
@@ -83,6 +128,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays the death animation sequence and cleans up intervals.
+     * Cycles through death images and stops all animations when complete.
+     */
     playDeathAnimation() {
         let deathAnimationIndex = 0;
         let deathAnimationInterval = setInterval(() => {
@@ -98,16 +147,26 @@ class Character extends MovableObject {
         }, 150);
     }
 
+    /**
+     * Plays the hurt animation and resets idle time.
+     */
     playHurtAnimation() {
         this.playAnimation(CHARACTER_IMAGES.images_hurt);
         this.resetIdleTime();
     }
 
+    /**
+     * Plays the jumping animation and resets idle time.
+     */
     playJumpAnimation() {
         this.playAnimation(CHARACTER_IMAGES.images_jumping);
         this.resetIdleTime();
     }
 
+    /**
+     * Handles the character's idle state progression.
+     * Transitions from standing to sleeping state based on idle time.
+     */
     handleIdleState() {
         this.idleTime += 0.1;
         if (this.idleTime >= 5) {
@@ -119,6 +178,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles the sleeping state animation and sound.
+     * Plays sleeping animation and snoring sound after 5 seconds of idle time.
+     */
     handleSleepingState() {
         this.playAnimation(CHARACTER_IMAGES.images_sleeping);
         if (!this.isPlayingSnoringSound && this.world && this.world.sound) {
@@ -128,6 +191,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles the standing idle state animation and sound.
+     * Plays standing animation and idle sound after 2 seconds of idle time.
+     */
     handleStandingIdleState() {
         this.playAnimation(CHARACTER_IMAGES.images_standing);
         if (!this.isPlayingIdleSound && this.world && this.world.sound) {
@@ -137,12 +204,20 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles the early idle state (less than 2 seconds).
+     * Plays standing animation without sound.
+     */
     handleEarlyIdleState() {
         this.playAnimation(CHARACTER_IMAGES.images_standing);
         this.isPlayingIdleSound = false;
         this.isPlayingSnoringSound = false;
     }
 
+    /**
+     * Checks character movement input and plays appropriate animations.
+     * Handles walking animation, running sounds, and idle state transitions.
+     */
     checkMovement() {
         let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.D;
         let isWalking = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
@@ -157,6 +232,11 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Manages the running sound based on walking state.
+     * Plays or pauses running sound depending on whether character is walking.
+     * @param {boolean} isWalking - Whether the character is currently walking
+     */
     handleRunningSound(isWalking) {
         if (this.world && this.world.sound) {
             let runningSound = this.world.sound.runingSound;
@@ -172,6 +252,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Stops the running sound and sets the flag to false.
+     */
     stopRunningSound() {
         if (this.world && this.world.sound) {
             this.world.sound.runingSound.pause();
@@ -179,12 +262,19 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Resets the idle time counter and stops all idle-related sounds.
+     */
     resetIdleTime() {
         this.idleTime = 0;
         this.stopIdleSounds();
         this.stopRunningSound();
     }
 
+    /**
+     * Stops all idle-related sounds (snoring and idle sounds).
+     * Resets sound positions and flags.
+     */
     stopIdleSounds() {
         if (this.isPlayingSnoringSound && this.world && this.world.sound) {
             this.world.sound.snoringSound.pause();
@@ -198,6 +288,10 @@ class Character extends MovableObject {
         this.isPlayingSnoringSound = false;
     }
 
+    /**
+     * Checks if the character can move right without colliding with the endboss.
+     * @returns {boolean} True if character can move right, false otherwise
+     */
     canMoveRight() {
         let endboss = this.world.level.enemies.find(enemy => enemy instanceof Endboss);
         if (!endboss || endboss.isDead()) return true;
@@ -210,6 +304,10 @@ class Character extends MovableObject {
         return charRightEdge < endbossLeftEdge + 60 || this.x > endboss.x;
     }
 
+    /**
+     * Checks if the character can move left without colliding with the endboss.
+     * @returns {boolean} True if character can move left, false otherwise
+     */
     canMoveLeft() {
         let endboss = this.world.level.enemies.find(enemy => enemy instanceof Endboss);
         if (!endboss || endboss.isDead()) return true;
@@ -220,6 +318,14 @@ class Character extends MovableObject {
         return charLeftEdge > endbossRightEdge - 60 || this.x < endboss.x;
     }
 
+    /**
+     * Returns the hitbox margins for collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels (110)
+     * @returns {number} returns.bottom - Bottom margin in pixels (20)
+     * @returns {number} returns.left - Left margin in pixels (30)
+     * @returns {number} returns.right - Right margin in pixels (30)
+     */
     getHitboxMargins() {
         return {
             top: 110,

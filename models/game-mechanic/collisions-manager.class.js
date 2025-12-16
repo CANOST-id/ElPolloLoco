@@ -36,7 +36,7 @@ class CollisionManager {
     }
 
     /** * Determines if the character is jumping on an enemy for a jump attack.
-     * @param {Object} enemy - The enemy object to check against
+     * @param {MovableObject} enemy - The enemy object to check against
      * @returns {boolean} True if character is performing a jump attack
      */
     isCharacterJumpingOnEnemy(enemy) {
@@ -48,7 +48,7 @@ class CollisionManager {
     }
 
     /** * Handles jump attack mechanics when character lands on enemy.
-     * @param {Object} enemy - The enemy being attacked
+     * @param {MovableObject} enemy - The enemy being attacked
      */
     handleJumpAttack(enemy) {
         enemy.hit(20);
@@ -56,7 +56,7 @@ class CollisionManager {
     }
 
     /** * Handles normal collision between character and enemy.
-     * @param {Object} enemy - The enemy colliding with the character
+     * @param {MovableObject} enemy - The enemy colliding with the character
      */
     handleNormalCollision(enemy) {
         if (enemy instanceof Endboss) {

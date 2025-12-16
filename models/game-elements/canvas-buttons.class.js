@@ -1,15 +1,24 @@
 /**
  * Canvas Buttons Class manages the buttons displayed on the game canvas for user interaction.
  * Inherits from DrawableObject.
+ * @extends {DrawableObject}
  */
 class Buttons extends DrawableObject {
+    /** @type {HTMLElement} Container element for all buttons */
     buttonContainer;
+    /** @type {HTMLButtonElement} Start/Restart game button */
     startButton;
+    /** @type {HTMLButtonElement} Home button to reload page */
     homeButton;
+    /** @type {HTMLButtonElement} Mute/Unmute sound button */
     muteButton;
+    /** @type {HTMLButtonElement} Information dialog button */
     infoButton;
-    fullscreenButton;    
+    /** @type {HTMLButtonElement} Fullscreen toggle button */
+    fullscreenButton;
+    /** @type {boolean} Current mute state of the game */
     isMuted = false;
+    /** @type {boolean} Whether the game is currently running */
     gameRunning = false;
 
     /**
@@ -23,7 +32,8 @@ class Buttons extends DrawableObject {
         this.buttonContainer.buttonsInstance = this;
     }
 
-    /** * Creates the button container and appends it to the header.
+    /**
+     * Creates the button container and appends it to the header.
      */
     createContainer() {
         this.buttonContainer = document.createElement('nav');
@@ -32,7 +42,8 @@ class Buttons extends DrawableObject {
         this.updateContainerPosition();
     }
 
-    /** * Creates all buttons and appends them to the button container.
+    /**
+     * Creates all buttons and appends them to the button container.
      */
     createAllButtons() {
         this.startButton = this.createButton('START', 'canvas-btn start-btn', () => this.toggleGame());
@@ -42,10 +53,12 @@ class Buttons extends DrawableObject {
         setTimeout(() => this.updateMuteButton(), 100);
     }
 
-    /** * Creates a button element with specified content, class, and click handler.
+    /**
+     * Creates a button element with specified content, class, and click handler.
      * @param {string} content - The inner HTML content of the button
      * @param {string} className - The CSS class name for styling the button
      * @param {Function} clickHandler - The function to call when the button is clicked
+     * @returns {HTMLButtonElement} The created button element
      */
     createButton(content, className, clickHandler) {
         let button = document.createElement('button');
@@ -56,7 +69,8 @@ class Buttons extends DrawableObject {
         return button;
     }
 
-    /** * Sets up event listeners for fullscreen changes and window resizing to update button container position.
+    /**
+     * Sets up event listeners for fullscreen changes and window resizing to update button container position.
      */
     setupEventListeners() {
         document.addEventListener('fullscreenchange', () => {
@@ -69,7 +83,8 @@ class Buttons extends DrawableObject {
         setInterval(() => this.updateContainerPosition(), 1000);
     }
 
-    /** * Updates the position of the button container to align with the canvas element.
+    /**
+     * Updates the position of the button container to align with the canvas element.
      */
     updateContainerPosition() {
         let canvas = document.getElementById('canvas');
@@ -79,7 +94,8 @@ class Buttons extends DrawableObject {
         this.buttonContainer.style.top = (canvasRect.bottom - 80) + 'px';
     }
 
-    /** * Toggles the game state between running and not running.
+    /**
+     * Toggles the game state between running and not running.
      */
     toggleGame() {
         if (!this.gameRunning) {
@@ -91,7 +107,8 @@ class Buttons extends DrawableObject {
         }
     }
 
-    /** * Toggles the mute state of the game sounds and changes the mute button icon.
+    /**
+     * Toggles the mute state of the game sounds and changes the mute button icon.
      */
     toggleMute() {
         if (typeof sounds !== 'undefined' && sounds) {
@@ -100,7 +117,8 @@ class Buttons extends DrawableObject {
         }
     }
 
-    /** * Updates the mute button display based on the saved mute state in local storage.
+    /**
+     * Updates the mute button display based on the saved mute state in local storage.
      * Updates the isMuted property accordingly and changes the button icon.
      */
     updateMuteButton() {
@@ -111,7 +129,8 @@ class Buttons extends DrawableObject {
         }
     }
 
-    /** * Toggles the information dialog display.
+    /**
+     * Toggles the information dialog display.
      */
     toggleInfo() {
         openDialog();

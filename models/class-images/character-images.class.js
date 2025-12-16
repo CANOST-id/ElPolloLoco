@@ -1,7 +1,14 @@
-/** * Character Images for the main character.
+/**
+ * Character Images for the main character.
+ * Contains image paths for different animation states of the main character Pepe.
+ * @type {Object}
  */
 const CHARACTER_IMAGES = {
-     images_walking: [
+    /**
+     * Image paths for character walking animation.
+     * @type {string[]}
+     */
+    images_walking: [
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-21.png',
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-22.png',
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-23.png',
@@ -9,6 +16,11 @@ const CHARACTER_IMAGES = {
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-25.png',
         'assets/img_pollo_locco/img/2_character_pepe/2_walk/W-26.png'
     ],
+    
+    /**
+     * Image paths for character jumping animation.
+     * @type {string[]}
+     */
     images_jumping: [
         'assets/img_pollo_locco/img/2_character_pepe/3_jump/J-31.png',
         'assets/img_pollo_locco/img/2_character_pepe/3_jump/J-32.png',
@@ -19,13 +31,22 @@ const CHARACTER_IMAGES = {
         'assets/img_pollo_locco/img/2_character_pepe/3_jump/J-37.png',
         'assets/img_pollo_locco/img/2_character_pepe/3_jump/J-38.png',
         'assets/img_pollo_locco/img/2_character_pepe/3_jump/J-39.png'
-
     ],
+    
+    /**
+     * Image paths for character hurt animation.
+     * @type {string[]}
+     */
     images_hurt: [
         'assets/img_pollo_locco/img/2_character_pepe/4_hurt/H-41.png',
         'assets/img_pollo_locco/img/2_character_pepe/4_hurt/H-42.png',
         'assets/img_pollo_locco/img/2_character_pepe/4_hurt/H-43.png'
     ],
+    
+    /**
+     * Image paths for character death animation.
+     * @type {string[]}
+     */
     images_dead: [
         'assets/img_pollo_locco/img/2_character_pepe/5_dead/D-51.png',
         'assets/img_pollo_locco/img/2_character_pepe/5_dead/D-52.png',
@@ -35,6 +56,11 @@ const CHARACTER_IMAGES = {
         'assets/img_pollo_locco/img/2_character_pepe/5_dead/D-56.png',
         'assets/img_pollo_locco/img/2_character_pepe/5_dead/D-57.png'
     ],
+    
+    /**
+     * Image paths for character idle/standing animation.
+     * @type {string[]}
+     */
     images_standing: [
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/idle/I-1.png',
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/idle/I-2.png',
@@ -47,6 +73,11 @@ const CHARACTER_IMAGES = {
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/idle/I-9.png',
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/idle/I-10.png'
     ],
+    
+    /**
+     * Image paths for character sleeping/long idle animation.
+     * @type {string[]}
+     */
     images_sleeping: [
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-11.png',
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-12.png',
@@ -59,4 +90,4 @@ const CHARACTER_IMAGES = {
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-19.png',
         'assets/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-20.png'
     ]
-}
+};

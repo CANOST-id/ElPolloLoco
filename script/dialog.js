@@ -15,13 +15,14 @@ function closeDialog() {
 }
 
 /** Stops the propagation of the click event to prevent closing the dialog when clicking inside it.
-* @param {Event} event - The click event
+* @param {Event} event - The click event to stop propagation for
 */
 function stopPropagation(event) {
     event.stopPropagation();
 }
 
 /** Renders the content of the instruction dialog, including controls and instructions.
+* Creates the complete HTML structure with game controls, instructions, and close button.
 */
 function renderDialog() {
     let dialog = document.getElementById("dialog");
@@ -68,7 +69,13 @@ function renderDialog() {
     `;
 }
 
+/**
+ * Prevents dialog from closing when clicking on the dialog content area.
+ * Adds event listener to dialog content to stop click event propagation.
+ */
 let dialogContent = document.querySelector('.dialog-content');
-dialogContent.addEventListener('click', function (event) {
-    event.stopPropagation();
-});
+if (dialogContent) {
+    dialogContent.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+}

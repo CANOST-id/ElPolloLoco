@@ -1,8 +1,10 @@
 /**
  * Cloud class representing cloud elements in the game.
  * Inherits from MovableObject.
+ * @extends {MovableObject}
  */
 class Cloud extends MovableObject {
+    /** @type {number} Movement speed of the cloud */
     speed = 0.15;
 
     /**
@@ -18,7 +20,8 @@ class Cloud extends MovableObject {
         this.height = 480;
     }
 
-    /** * Animates the cloud by moving it to the left.
+    /**
+     * Animates the cloud by moving it to the left.
      */
     animate() {
         this.moveLeft();

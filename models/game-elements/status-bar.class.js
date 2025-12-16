@@ -4,11 +4,17 @@
  * @extends {DrawableObject}
  */
 class StatusBar extends DrawableObject {
+    /** @type {number} Current percentage value (0-100) */
     percentage = 100;
+    /** @type {number} Width of the status bar in pixels */
     width = 200;
+    /** @type {number} Height of the status bar in pixels */
     height = 60;
+    /** @type {string[]} Array of image paths for different status levels */
+    images;
 
-    /** * Creates a status bar with specified images and position.
+    /**
+     * Creates a status bar with specified images and position.
      * @param {string[]} images - Array of image paths for different status levels
      * @param {number} x - The x-coordinate position of the status bar
      * @param {number} y - The y-coordinate position of the status bar
@@ -22,8 +28,9 @@ class StatusBar extends DrawableObject {
         this.setPercentage(100);
     }
 
-    /** * Sets the current percentage and updates the displayed image accordingly.
-     * @param {number} percentage - The current percentage value to set
+    /**
+     * Sets the current percentage and updates the displayed image accordingly.
+     * @param {number} percentage - The current percentage value to set (0-100)
      */
     setPercentage(percentage) {
         this.percentage = percentage;
@@ -31,8 +38,9 @@ class StatusBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
-    /** * Resolves the image index based on the current percentage.
-     * @returns {number} - The index of the image corresponding to the current percentage
+    /**
+     * Resolves the image index based on the current percentage.
+     * @returns {number} The index of the image corresponding to the current percentage
      */
     resolveImageIndex() {
         if (this.percentage >= 100) return 5;
@@ -51,9 +59,10 @@ class StatusBar extends DrawableObject {
  */
 class HealthBar extends StatusBar {
 
-    /** * Creates a health bar at the specified position.
-     * @param {number} x - The x-coordinate position of the health bar
-     * @param {number} y - The y-coordinate position of the health bar
+    /**
+     * Creates a health bar at the specified position.
+     * @param {number} [x=60] - The x-coordinate position of the health bar
+     * @param {number} [y=-10] - The y-coordinate position of the health bar
      */
     constructor(x = 60, y = -10) {
         const images = [
@@ -68,17 +77,19 @@ class HealthBar extends StatusBar {
     }
 }
 
-
-/** * CoinBar class representing the coin status bar.
+/**
+ * CoinBar class representing the coin status bar.
  * Inherits from StatusBar.
  * @extends {StatusBar}
  */
 class CoinBar extends StatusBar {
+    /** @type {number} Current number of coins collected */
     coins = 0;
 
-    /** * Creates a coin bar at the specified position.
-     * @param {number} x - The x-coordinate position of the coin bar
-     * @param {number} y - The y-coordinate position of the coin bar
+    /**
+     * Creates a coin bar at the specified position.
+     * @param {number} [x=30] - The x-coordinate position of the coin bar
+     * @param {number} [y=20] - The y-coordinate position of the coin bar
      */
     constructor(x = 30, y = 20) {
         const images = [
@@ -93,16 +104,19 @@ class CoinBar extends StatusBar {
     }
 }
 
-/** * BottleBar class representing the bottle status bar.
+/**
+ * BottleBar class representing the bottle status bar.
  * Inherits from StatusBar.
  * @extends {StatusBar}
  */
 class BottleBar extends StatusBar {
+    /** @type {number} Current number of bottles collected */
     bottles = 0;
 
-    /** * Creates a bottle bar at the specified position.
-     * @param {number} x - The x-coordinate position of the bottle bar
-     * @param {number} y - The y-coordinate position of the bottle bar
+    /**
+     * Creates a bottle bar at the specified position.
+     * @param {number} [x=10] - The x-coordinate position of the bottle bar
+     * @param {number} [y=50] - The y-coordinate position of the bottle bar
      */
     constructor(x = 10, y = 50) {
         const images = [
@@ -117,24 +131,29 @@ class BottleBar extends StatusBar {
         this.setBottles(0);
     }
 
-    /** * Sets the number of bottles and updates the bottle bar percentage.
-     * @param {number} bottles - The current number of bottles
+    /**
+     * Sets the number of bottles and updates the bottle bar percentage.
+     * Calculates percentage based on maximum of 7 bottles.
+     * @param {number} bottles - The current number of bottles (0-7)
      */
     setBottles(bottles) {
         this.bottles = bottles;
-
         let percentage = Math.min((this.bottles / 7) * 100, 100);
         this.setPercentage(percentage);
     }
 }
 
-/** * BossHealthBar class representing the boss's health status bar.
+/**
+ * BossHealthBar class representing the boss's health status bar.
  * Inherits from StatusBar.
  * @extends {StatusBar}
  */
 class BossHealthBar extends StatusBar {
+    /** @type {Endboss|null} Reference to the associated endboss object */
+    endboss = null;
 
-    /** * Creates a boss health bar at the specified position.
+    /**
+     * Creates a boss health bar at the default position (0,0).
      */
     constructor() {
         const images = [
@@ -148,14 +167,16 @@ class BossHealthBar extends StatusBar {
         super(images, 0, 0);
     }
 
-    /** * Associates the boss health bar with a specific endboss object.
+    /**
+     * Associates the boss health bar with a specific endboss object.
      * @param {Endboss} endboss - The endboss object to track
      */
     setEndboss(endboss) {
         this.endboss = endboss;
     }
 
-    /** * Sets the position of the boss health bar relative to the endboss.
+    /**
+     * Sets the position of the boss health bar.
      * @param {number} x - The x-coordinate position
      * @param {number} y - The y-coordinate position
      */
@@ -164,9 +185,9 @@ class BossHealthBar extends StatusBar {
         this.y = y;
     }
 
-    /** * Updates the position of the boss health bar based on the endboss's position.
-     * @param {number} x - The x-coordinate position plus 50 pixels
-     * @param {number} y - The y-coordinate position minus 20 pixels
+    /**
+     * Updates the position of the boss health bar based on the endboss's position.
+     * Positions the health bar 50 pixels to the right and 20 pixels above the endboss.
      */
     updatePosition() {
         if (this.endboss) {

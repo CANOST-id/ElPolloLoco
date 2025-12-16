@@ -2,8 +2,11 @@
  * @extends {MovableObject} 
  */
 class ThrowableObject extends MovableObject {
+    /** @type {number} Vertical speed of the object */
     speedY = 0;
+    /** @type {number} Horizontal speed of the object */
     speedX = 0;
+    /** @type {boolean} Whether the object has collided with something */
     hasCollided = false;
 
     images_splash = [
@@ -40,9 +43,9 @@ class ThrowableObject extends MovableObject {
         this.animate();
     }
 
-    /** * Initiates the throwing motion of the object with gravity and horizontal movement.
-     * @param {number} speedY - The initial vertical speed of the throwable object
-     * @param {number} speedX - The initial horizontal speed of the throwable object
+    /**
+     * Initiates the throwing motion of the object with gravity and horizontal movement.
+     * Sets initial speeds and applies physics to the object.
      */
     throw() {
         this.speedY = 20;
@@ -58,7 +61,8 @@ class ThrowableObject extends MovableObject {
         }, 25);
     }
 
-    /** * Animates the throwable object by rotating it until it collides.
+    /**
+     * Animates the throwable object by rotating it until it collides.
      */
     animate() {
         this.rotationInterval = setInterval(() => {
@@ -68,7 +72,8 @@ class ThrowableObject extends MovableObject {
         }, 200);
     }
 
-    /** * Plays the splash animation when the object hits the ground or collides.
+    /**
+     * Plays the splash animation when the object hits the ground or collides.
      */
     hitGround() {
         this.hasCollided = true;
@@ -78,7 +83,8 @@ class ThrowableObject extends MovableObject {
         this.playSplashAnimation();
     }
 
-    /** * Handles the collision of the throwable object with an enemy.
+    /**
+     * Handles the collision of the throwable object with an enemy.
      * @param {MovableObject} enemy - The enemy object that the throwable object collides with
      */
     hitEnemy(enemy) {
@@ -95,8 +101,9 @@ class ThrowableObject extends MovableObject {
         this.playSplashAnimation();
     }
 
-    /** * Plays the splash animation sequence for the throwable object.
-     * @param {number} splashIndex - The current index of the bottle splash image
+    /**
+     * Plays the splash animation sequence for the throwable object.
+     * Cycles through splash images and marks the object for removal when complete.
      */
     playSplashAnimation() {
         let splashIndex = 0;
@@ -113,14 +120,10 @@ class ThrowableObject extends MovableObject {
         }, 100);
     }
 
-    /** * Checks if this throwable object is colliding with another enemy object.
+    /**
+     * Checks if this throwable object is colliding with another enemy object.
      * @param {MovableObject} enemy - The enemy object to check collision with
-     * @returns {boolean} - True if the objects are colliding, false otherwise
-     * @param {number} x - The current x-coordinate position of this object
-     * @param {number} y - The current y-coordinate position of this object
-     * @param {number} thisMargins - The hitbox margins of this object
-     * @param {number} otherMargins - The hitbox margins of the other object
-     * @returns {Parameters} - for collision detection
+     * @returns {boolean} True if the objects are colliding, false otherwise
      */
     isColliding(enemy) {
         if (this.isDead() || enemy.isDead()) {
@@ -135,8 +138,13 @@ class ThrowableObject extends MovableObject {
             this.y + this.height - thisMargins.bottom > enemy.y + otherMargins.top;
     }
 
-    /** * Returns the hitbox margins for collision detection.
-     * @returns {Object} - An object containing the top, bottom, left, and right margins
+    /**
+     * Returns the hitbox margins for collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels
+     * @returns {number} returns.bottom - Bottom margin in pixels
+     * @returns {number} returns.left - Left margin in pixels  
+     * @returns {number} returns.right - Right margin in pixels
      */
     getHitboxMargins() {
         return {

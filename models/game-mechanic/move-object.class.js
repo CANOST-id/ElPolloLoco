@@ -15,8 +15,6 @@ class MovableObject extends DrawableObject {
     gameStarted = true;
 
     /** * Applies gravity to the object, affecting its vertical position over time.
-     * @param {number} y - The current y-coordinate position of the object
-     * @param {number} speedY - The current vertical speed of the object
      */
     applyGravity() {
         setInterval(() => {
@@ -28,19 +26,17 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Checks if the object is above the ground level.
-     * @return {boolean} - True if the object is above ground
+     * @returns {boolean} True if the object is above ground
      */
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-        return this.y < 164;
+            return this.y < 164;
         }
     }
 
     /** * Moves the object to the left continuously.
-     * @param {number} x - The current x-coordinate position of the object
-     * @param {number} speed - The speed at which the object moves left
      */
     moveLeft() {
         this.moveInterval = setInterval(() => {
@@ -54,8 +50,6 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Moves the character to the left, updating its position and camera view.
-     * @param {number} x - The current x-coordinate position of the character
-     * @param {number} camera_x - The current camera x-coordinate position
      */
     moveCharacterLeft() {
         this.x = this.x - 7;
@@ -64,8 +58,6 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Moves the character to the right, updating its position and camera view.
-     * @param {number} x - The current x-coordinate position of the character
-     * @param {number} camera_x - The current camera x-coordinate position
      */
     moveRight() {
         this.x = this.x + 7;
@@ -78,11 +70,11 @@ class MovableObject extends DrawableObject {
     jump() {
         if (this.isAboveGround()) return;
         this.speedY = 18;
-            this.world.sound.playSound(this.world.sound.jumpSound);
+        this.world.sound.playSound(this.world.sound.jumpSound);
     }
 
     /** * Plays an animation by cycling through a set of images.
-     * @param {Array} images - Array of image paths for the animation
+     * @param {Array<string>} images - Array of image paths for the animation
      */
     playAnimation(images) {
         let i = this.currentImageIndex % images.length;
@@ -100,11 +92,7 @@ class MovableObject extends DrawableObject {
 
     /** * Checks if this object is colliding with another movable object.
      * @param {MovableObject} mo - The other movable object to check collision with
-     * @param {number} x - The current x-coordinate position of this object
-     * @param {number} y - The current y-coordinate position of this object
-     * @param {number} thisMargins - The hitbox margins of this object
-     * @param {number} otherMargins - The hitbox margins of the other object
-     * @returns {boolean} - True if the objects are colliding, false otherwise
+     * @returns {boolean} True if the objects are colliding, false otherwise
      */
     isColliding(mo) {
         if (this.isDead() || mo.isDead()) {
@@ -112,7 +100,7 @@ class MovableObject extends DrawableObject {
         }
         let thisMargins = this.getHitboxMargins();
         let otherMargins = mo.getHitboxMargins();
-        
+
         return this.x + thisMargins.left < mo.x + mo.width - otherMargins.right &&
             this.x + this.width - thisMargins.right > mo.x + otherMargins.left &&
             this.y + thisMargins.top < mo.y + mo.height - otherMargins.bottom &&
@@ -120,20 +108,18 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Returns the hitbox margins for collision detection.
-     * @returns {Object} - An object containing the top, bottom, left, and right margins
+     * @returns {Object} An object containing the top, bottom, left, and right margins
      */
     getHitboxMargins() {
         return { top: 10, bottom: 10, left: 10, right: 10 };
     }
 
     /** * Reduces the energy of the object when hit and plays corresponding sounds.
-     * @param {number} damage - The amount of energy to reduce
-     * @param {number} energy - The current energy level of the object 
      */
     hit() {
         this.lastHit = new Date().getTime();
         this.energy -= 1;
-        
+
         if (this.energy <= 0) {
             this.energy = 0;
             if (this.world && this.world.sound) {
@@ -146,9 +132,7 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    /** * Reduces the energy of the boss when hit and plays corresponding sounds.
-     * @param {number} damage - The amount of energy to reduce
-     * @param {number} energy - The current energy level of the boss 
+    /** * Reduces the energy of the character when hit by boss and plays corresponding sounds.
      */
     hitBoss() {
         this.lastHit = new Date().getTime();
@@ -166,7 +150,7 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Checks if the object is currently hurt based on the last hit time.
-     * @returns {boolean} - True if the object is hurt, false otherwise
+     * @returns {boolean} True if the object is hurt, false otherwise
      */
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit;
@@ -174,7 +158,7 @@ class MovableObject extends DrawableObject {
     }
 
     /** * Checks if the object is dead based on its energy level.
-     * @returns {boolean} - returns that the object is dead 
+     * @returns {boolean} True if the object is dead
      */
     isDead() {
         return this.energy <= 0;

@@ -1,9 +1,13 @@
 /** * Endscreen class representing the end screen of the game.
  */
 class Endscreen {
+    /** @type {HTMLCanvasElement} The canvas element for drawing */
     canvas;
+    /** @type {CanvasRenderingContext2D} The 2D rendering context of the canvas */
     ctx;
+    /** @type {boolean} Indicates if the player has won or lost */
     isWin;
+    /** @type {HTMLImageElement} The image element for the endscreen */
     endImage;
 
     /**
@@ -18,7 +22,9 @@ class Endscreen {
         this.createEndscreen();
     }
 
-    /** * Creates the endscreen image element and sets its source based on win/loss status.
+    /**
+     * Creates the endscreen image element and sets its source based on win/loss status.
+     * Appends the created image to the document body.
      */
     createEndscreen() {
         this.endImage = document.createElement('img');
@@ -29,7 +35,9 @@ class Endscreen {
         document.body.appendChild(this.endImage);
     }
 
-    /**  * Sets the style and ID for the endscreen image element. 
+    /**
+     * Sets the style and ID for the endscreen image element.
+     * Applies CSS class and unique identifier for styling purposes.
      */
     endImageStyle() {
         this.endImage.className = 'end-image';
