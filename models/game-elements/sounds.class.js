@@ -25,10 +25,17 @@ class Sounds {
     winSound;
     /** @type {Audio} Sound when character is snoring */
     snoringSound;
-    /** @type {Audio} Sound for start screen */
-    startSound;
+    /** @type {Audio} Sound when collecting bottles */
+    bottleCollectSound;
+    /** @type {Audio} Sound when bottles splash/break */
+    bottleSplashSound;
+    /** @type {Audio} Sound when collecting coins */
+    coinCollectSound;
+    /** @type {Audio} Sound when chickens die */
+    chickenDeadSound;
 
-    /**  * Creates a Sounds instance, loads all sounds, sets up their settings, and loads mute state.
+    /**
+     * Creates a Sounds instance, loads all sounds, sets up their settings, and loads mute state.
      */
     constructor() {
         this.originalVolumes = {};
@@ -37,7 +44,8 @@ class Sounds {
         this.loadMuteState();
     }
 
-    /** * Loads all sound files into Audio objects.
+    /**
+     * Loads all sound files into Audio objects.
      */
     loadAllSounds() {
         this.chickenBackgroundSound = new Audio('assets/sounds/chicken-background-sound.mp3');
@@ -51,10 +59,14 @@ class Sounds {
         this.runingSound = new Audio('assets/sounds/runing-sound.mp3');
         this.winSound = new Audio('assets/sounds/win-sound.mp3');
         this.snoringSound = new Audio('assets/sounds/snoring-sound.mp3');
-        this.startSound = new Audio('assets/sounds/start-sound.mp3');
+        this.bottleCollectSound = new Audio('assets/sounds/bottle-collect.mp3');
+        this.bottleSplashSound = new Audio('assets/sounds/bottle-splash.mp3');
+        this.coinCollectSound = new Audio('assets/sounds/coin-collect.mp3');
+        this.chickenDeadSound = new Audio('assets/sounds/chicken-dead.mp3');
     }
 
-    /**  * Sets up sound settings including volume levels and looping behavior.
+    /** 
+     * Sets up sound settings including volume levels and looping behavior.
      */
     setupSoundSettings() {
         this.setupOriginalVolumes();
@@ -62,8 +74,11 @@ class Sounds {
         this.gameSound.loop = true;
         this.chickenBackgroundSound.loop = true;
         this.runingSound.loop = true;
-        this.startSound.loop = true;
         this.snoringSound.loop = true;
+        this.bottleSplashSound.loop = false;
+        this.bottleCollectSound.loop = false;
+        this.coinCollectSound.loop = false;
+        this.chickenDeadSound.loop = false;
     }
 
     /** 
@@ -78,11 +93,14 @@ class Sounds {
             chickenBackgroundSound: 0.1,
             idleSound: 0.2,
             runingSound: 0.2,
-            gameOverSound: 0.5,
-            winSound: 0.5,
-            startSound: 0.4,
+            gameOverSound: 0.3,
+            winSound: 0.4,
             snoringSound: 0.3,
-            endbossHurtSound: 0.5
+            endbossHurtSound: 0.5,
+            bottleCollectSound: 0.2,
+            bottleSplashSound: 0.2,
+            coinCollectSound: 0.2,
+            chickenDeadSound: 0.2
         };
     }
 
@@ -98,7 +116,8 @@ class Sounds {
         }
     }
 
-    /** * Checks the mute state from local storage and applies it to all sounds.
+    /**
+     * Checks the mute state from local storage and applies it to all sounds.
      */
     checkAndApplyMute() {
         let isMuted = localStorage.getItem('gameIsMuted') === 'true';
@@ -109,24 +128,12 @@ class Sounds {
         }
     }
 
-    /**  * Starts the background music when game starts.
+    /** 
+     * Starts the background music when game starts.
      */
     startBackgroundMusic() {
         this.playSound(this.gameSound);
         this.playSound(this.chickenBackgroundSound);
-    }
-
-    /**  * Starts the start sound for home screen.
-     */
-    startStartSound() {
-        this.playSound(this.startSound);
-    }
-
-    /**  * Stops the start sound for home screen.
-     */
-    stopStartSound() {
-        this.startSound.pause();
-        this.startSound.currentTime = 0;
     }
 
     /**  * Stops all sounds in the game.
@@ -154,7 +161,8 @@ class Sounds {
         }
     }
 
-    /**  * Stops all sounds except the main game sound.
+    /** 
+     * Stops all sounds except the main game sound.
      */
     stopAllExceptGameSound() {
         this.chickenBackgroundSound.pause();
@@ -165,44 +173,108 @@ class Sounds {
         this.jumpSound.pause();
         this.runingSound.pause();
         this.snoringSound.pause();
-        this.startSound.pause();
     }
 
     /**  * Sets all sound volumes to zero (mute state).
      */
     muteState() {
+        this.charactermMuteState();
+        this.chickenMuteState();
+        this.collectablesMuteState();
+        this.gameMuteState();
+    }
+
+    /**
+     * Mutes all game-related sounds (background music, game over, win, start).
+     */
+    gameMuteState() {
         this.gameSound.volume = 0;
+        this.chickenBackgroundSound.volume = 0;
+        this.gameOverSound.volume = 0;
+        this.winSound.volume = 0;
+    }
+
+    /**
+     * Mutes all character-related sounds (jump, hurt, death, idle, running, snoring).
+     */
+    charactermMuteState() {
         this.jumpSound.volume = 0;
         this.hurtSound.volume = 0;
         this.deadCharacterSound.volume = 0;
-        this.chickenBackgroundSound.volume = 0;
         this.idleSound.volume = 0;
         this.runingSound.volume = 0;
-        this.gameOverSound.volume = 0;
-        this.winSound.volume = 0;
-        this.startSound.volume = 0;
         this.snoringSound.volume = 0;
-        this.endbossHurtSound.volume = 0;
+
     }
 
-    /**  * Restores all sound volumes to their original levels (unmute state).
+    /**
+     * Mutes all chicken-related sounds (endboss hurt, chicken death).
+     */
+    chickenMuteState() {
+        this.endbossHurtSound.volume = 0;
+        this.chickenDeadSound.volume = 0;
+    }
+
+    /**
+     * Mutes all collectible-related sounds (bottle collect, coin collect, bottle splash).
+     */
+    collectablesMuteState() {
+        this.bottleCollectSound.volume = 0;
+        this.coinCollectSound.volume = 0;
+        this.bottleSplashSound.volume = 0;
+    }
+
+    /** 
+     * Restores all sound volumes to their original levels (unmute state).
      */
     soundState() {
+        this.characterSoundState();
+        this.chickenSoundState();
+        this.collectablesSoundState();
+        this.gameSoundState();
+    }
+
+    /**
+     * Restores game-related sounds to their original volume levels.
+     */
+    gameSoundState() {
         this.gameSound.volume = this.originalVolumes.gameSound;
+        this.chickenBackgroundSound.volume = this.originalVolumes.chickenBackgroundSound;
+        this.gameOverSound.volume = this.originalVolumes.gameOverSound;
+        this.winSound.volume = this.originalVolumes.winSound;
+    }
+
+    /**
+     * Restores character-related sounds to their original volume levels.
+     */
+    characterSoundState() {
         this.jumpSound.volume = this.originalVolumes.jumpSound;
         this.hurtSound.volume = this.originalVolumes.hurtSound;
         this.deadCharacterSound.volume = this.originalVolumes.deadCharacterSound;
-        this.chickenBackgroundSound.volume = this.originalVolumes.chickenBackgroundSound;
         this.idleSound.volume = this.originalVolumes.idleSound;
         this.runingSound.volume = this.originalVolumes.runingSound;
-        this.gameOverSound.volume = this.originalVolumes.gameOverSound;
-        this.winSound.volume = this.originalVolumes.winSound;
-        this.startSound.volume = this.originalVolumes.startSound;
         this.snoringSound.volume = this.originalVolumes.snoringSound;
+    }
+
+    /**
+     * Restores chicken-related sounds to their original volume levels.
+     */
+    chickenSoundState() {
+        this.chickenDeadSound.volume = this.originalVolumes.chickenDeadSound;
         this.endbossHurtSound.volume = this.originalVolumes.endbossHurtSound;
     }
 
-    /**  * Loads the mute state from local storage and applies it to the sounds.
+    /**
+     * Restores collectible-related sounds to their original volume levels.
+     */
+    collectablesSoundState() {
+        this.bottleCollectSound.volume = this.originalVolumes.bottleCollectSound;
+        this.coinCollectSound.volume = this.originalVolumes.coinCollectSound;
+        this.bottleSplashSound.volume = this.originalVolumes.bottleSplashSound;
+    }
+
+    /**
+     * Loads the mute state from local storage and applies it to the sounds.
      */
     loadMuteState() {
         const savedState = localStorage.getItem('gameIsMuted');
@@ -211,7 +283,8 @@ class Sounds {
         }
     }
 
-    /**  * Toggles the mute state and updates local storage.
+    /** 
+     * Toggles the mute state and updates local storage.
      * @returns {boolean} The new mute state (true if now muted, false if now unmuted)
      */
     toggleMute() {
