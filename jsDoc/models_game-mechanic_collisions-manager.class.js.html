@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/game-mechanic/collisions-manager.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/game-mechanic/collisions-manager.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * CollisionManager handles all collision detection logic for the game world.
+ * Manages character-enemy collisions, collectible pickups, and projectile impacts.
+ */
+class CollisionManager {
+
+    /** * Creates a new CollisionManager instance.
+     * @param {World} world - Reference to the game world
+     */
+    constructor(world) {
+        this.world = world;
+    }
+
+    /** * Checks all collision types in the game.
+     */
+    checkAllCollisions() {
+        this.checkCharacterEnemyCollisions();
+        this.checkCollectibleCollisions();
+        this.checkBottleEnemyCollisions();
+    }
+
+    /** * Checks collisions between the character and all enemies.
+     */
+    checkCharacterEnemyCollisions() {
+        if (this.world.character.isDead()) return;
+
+        this.world.level.enemies.forEach(enemy => {
+            if (enemy.isDead() || !this.world.character.isColliding(enemy)) return;
+
+            if (this.isCharacterJumpingOnEnemy(enemy)) {
+                this.handleJumpAttack(enemy);
+            } else {
+                this.handleNormalCollision(enemy);
+            }
+        });
+    }
+
+    /** * Determines if the character is jumping on an enemy for a jump attack.
+     * @param {MovableObject} enemy - The enemy object to check against
+     * @returns {boolean} True if character is performing a jump attack
+     */
+    isCharacterJumpingOnEnemy(enemy) {
+        let charMargins = this.world.character.getHitboxMargins();
+        let enemyMargins = enemy.getHitboxMargins();
+        let characterBottom = this.world.character.y + this.world.character.height - charMargins.bottom;
+        let enemyTop = enemy.y + enemyMargins.top;
+        return characterBottom + this.world.character.speedY &lt; enemyTop;
+    }
+
+    /** * Handles jump attack mechanics when character lands on enemy.
+     * @param {MovableObject} enemy - The enemy being attacked
+     */
+    handleJumpAttack(enemy) {
+        enemy.hit(20);
+        this.world.character.speedY = -15;
+    }
+
+    /** * Handles normal collision between character and enemy.
+     * @param {MovableObject} enemy - The enemy colliding with the character
+     */
+    handleNormalCollision(enemy) {
+        if (enemy instanceof Endboss) {
+            this.applyBounceBack(this.world.character, enemy);
+            enemy.performAttack();
+            this.world.character.hitBoss();
+        } else {
+            this.world.character.hit();
+        }
+        this.world.statusBarHealth.setPercentage(this.world.character.energy);
+    }
+
+    /** * Applies bounce-back physics between character and endboss.
+     * @param {Character} character - The character object
+     * @param {Endboss} endboss - The endboss object
+     */
+    applyBounceBack(character, endboss) {
+        let characterCenter = character.x + (character.width / 2);
+        let endbossCenter = endboss.x + (endboss.width / 2);
+
+        if (characterCenter &lt; endbossCenter) {
+            endboss.x += 100;
+        }
+        endboss.x = Math.max(100, Math.min(endboss.x, this.world.level.level_end_x - endboss.width));
+    }
+
+    /** * Checks collisions with all collectible items.
+     */
+    checkCollectibleCollisions() {
+        this.checkCoinCollisions();
+        this.checkBottleCollisions();
+    }
+
+    /** * Handles collision detection and collection of coins.
+     */
+    checkCoinCollisions() {
+        this.world.coins.forEach((coin, index) => {
+            if (this.world.character.isColliding(coin)) {
+                this.world.coins.splice(index, 1);
+                this.world.collectedCoins += 1;
+                this.world.statusBarCoins.setPercentage((this.world.collectedCoins / 8) * 100);
+            }
+        });
+    }
+
+    /** * Handles collision detection and collection of bottles.
+     */
+    checkBottleCollisions() {
+        this.world.bottles.forEach((bottle, index) => {
+            if (this.world.character.isColliding(bottle)) {
+                this.world.bottles.splice(index, 1);
+                this.world.collectedBottles++;
+                this.world.statusBarBottles.setBottles(this.world.collectedBottles);
+            }
+        });
+    }
+
+    /** * Handles collision detection between thrown bottles and enemies.
+     */
+    checkBottleEnemyCollisions() {
+        this.world.throwableObjects.forEach((bottle, bottleIndex) => {
+            this.world.level.enemies.forEach(enemy => {
+                if (!enemy.isDead() &amp;&amp; bottle.isColliding(enemy)) {
+                    bottle.hitEnemy(enemy);
+                    if (enemy instanceof Endboss) {
+                        this.world.statusBarBossHealth.setPercentage(enemy.energy);
+                        this.world.sound.playSound(this.world.sound.endbossHurtSound);
+                    }
+                }
+            });
+            this.world.spliceBottle(bottle, bottleIndex);
+        });
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="BossHealthBar.html">BossHealthBar</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Buttons.html">Buttons</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Collectibles.html">Collectibles</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CHARACTER_IMAGES">CHARACTER_IMAGES</a></li><li><a href="global.html#ENDBOSS_IMAGES">ENDBOSS_IMAGES</a></li><li><a href="global.html#buttons">buttons</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#dialogContent">dialogContent</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#removeEndscreen">removeEndscreen</a></li><li><a href="global.html#renderDialog">renderDialog</a></li><li><a href="global.html#resetCharacter">resetCharacter</a></li><li><a href="global.html#resetEnemyAnimation">resetEnemyAnimation</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showEndscreen">showEndscreen</a></li><li><a href="global.html#sounds">sounds</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startOverlay">startOverlay</a></li><li><a href="global.html#stopPropagation">stopPropagation</a></li><li><a href="global.html#world">world</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Dec 16 2025 14:37:50 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

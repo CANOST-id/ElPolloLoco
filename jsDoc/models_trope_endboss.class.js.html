@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/trope/endboss.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/trope/endboss.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** * Represents the endboss character in the game, extending the MovableObject class.
+ * @extends {MovableObject}
+  */
+class Endboss extends MovableObject {
+    /** @type {number} Index of the current image in animation sequences */
+    currentImageIndex = 0;
+    /** @type {number} Health points of the endboss */
+    energy = 100;
+    /** @type {boolean} Flag indicating if the endboss is currently hurt */
+    isHurting = false;
+    /** @type {boolean} Flag indicating if the endboss is currently dying */
+    isDying = false;
+    /** @type {boolean} Flag indicating if the endboss is currently attacking */
+    isAttacking = false;
+    /** @type {number} Interval ID for animation loop */
+    animationInterval;
+    /** @type {number} Interval ID for movement loop */
+    movementInterval;
+    /** @type {boolean} Flag indicating if the endboss is currently moving */
+    isMoving = false;
+
+    /** * Creates a new Endboss instance.
+     * Initializes position, size, images, and starts animation.
+     */
+    constructor() {
+        super().loadImage(ENDBOSS_IMAGES.chicken_walk_images[0]);
+        this.loadImages(ENDBOSS_IMAGES.chicken_walk_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_hurt_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_dead_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_alert_images);
+        this.loadImages(ENDBOSS_IMAGES.chicken_attack_images);
+        this.y = 50;
+        this.x = 1650;
+        this.height = 400;
+        this.width = 300;
+        this.animateEndboss();
+    }
+
+    /** * Performs an attack action by the endboss.
+     * Initiates attack state and temporarily disables movement.
+     * @returns {boolean} True if the attack was initiated, false if already dead or attacking
+     */
+    performAttack() {
+        if (this.isDead() || this.isAttacking) return false;
+        this.isAttacking = true;
+        this.isMoving = false;
+        setTimeout(() => {
+            this.isAttacking = false;
+            if (this.energy &lt; 100) {
+                this.isMoving = true;
+            }
+        }, 800);
+        return true;
+    }
+
+    /** * Reduces the endboss's energy when hit and triggers hurt or death animations.
+     * @param {number} [damage=20] - The amount of damage to inflict on the endboss
+     */
+    hit(damage = 20) {
+        if (this.isDead()) return;
+        this.energy -= damage;
+        if (this.energy &lt;= 0) {
+            this.energy = 0;
+            this.stopMovement();
+        } else {
+            this.endbossIsHurting();
+            this.world.sound.playSound(this.world.sound.endbossHurtSound);
+            setTimeout(() => {
+                this.isHurting = false;
+            }, 600);
+        }
+    }
+
+    /** * Sets the endboss to a hurting state and records the last hit time.
+     */
+    endbossIsHurting() {
+        this.isHurting = true;
+        this.lastHit = new Date().getTime();
+    }
+
+    /** * Starts the endboss moving towards the character.
+     */
+    startMovingToCharacter() {
+        this.isMoving = true;
+        this.speed = 3;
+        this.moveLeftToCharacter();
+    }
+
+    /** * Moves the endboss left towards the character.
+     * Sets up movement interval and handles boundary checking.
+     */
+    moveLeftToCharacter() {
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+        }
+        this.movementInterval = setInterval(() => {
+            if (!this.isDead() &amp;&amp; this.isMoving) {
+                this.checkCharacterCollision();
+                this.x -= this.speed;
+                if (this.x &lt;= 100) {
+                    this.stopMovement();
+                }
+            }
+        }, 1000 / 60);
+    }
+
+    /** * Checks the distance to the character and initiates movement or attack as needed.
+     * Handles proximity-based behavior changes.
+     */
+    checkCharacterCollision() {
+        if (this.world &amp;&amp; this.world.character) {
+            let distance = Math.abs(this.x - this.world.character.x);
+            if (distance &lt; 300 &amp;&amp; !this.isMoving &amp;&amp; !this.isDead()) {
+                this.startMovingToCharacter();
+            }
+            if (distance &lt; 10 &amp;&amp; !this.isAttacking) {
+                this.startAttacking();
+            } else if (distance > 200 &amp;&amp; this.isAttacking) {
+                this.stopAttacking();
+            }
+        }
+    }
+
+    /** * Starts the endboss attacking the character.
+     */
+    startAttacking() {
+        this.isAttacking = true;
+        this.isMoving = false;
+    }
+
+    /** * Stops the endboss attacking the character.
+     */
+    stopAttacking() {
+        this.isAttacking = false;
+        this.isMoving = true;
+    }
+
+    /** * Stops the endboss's movement.
+     * Clears movement intervals and resets movement flags.
+     */
+    stopMovement() {
+        this.isMoving = false;
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null;
+        }
+    }
+
+    /** * Animates the endboss by checking its state and playing the appropriate animation.
+     * Runs at 5 FPS (every 200ms) and handles state-based animation switching.
+     */
+    animateEndboss() {
+        this.animationInterval = setInterval(() => {
+            this.checkCharacterCollision();
+            if (this.isDead() &amp;&amp; !this.isDying) {
+                this.playDeathAnimation();
+            } else if (this.isAttacking) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_attack_images);
+            } else if (this.isHurting) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
+            } else if (this.isMoving) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
+            } else if (!this.isDead()) {
+                this.playAnimation(ENDBOSS_IMAGES.chicken_alert_images);
+            }
+        }, 200);
+    }
+
+    /** * Plays the death animation for the endboss.
+     * Stops movement, clears intervals, and cycles through death images.
+     * @returns {boolean} Always returns true after setting isDying flag
+     */
+    playDeathAnimation() {
+        this.stopMovement();
+        clearInterval(this.animationInterval);
+
+        let deathAnimationIndex = 0;
+        let deathInterval = setInterval(() => {
+            if (deathAnimationIndex &lt; ENDBOSS_IMAGES.chicken_dead_images.length) {
+                let path = ENDBOSS_IMAGES.chicken_dead_images[deathAnimationIndex];
+                this.img = this.imageCache[path];
+                deathAnimationIndex++;
+            } else {
+                clearInterval(deathInterval);
+            }
+        }, 200);
+        return this.isDying = true;
+    }
+
+    /** * Checks if the endboss is dead.
+     * @returns {boolean} True if the endboss's energy is 0 or less, false otherwise
+     */
+    isDead() {
+        return this.energy &lt;= 0;
+    }
+
+    /** * Returns the hitbox margins for collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels (90)
+     * @returns {number} returns.bottom - Bottom margin in pixels (50)
+     * @returns {number} returns.left - Left margin in pixels (40)
+     * @returns {number} returns.right - Right margin in pixels (40)
+     */
+    getHitboxMargins() {
+        return {
+            top: 90,
+            bottom: 50,
+            left: 40,
+            right: 40
+        };
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="BossHealthBar.html">BossHealthBar</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Buttons.html">Buttons</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Collectibles.html">Collectibles</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CHARACTER_IMAGES">CHARACTER_IMAGES</a></li><li><a href="global.html#ENDBOSS_IMAGES">ENDBOSS_IMAGES</a></li><li><a href="global.html#buttons">buttons</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#dialogContent">dialogContent</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#removeEndscreen">removeEndscreen</a></li><li><a href="global.html#renderDialog">renderDialog</a></li><li><a href="global.html#resetCharacter">resetCharacter</a></li><li><a href="global.html#resetEnemyAnimation">resetEnemyAnimation</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showEndscreen">showEndscreen</a></li><li><a href="global.html#sounds">sounds</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startOverlay">startOverlay</a></li><li><a href="global.html#stopPropagation">stopPropagation</a></li><li><a href="global.html#world">world</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Dec 16 2025 14:37:50 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

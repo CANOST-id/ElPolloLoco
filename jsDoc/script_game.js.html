@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: script/game.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: script/game.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @type {HTMLCanvasElement} The main game canvas element */
+let canvas;
+/** @type {World} The game world instance */
+let world;
+/** @type {Keyboard} The keyboard input handler instance */
+let keyboard = new Keyboard();
+/** @type {Buttons} The button manager for UI controls */
+let buttons;
+/** @type {Sounds} The audio manager for game sounds */
+let sounds;
+
+/**
+ * Initializes the game by setting up the canvas and creating the game world.
+ */
+function init() {
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard, buttons);
+}
+
+/**
+ * Displays the start overlay with the start screen image and initializes buttons.
+ */
+function startOverlay() {
+    canvas = document.getElementById('canvas');
+    buttons = new Buttons();
+    let ctx = canvas.getContext('2d');
+    let startImage = new Image();
+    startImage.src = 'assets/img_pollo_locco/img/9_intro_outro_screens/start/startscreen_2.png';
+    startImage.onload = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
+    };
+}
+
+/**
+ * Starts the game by stopping the start sound, playing background music, 
+ * initializing the game world, and starting enemy movement.
+ */
+function startGame() {
+    if (sounds) {
+        sounds.stopStartSound();
+        sounds.startBackgroundMusic();
+    }
+    init();
+    if (world) {
+        world.startEnemyMovement();
+    }
+}
+
+/**
+ * Sets up event listeners for loading the game and initializes sounds.
+ * Automatically starts the start screen sound when the page loads.
+ */
+window.addEventListener('load', () => {
+    sounds = new Sounds();
+    sounds.startStartSound();
+});
+
+/**
+ * Restarts the game by removing the endscreen, resetting the character 
+ * and enemy animations, and starting the game.
+ */
+function restartGame() {
+    removeEndscreen();
+    resetCharacter();
+    resetEnemyAnimation();
+    startGame();
+}
+
+/**
+ * Displays the endscreen based on win/loss status.
+ * @param {boolean} isWin - Indicates if the player has won or lost
+ */
+function showEndscreen(isWin) {
+    new Endscreen(canvas, isWin);
+}
+
+/**
+ * Removes the endscreen image from the DOM if it exists.
+ */
+function removeEndscreen() {
+    let endImage = document.getElementById('endscreen_image');
+    if (endImage) {
+        endImage.remove();
+    }
+}
+
+/**
+ * Resets the enemy animations by clearing existing enemies and recreating them.
+ * Creates a new set of enemies with 3 regular chickens, 2 small chickens, and 1 endboss.
+ */
+function resetEnemyAnimation() {
+    if (world &amp;&amp; world.level) {
+        world.level.enemies = [];
+        for (let i = 0; i &lt; 3; i++) {
+            world.level.enemies.push(new Chicken());
+        }
+        world.level.enemies.push(new SmallChicken());
+        world.level.enemies.push(new SmallChicken());
+        world.level.enemies.push(new Endboss());
+        world.startEnemyMovement();
+    }
+}
+
+/**
+ * Resets the character's position and energy to initial values.
+ * Sets energy to 100, position to (120, 80), and stops vertical movement.
+ */
+function resetCharacter() {
+    world.character.energy = 100;
+    world.character.x = 120;
+    world.character.y = 80;
+    world.character.speedY = 0;
+}
+
+// Keyboard Events
+
+/**
+ * Handles keydown events and updates the keyboard state for game controls.
+ * Supports Arrow keys, Space bar, and 'D' key for various game actions.
+ * @param {KeyboardEvent} e - The keyboard event object
+ */
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') {
+        keyboard.RIGHT = true;
+    }
+    if (e.key === 'ArrowLeft') {
+        keyboard.LEFT = true;
+    } 
+    if (e.key === 'ArrowUp') {
+        keyboard.UP = true;
+    }
+    if (e.key === ' ') {
+        keyboard.SPACE = true;
+    }
+    if (e.key === 'd') {
+        keyboard.D = true;
+    }
+});
+
+/**
+ * Handles keyup events and resets the keyboard state when keys are released.
+ * Ensures proper input handling by setting key states to false on release.
+ * @param {KeyboardEvent} e - The keyboard event object
+ */
+window.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowRight') {
+        keyboard.RIGHT = false;
+    }
+    if (e.key === 'ArrowLeft') {
+        keyboard.LEFT = false;
+    }
+    if (e.key === 'ArrowUp') {
+        keyboard.UP = false;
+    }
+    if (e.key === ' ') {
+        keyboard.SPACE = false;
+    }
+    if (e.key === 'd') {
+        keyboard.D = false;
+    }
+});
+
+// Touch Button Events
+
+/**
+ * Sets up touch event listeners for on-screen mobile control buttons.
+ * Handles touchstart and touchend events for left, right, jump, and throw buttons.
+ * Prevents default touch behavior to avoid scrolling and other touch conflicts.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    // Left button events
+    document.getElementById('btn-left').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = true;
+    });
+    document.getElementById('btn-left').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false;
+    });
+    
+    // Right button events
+    document.getElementById('btn-right').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = true;
+    });
+    document.getElementById('btn-right').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    });
+    
+    // Jump button events
+    document.getElementById('btn-jump').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = true;
+    });
+    document.getElementById('btn-jump').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = false;
+    });
+    
+    // Throw button events
+    document.getElementById('btn-throw').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.D = true;
+    });
+    document.getElementById('btn-throw').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.D = false;
+    });
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="BossHealthBar.html">BossHealthBar</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Buttons.html">Buttons</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Collectibles.html">Collectibles</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CHARACTER_IMAGES">CHARACTER_IMAGES</a></li><li><a href="global.html#ENDBOSS_IMAGES">ENDBOSS_IMAGES</a></li><li><a href="global.html#buttons">buttons</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#dialogContent">dialogContent</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#removeEndscreen">removeEndscreen</a></li><li><a href="global.html#renderDialog">renderDialog</a></li><li><a href="global.html#resetCharacter">resetCharacter</a></li><li><a href="global.html#resetEnemyAnimation">resetEnemyAnimation</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showEndscreen">showEndscreen</a></li><li><a href="global.html#sounds">sounds</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startOverlay">startOverlay</a></li><li><a href="global.html#stopPropagation">stopPropagation</a></li><li><a href="global.html#world">world</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Dec 16 2025 14:37:50 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

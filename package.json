@@ -1,0 +1,25 @@
+{
+  "name": "elpolloloco",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "jsdoc -c jsdoc.json",
+    "docs:serve": "jsdoc -c jsdoc.json && start ./jsDoc/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CANOST-id/ElPolloLoco.git"
+  },
+  "keywords": ["game", "javascript", "canvas", "html5", "el-pollo-loco", "platformer"],
+  "author": "CANOST-id",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CANOST-id/ElPolloLoco/issues"
+  },
+  "homepage": "https://github.com/CANOST-id/ElPolloLoco#readme",
+  "description": "El Pollo Loco - A JavaScript-based 2D platformer game where Pepe fights against chickens and collects bottles and coins.",
+  "devDependencies": {
+    "jsdoc": "^4.0.5"
+  }
+}

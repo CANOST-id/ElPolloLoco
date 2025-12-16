@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/trope/chicken.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/trope/chicken.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** * Represents a chicken enemy in the game, extending the MovableObject class.
+ * @extends {MovableObject} 
+ */
+class Chicken extends MovableObject {
+    /** @type {number} Movement speed of the chicken */
+    speed = 0.25;
+    /** @type {number} Health points of the chicken */
+    energy = 20;
+    /** @type {boolean} Flag indicating if the game has started */
+    gameStarted = false;
+    /** @type {number} Interval ID for walk animation */
+    walkInterval;
+
+    /** @type {string[]} Image paths for chicken walking animation */
+    chicken_walk_images = [
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
+    ];
+
+    /** @type {string[]} Image paths for small chicken walking animation */
+    small_chicken_walk_images = [
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        'assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
+    ];
+
+    /** * Creates a new Chicken instance.
+     * Initializes position, size, speed, and starts animation.
+     */
+    constructor() {
+        super().loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png');
+        this.loadImages(this.chicken_walk_images);
+        this.y = 340;
+        this.x = 600 + Math.random() * 1000;
+        this.height = 80;
+        this.width = 80;
+        this.speed = 0.25 + Math.random() * 0.6;
+        this.energy = 20;
+        this.gameStarted = false;
+        this.animateChicken();
+    }
+
+    /** * Animates the chicken by moving it left and cycling through walk images.
+     * Sets up interval for continuous walking animation at 10 FPS.
+     */
+    animateChicken() {
+        this.moveLeft();
+        this.walkInterval = setInterval(() => {
+            if (this.gameStarted &amp;&amp; !this.isDead()) {
+                this.playAnimation(this.chicken_walk_images);
+            }
+        }, 1000 / 10);
+    }
+
+    /** * Starts the movement of the chicken when the game begins.
+     * Enables the chicken's animation and movement.
+     */
+    startMovement() {
+        this.gameStarted = true;
+    }
+
+    /** * Reduces the chicken's energy when hit and triggers death animation if energy depletes.
+     * @param {number} [damage=20] - The amount of damage to inflict on the chicken
+     */
+    hit(damage = 20) {
+        this.energy -= damage;
+        if (this.energy &lt;= 0) {
+            this.energy = 0;
+            this.speed = 0;
+            this.chickenDeathAnimation();
+        }
+    }
+
+    /** * Checks if the chicken is dead.
+     * @returns {boolean} True if the chicken's energy is zero or below, false otherwise
+     */
+    isDead() {
+        return this.energy &lt;= 0;
+    }
+
+    /** * Plays the death animation for the chicken.
+     * Clears the animation interval and loads the dead chicken image.
+     */
+    chickenDeathAnimation() {
+        clearInterval(this.walkInterval);
+        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+    }
+
+    /** * Returns the hitbox margins for collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels (10)
+     * @returns {number} returns.bottom - Bottom margin in pixels (0)
+     * @returns {number} returns.left - Left margin in pixels (18)
+     * @returns {number} returns.right - Right margin in pixels (18)
+     */
+    getHitboxMargins() {
+        return { 
+            top: 10,
+            bottom: 0,   
+            left: 18,    
+            right: 18    
+        };
+    }
+}
+
+/** * Represents a small chicken enemy in the game, extending the Chicken class.
+ * Smaller version of the regular chicken with adjusted size and hitbox.
+ * @extends {Chicken} 
+ */
+class SmallChicken extends Chicken {
+    
+    /** * Creates a new SmallChicken instance.
+     * Inherits from Chicken but with smaller dimensions and different sprites.
+     */
+    constructor() {
+        super();
+        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png');
+        this.loadImages(this.small_chicken_walk_images);
+        this.y = 365;
+        this.height = 55;
+        this.width = 55;
+    }
+
+    /** * Animates the small chicken by moving it left and cycling through walk images.
+     * Overrides parent method to use small chicken specific images.
+     */
+    animateChicken() {
+        this.moveLeft();
+        this.walkInterval = setInterval(() => {
+            if (this.gameStarted &amp;&amp; !this.isDead()) {
+                this.playAnimation(this.small_chicken_walk_images);
+            }
+        }, 1000 / 10);
+    }
+
+    /** * Plays the death animation for the small chicken.
+     * Clears the animation interval and loads the small dead chicken image.
+     */
+    chickenDeathAnimation() {
+        clearInterval(this.walkInterval);
+        this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
+    }
+
+    /** * Returns the hitbox margins for collision detection.
+     * Adjusted margins for the smaller chicken size.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     * @returns {number} returns.top - Top margin in pixels (8)
+     * @returns {number} returns.bottom - Bottom margin in pixels (0)
+     * @returns {number} returns.left - Left margin in pixels (12)
+     * @returns {number} returns.right - Right margin in pixels (12)
+     */
+    getHitboxMargins() {
+        return { 
+            top: 8,
+            bottom: 0,   
+            left: 12,    
+            right: 12    
+        };
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="BossHealthBar.html">BossHealthBar</a></li><li><a href="BottleBar.html">BottleBar</a></li><li><a href="Buttons.html">Buttons</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Collectibles.html">Collectibles</a></li><li><a href="CollisionManager.html">CollisionManager</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Endscreen.html">Endscreen</a></li><li><a href="HealthBar.html">HealthBar</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="SalsaBottle.html">SalsaBottle</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="Sounds.html">Sounds</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#CHARACTER_IMAGES">CHARACTER_IMAGES</a></li><li><a href="global.html#ENDBOSS_IMAGES">ENDBOSS_IMAGES</a></li><li><a href="global.html#buttons">buttons</a></li><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#closeDialog">closeDialog</a></li><li><a href="global.html#dialogContent">dialogContent</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#openDialog">openDialog</a></li><li><a href="global.html#removeEndscreen">removeEndscreen</a></li><li><a href="global.html#renderDialog">renderDialog</a></li><li><a href="global.html#resetCharacter">resetCharacter</a></li><li><a href="global.html#resetEnemyAnimation">resetEnemyAnimation</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#showEndscreen">showEndscreen</a></li><li><a href="global.html#sounds">sounds</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startOverlay">startOverlay</a></li><li><a href="global.html#stopPropagation">stopPropagation</a></li><li><a href="global.html#world">world</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Tue Dec 16 2025 14:37:50 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
