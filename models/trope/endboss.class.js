@@ -151,19 +151,35 @@ class Endboss extends MovableObject {
      */
     animateEndboss() {
         this.animationInterval = setInterval(() => {
-            this.checkCharacterCollision();
-            if (this.isDead() && !this.isDying) {
-                this.playDeathAnimation();
-            } else if (this.isAttacking) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_attack_images);
-            } else if (this.isHurting) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
-            } else if (this.isMoving) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
-            } else if (!this.isDead()) {
-                this.playAnimation(ENDBOSS_IMAGES.chicken_alert_images);
-            }
+            this.processEndbossFrame();
         }, 200);
+    }
+
+    /**
+     * Processes a single animation frame for the endboss.
+     * Checks collisions and determines which animation to play based on current state.
+     */
+    processEndbossFrame() {
+        this.checkCharacterCollision();
+        this.selectEndbossAnimation();
+    }
+
+    /**
+     * Selects and plays the appropriate animation based on the endboss's current state.
+     * Prioritizes death, attack, hurt, movement, and alert animations.
+     */
+    selectEndbossAnimation() {
+        if (this.isDead() && !this.isDying) {
+            this.playDeathAnimation();
+        } else if (this.isAttacking) {
+            this.playAnimation(ENDBOSS_IMAGES.chicken_attack_images);
+        } else if (this.isHurting) {
+            this.playAnimation(ENDBOSS_IMAGES.chicken_hurt_images);
+        } else if (this.isMoving) {
+            this.playAnimation(ENDBOSS_IMAGES.chicken_walk_images);
+        } else if (!this.isDead()) {
+            this.playAnimation(ENDBOSS_IMAGES.chicken_alert_images);
+        }
     }
 
     /** * Plays the death animation for the endboss.

@@ -1,4 +1,5 @@
-/** * Represents a chicken enemy in the game, extending the MovableObject class.
+/**
+ * Represents a chicken enemy in the game, extending the MovableObject class.
  * @extends {MovableObject} 
  */
 class Chicken extends MovableObject {
@@ -10,6 +11,8 @@ class Chicken extends MovableObject {
     gameStarted = false;
     /** @type {number} Interval ID for walk animation */
     walkInterval;
+    /** @type {boolean} Flag to prevent multiple death sounds */
+    deathSoundPlayed = false;
 
     /** @type {string[]} Image paths for chicken walking animation */
     chicken_walk_images = [
@@ -25,7 +28,8 @@ class Chicken extends MovableObject {
         'assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
 
-    /** * Creates a new Chicken instance.
+    /**
+     * Creates a new Chicken instance.
      * Initializes position, size, speed, and starts animation.
      */
     constructor() {
@@ -41,7 +45,8 @@ class Chicken extends MovableObject {
         this.animateChicken();
     }
 
-    /** * Animates the chicken by moving it left and cycling through walk images.
+    /**
+     * Animates the chicken by moving it left and cycling through walk images.
      * Sets up interval for continuous walking animation at 10 FPS.
      */
     animateChicken() {
@@ -53,14 +58,16 @@ class Chicken extends MovableObject {
         }, 1000 / 10);
     }
 
-    /** * Starts the movement of the chicken when the game begins.
+    /**
+     * Starts the movement of the chicken when the game begins.
      * Enables the chicken's animation and movement.
      */
     startMovement() {
         this.gameStarted = true;
     }
 
-    /** * Reduces the chicken's energy when hit and triggers death animation if energy depletes.
+    /**
+     * Reduces the chicken's energy when hit and triggers death animation if energy depletes.
      * @param {number} [damage=20] - The amount of damage to inflict on the chicken
      */
     hit(damage = 20) {
@@ -72,22 +79,37 @@ class Chicken extends MovableObject {
         }
     }
 
-    /** * Checks if the chicken is dead.
+    /**
+     * Checks if the chicken is dead.
      * @returns {boolean} True if the chicken's energy is zero or below, false otherwise
      */
     isDead() {
         return this.energy <= 0;
     }
 
-    /** * Plays the death animation for the chicken.
+    /**
+     * Plays the death animation for the chicken.
      * Clears the animation interval and loads the dead chicken image.
      */
     chickenDeathAnimation() {
+        if (this.deathSoundPlayed) return;
         clearInterval(this.walkInterval);
         this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+        this.playChickenDeadSound();
     }
 
-    /** * Returns the hitbox margins for collision detection.
+    /**
+     * Plays the chicken dead sound effect.
+     */
+    playChickenDeadSound() {
+        if (!this.deathSoundPlayed && world && world.sound) {
+            this.deathSoundPlayed = true;
+            world.sound.playSound(world.sound.chickenDeadSound);
+        }
+    }
+
+    /**
+     * Returns the hitbox margins for collision detection.
      * @returns {Object} An object containing the top, bottom, left, and right margins
      * @returns {number} returns.top - Top margin in pixels (10)
      * @returns {number} returns.bottom - Bottom margin in pixels (0)
@@ -104,13 +126,15 @@ class Chicken extends MovableObject {
     }
 }
 
-/** * Represents a small chicken enemy in the game, extending the Chicken class.
+/** 
+ * Represents a small chicken enemy in the game, extending the Chicken class.
  * Smaller version of the regular chicken with adjusted size and hitbox.
  * @extends {Chicken} 
  */
 class SmallChicken extends Chicken {
     
-    /** * Creates a new SmallChicken instance.
+    /** 
+     * Creates a new SmallChicken instance.
      * Inherits from Chicken but with smaller dimensions and different sprites.
      */
     constructor() {
@@ -122,7 +146,8 @@ class SmallChicken extends Chicken {
         this.width = 55;
     }
 
-    /** * Animates the small chicken by moving it left and cycling through walk images.
+    /**
+     * Animates the small chicken by moving it left and cycling through walk images.
      * Overrides parent method to use small chicken specific images.
      */
     animateChicken() {
@@ -134,15 +159,19 @@ class SmallChicken extends Chicken {
         }, 1000 / 10);
     }
 
-    /** * Plays the death animation for the small chicken.
+    /**
+     * Plays the death animation for the small chicken.
      * Clears the animation interval and loads the small dead chicken image.
      */
     chickenDeathAnimation() {
+        if (this.deathSoundPlayed) return;
         clearInterval(this.walkInterval);
         this.loadImage('assets/img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png');
+        this.playChickenDeadSound();
     }
 
-    /** * Returns the hitbox margins for collision detection.
+    /**
+     * Returns the hitbox margins for collision detection.
      * Adjusted margins for the smaller chicken size.
      * @returns {Object} An object containing the top, bottom, left, and right margins
      * @returns {number} returns.top - Top margin in pixels (8)

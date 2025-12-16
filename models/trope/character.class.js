@@ -135,16 +135,42 @@ class Character extends MovableObject {
     playDeathAnimation() {
         let deathAnimationIndex = 0;
         let deathAnimationInterval = setInterval(() => {
-            if (deathAnimationIndex < CHARACTER_IMAGES.images_dead.length) {
-                let path = CHARACTER_IMAGES.images_dead[deathAnimationIndex];
-                this.img = this.imageCache[path];
-                deathAnimationIndex++;
-            } else {
-                clearInterval(deathAnimationInterval);
-                clearInterval(this.animationInterval);
-                clearInterval(this.movementInterval);
-            }
+            this.processDeathFrame(deathAnimationIndex, deathAnimationInterval);
+            deathAnimationIndex++;
         }, 150);
+    }
+
+    /**
+     * Processes a single frame of the death animation.
+     * Updates the character image or cleans up when animation is complete.
+     * @param {number} frameIndex - The current frame index in the death animation
+     * @param {number} intervalId - The interval ID for the death animation
+     */
+    processDeathFrame(frameIndex, intervalId) {
+        if (frameIndex < CHARACTER_IMAGES.images_dead.length) {
+            this.updateDeathImage(frameIndex);
+        } else {
+            this.cleanupCharacterAnimations(intervalId);
+        }
+    }
+
+    /**
+     * Updates the character image to the current death animation frame.
+     * @param {number} frameIndex - The frame index to display
+     */
+    updateDeathImage(frameIndex) {
+        let path = CHARACTER_IMAGES.images_dead[frameIndex];
+        this.img = this.imageCache[path];
+    }
+
+    /**
+     * Cleans up all character animation intervals when death animation is complete.
+     * @param {number} deathIntervalId - The death animation interval to clear
+     */
+    cleanupCharacterAnimations(deathIntervalId) {
+        clearInterval(deathIntervalId);
+        clearInterval(this.animationInterval);
+        clearInterval(this.movementInterval);
     }
 
     /**

@@ -101,8 +101,10 @@ class Buttons extends DrawableObject {
         if (!this.gameRunning) {
             this.gameRunning = true;
             this.startButton.innerHTML = 'RESTART';
+            this.disableResetButton();
             startGame(); 
         } else {
+            this.disableResetButton();
             restartGame();
         }
     }
@@ -134,5 +136,21 @@ class Buttons extends DrawableObject {
      */
     toggleInfo() {
         openDialog();
+    }
+
+    /**
+     * Disables the reset button and applies disabled styling.
+     */
+    disableResetButton() {
+        this.startButton.disabled = true;
+        this.startButton.classList.add('reset-btn');
+    }
+
+    /**
+     * Enables the reset button and removes disabled styling.
+     */
+    enableResetButton() {
+        this.startButton.disabled = false;
+        this.startButton.classList.remove('reset-btn');
     }
 }

@@ -1,4 +1,5 @@
-/** * World class that manages the game world, including characters, enemies, objects, and game logic.
+/**
+ * World class that manages the game world, including characters, enemies, objects, and game logic.
  * Handles rendering, collision detection, game state, and audio management.
  */
 class World {
@@ -45,16 +46,34 @@ class World {
     /** @type {CollisionManager} Manager for handling all collision detection */
     collisionManager;
 
-    /** * Creates a new World instance and initializes the game.
+    /**
+     * Creates a new World instance and initializes the game.
      * @param {HTMLCanvasElement} canvas - The canvas element for rendering
      * @param {Keyboard} keyboard - The keyboard input handler
      * @param {Buttons} [existingButtons=null] - Optional existing button instance
      */
     constructor(canvas, keyboard, existingButtons = null) {
+        this.initializeCanvas(canvas, keyboard, existingButtons);
+        this.initializeGame();
+    }
+
+    /**
+     * Initializes canvas, keyboard and button references.
+     * @param {HTMLCanvasElement} canvas - The canvas element for rendering
+     * @param {Keyboard} keyboard - The keyboard input handler
+     * @param {Buttons} [existingButtons=null] - Optional existing button instance
+     */
+    initializeCanvas(canvas, keyboard, existingButtons = null) {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.ctx = canvas.getContext('2d');
         this.buttons = existingButtons;
+    }
+
+    /**
+     * Initializes game components and starts the game loop.
+     */
+    initializeGame() {
         this.draw();
         this.setWorld();
         this.run();
@@ -64,7 +83,8 @@ class World {
         this.collisionManager = new CollisionManager(this);
     }
 
-    /** * Sets world reference for character and enemies to enable cross-object communication.
+    /**
+     * Sets world reference for character and enemies to enable cross-object communication.
      */
     setWorld() {
         this.character.world = this;
@@ -73,7 +93,8 @@ class World {
         });
     }
 
-    /** * Starts the main game loop with collision detection, object handling, and game state checks.
+    /**
+     * Starts the main game loop with collision detection, object handling, and game state checks.
      * Runs at 25 FPS.
      */
     run() {
@@ -85,7 +106,8 @@ class World {
         }, 1000 / 25);
     }
 
-    /** * Main drawing function that renders all game elements using requestAnimationFrame.
+    /**
+     * Main drawing function that renders all game elements using requestAnimationFrame.
      */
     draw() {
         this.drawBackground();
@@ -97,7 +119,8 @@ class World {
         });
     }
 
-    /** * Draws an array of objects to the canvas.
+    /**
+     * Draws an array of objects to the canvas.
      * @param {MovableObject[]} objects - Array of objects to render
      */
     addObjectsToMap(objects) {
@@ -106,7 +129,8 @@ class World {
         });
     }
 
-    /** * Draws a single movable object to the canvas with proper image flipping if needed.
+    /**
+     * Draws a single movable object to the canvas with proper image flipping if needed.
      * @param {MovableObject} mo - The movable object to render
      */
     addToMap(mo) {
@@ -122,7 +146,8 @@ class World {
         }
     }
 
-    /** * Renders the background elements (background objects and clouds) with camera translation.
+    /**
+     * Renders the background elements (background objects and clouds) with camera translation.
      */
     drawBackground() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -132,7 +157,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
-    /** * Renders all moving game elements (character, enemies, objects) with camera translation.
+    /**
+     * Renders all moving game elements (character, enemies, objects) with camera translation.
      */
     drawMovingElements() {
         this.ctx.translate(this.camera_x, 0);
@@ -144,7 +170,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);
     }
 
-    /** * Renders all UI status bars (health, bottles, coins, boss health).
+    /**
+     * Renders all UI status bars (health, bottles, coins, boss health).
      */
     drawStatusBars() {
         this.addToMap(this.statusBarHealth);
@@ -153,7 +180,8 @@ class World {
         this.drawBossHealthBar();
     }
 
-    /** * Renders the boss health bar when the endboss is active and damaged.
+    /**
+     * Renders the boss health bar when the endboss is active and damaged.
      */
     drawBossHealthBar() {
         let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -166,14 +194,16 @@ class World {
         }
     }
 
-    /** * Renders all collectible items (coins and bottles) to the canvas.
+    /**
+     * Renders all collectible items (coins and bottles) to the canvas.
      */
     drawCollectibles() {
         this.addObjectsToMap(this.coins);
         this.addObjectsToMap(this.bottles);
     }
 
-    /** * Creates and initializes coin collectibles at random positions across the level.
+    /**
+     * Creates and initializes coin collectibles at random positions across the level.
      * Distributes coins evenly across the level width with random position variations.
      */
     createCoins() {
@@ -187,7 +217,8 @@ class World {
         }
     }
 
-    /** * Creates and initializes bottle collectibles at random positions across the level.
+    /**
+     * Creates and initializes bottle collectibles at random positions across the level.
      * Distributes bottles evenly across the level width with random position variations.
      */
     createBottles() {
@@ -200,7 +231,8 @@ class World {
         }
     }
 
-    /** * Starts movement for all enemies in the level that have a startMovement method.
+    /**
+     * Starts movement for all enemies in the level that have a startMovement method.
      */
     startEnemyMovement() {
         this.level.enemies.forEach(enemy => {
@@ -210,7 +242,8 @@ class World {
         });
     }
 
-    /** * Checks win/loss conditions and triggers game end if conditions are met.
+    /**
+     * Checks win/loss conditions and triggers game end if conditions are met.
      */
     checkGameEnd() {
         if (this.character.isDead()) {
@@ -224,7 +257,8 @@ class World {
         }
     }
 
-    /** * Ends the game with win/loss state and shows appropriate screen and sounds.
+    /**
+     * Ends the game with win/loss state and shows appropriate screen and sounds.
      * @param {boolean} isWin - Whether the game was won (true) or lost (false)
      */
     endGame(isWin) {
@@ -242,7 +276,8 @@ class World {
         }, 1000);
     }
 
-    /** * Stops all character-related sound effects (walking, jumping, hurt sounds).
+    /**
+     * Stops all character-related sound effects (walking, jumping, hurt sounds).
      */
     stopAllCharacterSounds() {
         this.sound.chickenBackgroundSound.pause();
@@ -255,23 +290,40 @@ class World {
         this.sound.snoringSound.currentTime = 0;
     }
 
-    /** * Handles bottle throwing mechanics and input detection.
+    /**
+     * Handles bottle throwing mechanics and input detection.
      */
     checkThrowObjects() {
+        this.handleBottleThrow();
+        this.resetBottleThrown();
+        this.bottleEnemyCollision();
+    }
+
+    /**
+     * Creates and throws a new bottle if conditions are met.
+     */
+    handleBottleThrow() {
         if (this.keyboard.D && !this.bottleThrown && this.collectedBottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 80);
+            bottle.world = this;
             this.throwableObjects.push(bottle);
             this.collectedBottles -= 1;
             this.statusBarBottles.setBottles(this.collectedBottles);
             this.bottleThrown = true;
         }
+    }
+
+    /**
+     * Resets bottle throw flag when D key is released.
+     */
+    resetBottleThrown() {
         if (!this.keyboard.D) {
             this.bottleThrown = false;
         }
-        this.bottleEnemyCollision();
     }
 
-    /** * Removes a bottle from the game when it's destroyed or expired.
+    /**
+     * Removes a bottle from the game when it's destroyed or expired.
      * @param {ThrowableObject} bottle - The bottle object to check for removal
      * @param {number} bottleIndex - The index of the bottle in the array
      */
@@ -281,7 +333,8 @@ class World {
         }
     }
 
-    /** * Handles collision detection between thrown bottles and enemies.
+    /**
+     * Handles collision detection between thrown bottles and enemies.
      */
     bottleEnemyCollision() {
         this.throwableObjects.forEach((bottle, bottleIndex) => {
@@ -298,7 +351,8 @@ class World {
         });
     }
 
-    /** * Flips an image horizontally for rendering (e.g., character facing left).
+    /**
+     * Flips an image horizontally for rendering (e.g., character facing left).
      * @param {MovableObject} mo - The moveable object to flip
      */
     flipImage(mo) {
@@ -308,7 +362,8 @@ class World {
         mo.x = mo.x * -1;
     }
 
-    /** * Restores the image to its original orientation after flipping.
+    /**
+     * Restores the image to its original orientation after flipping.
      * @param {MovableObject} mo - The moveable object to restore
      */
     flipImageBack(mo) {
@@ -316,23 +371,46 @@ class World {
         this.ctx.restore();
     }
 
-    /** * Checks if the character is dead (energy depleted).
+    /**
+     * Checks if the character is dead (energy depleted).
      * @returns {boolean} True if character has no energy left
      */
     isDead() {
         return this.character.energy <= 0;
     }
 
-    /** * Stops all running animation intervals to prevent memory leaks.
+    /**
+     * Stops all running animation intervals to prevent memory leaks.
      */
     stopAllAnimations() {
+        this.stopCharacterAnimations();
+        this.stopEnemyAnimations();
+        this.stopBottleAnimations();
+    }
+
+    /**
+     * Stops all character-related animation intervals and sounds.
+     */
+    stopCharacterAnimations() {
         clearInterval(this.character.animationInterval);
         clearInterval(this.character.movementInterval);
         this.character.stopIdleSounds();
         this.character.stopRunningSound();
+    }
+
+    /**
+     * Stops all enemy animation intervals in the level.
+     */
+    stopEnemyAnimations() {
         this.level.enemies.forEach(enemy => {
             this.stopEnemieAnimations(enemy);
         });
+    }
+
+    /**
+     * Stops all throwable bottle rotation intervals.
+     */
+    stopBottleAnimations() {
         this.throwableObjects.forEach(bottle => {
             if (bottle.rotationInterval) {
                 clearInterval(bottle.rotationInterval);
@@ -340,7 +418,8 @@ class World {
         });
     }
 
-    /** * Stops all animation intervals for a specific enemy to prevent memory leaks.
+    /**
+     * Stops all animation intervals for a specific enemy to prevent memory leaks.
      * @param {MovableObject} enemy - The enemy object whose animations to stop
      */
     stopEnemieAnimations(enemy) {
@@ -358,7 +437,8 @@ class World {
         enemy.speedY = 0;
     }
 
-    /** * Stops all remaining intervals when game ends.
+    /**
+     * Stops all remaining intervals when game ends.
      */
     stopAllIntervals() {
         if (this.enemyMovementInterval) {
@@ -366,7 +446,8 @@ class World {
         }
     }
 
-    /** * Draws hitboxes for all game objects for debugging purposes.
+    /**
+     * Draws hitboxes for all game objects for debugging purposes.
      */
     drawHitboxes() {
         this.ctx.strokeStyle = 'red';
@@ -375,7 +456,8 @@ class World {
         this.createEnemyHitboxes();
     }
 
-    /** * Creates and draws the hitbox for the main character.
+    /**
+     * Creates and draws the hitbox for the main character.
      */
     createCHaracterHitbox() {
         let charMargins = this.character.getHitboxMargins();
@@ -387,7 +469,8 @@ class World {
         );
     }
 
-    /** * Creates and draws hitboxes for all enemies in the level.
+    /**
+     * Creates and draws hitboxes for all enemies in the level.
      */
     createEnemyHitboxes() {
         this.level.enemies.forEach(enemy => {

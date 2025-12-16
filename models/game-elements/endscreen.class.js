@@ -33,6 +33,16 @@ class Endscreen {
             'assets/img_pollo_locco/img/win_lost/game_over_a.png';
         this.endImageStyle();
         document.body.appendChild(this.endImage);
+        this.enableResetButton();
+    }
+
+    /**
+     * Enables the reset button when the game ends.
+     */
+    enableResetButton() {
+        if (typeof buttons !== 'undefined' && buttons && buttons.enableResetButton) {
+            buttons.enableResetButton();
+        }
     }
 
     /**

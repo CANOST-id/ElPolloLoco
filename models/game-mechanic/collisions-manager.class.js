@@ -4,14 +4,16 @@
  */
 class CollisionManager {
 
-    /** * Creates a new CollisionManager instance.
+    /**
+     * Creates a new CollisionManager instance.
      * @param {World} world - Reference to the game world
      */
     constructor(world) {
         this.world = world;
     }
 
-    /** * Checks all collision types in the game.
+    /**
+     * Checks all collision types in the game.
      */
     checkAllCollisions() {
         this.checkCharacterEnemyCollisions();
@@ -19,7 +21,8 @@ class CollisionManager {
         this.checkBottleEnemyCollisions();
     }
 
-    /** * Checks collisions between the character and all enemies.
+    /**
+     * Checks collisions between the character and all enemies.
      */
     checkCharacterEnemyCollisions() {
         if (this.world.character.isDead()) return;
@@ -35,8 +38,9 @@ class CollisionManager {
         });
     }
 
-    /** * Determines if the character is jumping on an enemy for a jump attack.
-     * @param {MovableObject} enemy - The enemy object to check against
+    /**
+     * Determines if the character is jumping on an enemy for a jump attack.
+     * @param {Object} enemy - The enemy object to check against
      * @returns {boolean} True if character is performing a jump attack
      */
     isCharacterJumpingOnEnemy(enemy) {
@@ -47,16 +51,18 @@ class CollisionManager {
         return characterBottom + this.world.character.speedY < enemyTop;
     }
 
-    /** * Handles jump attack mechanics when character lands on enemy.
-     * @param {MovableObject} enemy - The enemy being attacked
+    /**
+     * Handles jump attack mechanics when character lands on enemy.
+     * @param {Object} enemy - The enemy being attacked
      */
     handleJumpAttack(enemy) {
         enemy.hit(20);
         this.world.character.speedY = -15;
     }
 
-    /** * Handles normal collision between character and enemy.
-     * @param {MovableObject} enemy - The enemy colliding with the character
+    /**
+     * Handles normal collision between character and enemy.
+     * @param {Object} enemy - The enemy colliding with the character
      */
     handleNormalCollision(enemy) {
         if (enemy instanceof Endboss) {
@@ -69,7 +75,8 @@ class CollisionManager {
         this.world.statusBarHealth.setPercentage(this.world.character.energy);
     }
 
-    /** * Applies bounce-back physics between character and endboss.
+    /**
+     * Applies bounce-back physics between character and endboss.
      * @param {Character} character - The character object
      * @param {Endboss} endboss - The endboss object
      */
@@ -83,14 +90,16 @@ class CollisionManager {
         endboss.x = Math.max(100, Math.min(endboss.x, this.world.level.level_end_x - endboss.width));
     }
 
-    /** * Checks collisions with all collectible items.
+    /**
+     * Checks collisions with all collectible items.
      */
     checkCollectibleCollisions() {
         this.checkCoinCollisions();
         this.checkBottleCollisions();
     }
 
-    /** * Handles collision detection and collection of coins.
+    /**
+     * Handles collision detection and collection of coins.
      */
     checkCoinCollisions() {
         this.world.coins.forEach((coin, index) => {
@@ -98,11 +107,13 @@ class CollisionManager {
                 this.world.coins.splice(index, 1);
                 this.world.collectedCoins += 1;
                 this.world.statusBarCoins.setPercentage((this.world.collectedCoins / 8) * 100);
+                this.world.sound.playSound(this.world.sound.coinCollectSound);
             }
         });
     }
 
-    /** * Handles collision detection and collection of bottles.
+    /**
+     * Handles collision detection and collection of bottles.
      */
     checkBottleCollisions() {
         this.world.bottles.forEach((bottle, index) => {
@@ -110,11 +121,13 @@ class CollisionManager {
                 this.world.bottles.splice(index, 1);
                 this.world.collectedBottles++;
                 this.world.statusBarBottles.setBottles(this.world.collectedBottles);
+                this.world.sound.playSound(this.world.sound.bottleCollectSound);
             }
         });
     }
 
-    /** * Handles collision detection between thrown bottles and enemies.
+    /**
+     * Handles collision detection between thrown bottles and enemies.
      */
     checkBottleEnemyCollisions() {
         this.world.throwableObjects.forEach((bottle, bottleIndex) => {
