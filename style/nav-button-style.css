@@ -64,3 +64,10 @@
 .info-btn:hover {
     background: rgba(156, 39, 176, 0.5);
 }
+
+/* disabled reset button */
+.reset-btn:disabled {
+    background: rgba(189, 189, 189, 0.3);
+    border-color: #BDBDBD;
+    cursor: not-allowed;
+}
