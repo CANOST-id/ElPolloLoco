@@ -23,6 +23,7 @@ class World {
     collectedCoins = 0;
     collectedBottles = 0;
     sound = new Sounds();
+    collisionManager;
 
     /**
      * Creates a new World instance and initializes the game.
@@ -41,7 +42,7 @@ class World {
         this.startEnemyMovement();
         this.createCoins();
         this.createBottles();
-        this.checkCollisionsCollectibles();
+        this.collisionManager = new CollisionManager(this);
     }
 
     /** * Sets world reference for character and enemies to enable cross-object communication.
@@ -59,9 +60,8 @@ class World {
     run() {
         this.gameInterval = setInterval(() => {
             if (!this.gameRunning) return;
-            this.checkCollisions();
+            this.collisionManager.checkAllCollisions();
             this.checkThrowObjects();
-            this.checkCollisionsCollectibles();
             this.checkGameEnd();
         }, 1000 / 25);
     }
@@ -236,68 +236,6 @@ class World {
         this.sound.snoringSound.currentTime = 0;
     }
 
-    /** * Checks collisions between the character and all enemies in the level.
-     */
-    checkCollisions() {
-        if (this.character.isDead()) return;
-        this.level.enemies.forEach(enemy => {
-            if (enemy.isDead() || !this.character.isColliding(enemy)) return;
-            if (this.isCharacterJumpingOnEnemy(enemy)) {
-                this.handleJumpAttack(enemy);
-            } else {
-                this.handleNormalCollision(enemy);
-            }
-        });
-    }
-
-    /** * Determines if the character is jumping on an enemy for a jump attack.
-     * @param {Object} enemy - The enemy object to check against
-     * @returns {boolean} True if character is performing a jump attack
-     */
-    isCharacterJumpingOnEnemy(enemy) {
-        let charMargins = this.character.getHitboxMargins();
-        let enemyMargins = enemy.getHitboxMargins();
-        let characterBottom = this.character.y + this.character.height - charMargins.bottom;
-        let enemyTop = enemy.y + enemyMargins.top;
-        return characterBottom + this.character.speedY < enemyTop;
-    }
-
-    /** * Handles jump attack mechanics when character lands on enemy.
-     * @param {Object} enemy - The enemy being attacked
-     */
-    handleJumpAttack(enemy) {
-        enemy.hit(20);
-        this.character.speedY = -15;
-    }
-
-    /** * Handles normal collision between character and enemy (damage to character).
-     * @param {Object} enemy - The enemy colliding with the character
-     */
-    handleNormalCollision(enemy) {
-        if (enemy instanceof Endboss) {
-            this.applyBounceBack(this.character, enemy);
-            enemy.performAttack();
-            this.character.hitBoss();
-        } else {
-            this.character.hit();
-        }
-        this.statusBarHealth.setPercentage(this.character.energy);
-    }
-
-    /** * Applies bounce-back physics between character and endboss during collision.
-     * @param {Character} character - The character object
-     * @param {Endboss} endboss - The endboss object
-     */
-    applyBounceBack(character, endboss) {
-        let characterCenter = character.x + (character.width / 2);
-        let endbossCenter = endboss.x + (endboss.width / 2);
-
-        if (characterCenter < endbossCenter) {
-            endboss.x += 100;
-        }
-        endboss.x = Math.max(100, Math.min(endboss.x, this.level.level_end_x - endboss.width));
-    }
-
     /** * Handles bottle throwing mechanics and input detection.
      */
     checkThrowObjects() {
@@ -314,6 +252,16 @@ class World {
         this.bottleEnemyCollision();
     }
 
+    /** * Removes a bottle from the game when it's destroyed or expired.
+     * @param {ThrowableObject} bottle - The bottle object to check for removal
+     * @param {number} bottleIndex - The index of the bottle in the array
+     */
+    spliceBottle(bottle, bottleIndex) {
+        if (bottle.energy <= 0) {
+            this.throwableObjects.splice(bottleIndex, 1);
+        }
+    }
+
     /** * Handles collision detection between thrown bottles and enemies.
      */
     bottleEnemyCollision() {
@@ -328,47 +276,6 @@ class World {
                 }
             });
             this.spliceBottle(bottle, bottleIndex);
-        });
-    }
-
-    /** * Removes a bottle from the game when it's destroyed or expired.
-     * @param {ThrowableObject} bottle - The bottle object to check for removal
-     * @param {number} bottleIndex - The index of the bottle in the array
-     */
-    spliceBottle(bottle, bottleIndex) {
-        if (bottle.energy <= 0) {
-            this.throwableObjects.splice(bottleIndex, 1);
-        }
-    }
-
-    /** * Checks collisions with all collectible items (coins and bottles).
-     */
-    checkCollisionsCollectibles() {
-        this.checkCoinCollisions();
-        this.checkBottleCollisions();
-    }
-
-    /** * Handles collision detection and collection of coins by the character.
-     */
-    checkCoinCollisions() {
-        this.coins.forEach((coin, index) => {
-            if (this.character.isColliding(coin)) {
-                this.coins.splice(index, 1);
-                this.collectedCoins += 1;
-                this.statusBarCoins.setPercentage((this.collectedCoins / 8) * 100);
-            }
-        });
-    }
-
-    /** * Handles collision detection and collection of bottles by the character.
-     */
-    checkBottleCollisions() {
-        this.bottles.forEach((bottle, index) => {
-            if (this.character.isColliding(bottle)) {
-                this.bottles.splice(index, 1);
-                this.collectedBottles++;
-                this.statusBarBottles.setBottles(this.collectedBottles);
-            }
         });
     }
 
