@@ -97,8 +97,7 @@ class Character extends MovableObject {
     moveInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead()) {
-                let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) ||
-                    (this.world.keyboard.LEFT && this.x > 70);
+                let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) || (this.world.keyboard.LEFT && this.x > 70);
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     if (this.canMoveRight()) {
                         this.moveRight();
@@ -107,11 +106,9 @@ class Character extends MovableObject {
                 if (this.world.keyboard.LEFT && this.x > 70) {
                     if (this.canMoveLeft()) {
                         this.moveCharacterLeft();
-                    }
-                }
+                    }}
                 this.handleRunningSound(isWalking);
-            }
-        }, 1000 / 60);
+            }}, 1000 / 60);
     }
 
     /**

@@ -189,7 +189,6 @@ class Endboss extends MovableObject {
     playDeathAnimation() {
         this.stopMovement();
         clearInterval(this.animationInterval);
-
         let deathAnimationIndex = 0;
         let deathInterval = setInterval(() => {
             if (deathAnimationIndex < ENDBOSS_IMAGES.chicken_dead_images.length) {
@@ -198,8 +197,7 @@ class Endboss extends MovableObject {
                 deathAnimationIndex++;
             } else {
                 clearInterval(deathInterval);
-            }
-        }, 200);
+            }}, 200);
         return this.isDying = true;
     }
 

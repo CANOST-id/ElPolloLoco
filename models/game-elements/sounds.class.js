@@ -71,7 +71,11 @@ class Sounds {
     setupSoundSettings() {
         this.setupOriginalVolumes();
         this.soundState();
-        this.gameSound.loop = true;
+ 
+    }
+
+    setupSoundLoops() {
+       this.gameSound.loop = true;
         this.chickenBackgroundSound.loop = true;
         this.runingSound.loop = true;
         this.snoringSound.loop = true;
@@ -80,7 +84,7 @@ class Sounds {
         this.coinCollectSound.loop = false;
         this.chickenDeadSound.loop = false;
     }
-
+    
     /** 
      * Initializes the original volume levels for each sound.
      */
