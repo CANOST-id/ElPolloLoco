@@ -12,6 +12,12 @@ body {
     background-position: center;
 }
 
+.max-content {
+    width: 100%;
+    max-width: 1440px;
+    height: auto;
+}
+
 /* header style */
 header {
     width: 100%;
