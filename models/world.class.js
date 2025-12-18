@@ -45,6 +45,8 @@ class World {
     sound = new Sounds();
     /** @type {CollisionManager} Manager for handling all collision detection */
     collisionManager;
+    /** @type {DrawingManager} Manager for all rendering operations */
+    drawingManager;
 
     /**
      * Creates a new World instance and initializes the game.
@@ -74,7 +76,8 @@ class World {
      * Initializes game components and starts the game loop.
      */
     initializeGame() {
-        this.draw();
+        this.drawingManager = new DrawingManager(this);
+        this.drawingManager.draw();
         this.setWorld();
         this.run();
         this.startEnemyMovement();
@@ -98,108 +101,16 @@ class World {
      * Runs at 25 FPS.
      */
     run() {
+        this.collisionInterval = setInterval(() => {
+            if (!this.gameEnded) {
+                this.collisionManager.checkAllCollisions();
+            }
+        }, 1000 / 60);
         this.gameInterval = setInterval(() => {
             if (!this.gameRunning) return;
-            this.collisionManager.checkAllCollisions();
             this.checkThrowObjects();
             this.checkGameEnd();
         }, 1000 / 25);
-    }
-
-    /**
-     * Main drawing function that renders all game elements using requestAnimationFrame.
-     */
-    draw() {
-        this.drawBackground();
-        this.drawStatusBars();
-        this.drawMovingElements();
-        let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
-    }
-
-    /**
-     * Draws an array of objects to the canvas.
-     * @param {MovableObject[]} objects - Array of objects to render
-     */
-    addObjectsToMap(objects) {
-        objects.forEach(o => {
-            this.addToMap(o);
-        });
-    }
-
-    /**
-     * Draws a single movable object to the canvas with proper image flipping if needed.
-     * @param {MovableObject} mo - The movable object to render
-     */
-    addToMap(mo) {
-        if (!mo.img || !mo.img.complete || mo.img.naturalWidth === 0) {
-            return;
-        }
-        if (mo.otherDirection) {
-            this.flipImage(mo);
-        }
-        mo.draw(this.ctx);
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-        }
-    }
-
-    /**
-     * Renders the background elements (background objects and clouds) with camera translation.
-     */
-    drawBackground() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
-        this.ctx.translate(-this.camera_x, 0);
-    }
-
-    /**
-     * Renders all moving game elements (character, enemies, objects) with camera translation.
-     */
-    drawMovingElements() {
-        this.ctx.translate(this.camera_x, 0);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.throwableObjects);
-        this.addObjectsToMap(this.coins);
-        this.addObjectsToMap(this.bottles);
-        this.ctx.translate(-this.camera_x, 0);
-    }
-
-    /**
-     * Renders all UI status bars (health, bottles, coins, boss health).
-     */
-    drawStatusBars() {
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarBottles);
-        this.addToMap(this.statusBarCoins);
-        this.drawBossHealthBar();
-    }
-
-    /**
-     * Renders the boss health bar when the endboss is active and damaged.
-     */
-    drawBossHealthBar() {
-        let endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
-        if (endboss && endboss.energy < 100) {
-            this.statusBarBossHealth.setPosition(
-                endboss.x + this.camera_x + 150,
-                endboss.y - 20
-            );
-            this.addToMap(this.statusBarBossHealth);
-        }
-    }
-
-    /**
-     * Renders all collectible items (coins and bottles) to the canvas.
-     */
-    drawCollectibles() {
-        this.addObjectsToMap(this.coins);
-        this.addObjectsToMap(this.bottles);
     }
 
     /**
@@ -352,26 +263,6 @@ class World {
     }
 
     /**
-     * Flips an image horizontally for rendering (e.g., character facing left).
-     * @param {MovableObject} mo - The moveable object to flip
-     */
-    flipImage(mo) {
-        this.ctx.save();
-        this.ctx.translate(mo.width, 0);
-        this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
-    }
-
-    /**
-     * Restores the image to its original orientation after flipping.
-     * @param {MovableObject} mo - The moveable object to restore
-     */
-    flipImageBack(mo) {
-        mo.x = mo.x * -1;
-        this.ctx.restore();
-    }
-
-    /**
      * Checks if the character is dead (energy depleted).
      * @returns {boolean} True if character has no energy left
      */
@@ -435,52 +326,5 @@ class World {
         enemy.gameStarted = false;
         enemy.speed = 0;
         enemy.speedY = 0;
-    }
-
-    /**
-     * Stops all remaining intervals when game ends.
-     */
-    stopAllIntervals() {
-        if (this.enemyMovementInterval) {
-            clearInterval(this.enemyMovementInterval);
-        }
-    }
-
-    /**
-     * Draws hitboxes for all game objects for debugging purposes.
-     */
-    drawHitboxes() {
-        this.ctx.strokeStyle = 'red';
-        this.ctx.lineWidth = 2;
-        this.createCHaracterHitbox();
-        this.createEnemyHitboxes();
-    }
-
-    /**
-     * Creates and draws the hitbox for the main character.
-     */
-    createCHaracterHitbox() {
-        let charMargins = this.character.getHitboxMargins();
-        this.ctx.strokeRect(
-            this.character.x + charMargins.left,
-            this.character.y + charMargins.top,
-            this.character.width - charMargins.left - charMargins.right,
-            this.character.height - charMargins.top - charMargins.bottom
-        );
-    }
-
-    /**
-     * Creates and draws hitboxes for all enemies in the level.
-     */
-    createEnemyHitboxes() {
-        this.level.enemies.forEach(enemy => {
-            let enemyMargins = enemy.getHitboxMargins();
-            this.ctx.strokeRect(
-                enemy.x + enemyMargins.left,
-                enemy.y + enemyMargins.top,
-                enemy.width - enemyMargins.left - enemyMargins.right,
-                enemy.height - enemyMargins.top - enemyMargins.bottom
-            );
-        });
     }
 }
