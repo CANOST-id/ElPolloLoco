@@ -3,49 +3,27 @@
  * Handles rendering, collision detection, game state, and audio management.
  */
 class World {
-    /** @type {Character} The main playable character */
     character = new Character();
-    /** @type {Level} The current game level */
     level = level1;
-    /** @type {HTMLCanvasElement} The canvas element for rendering */
     canvas;
-    /** @type {CanvasRenderingContext2D} The 2D rendering context */
     ctx;
-    /** @type {Keyboard} The keyboard input handler */
     keyboard;
-    /** @type {number} Camera horizontal offset for scrolling */
     camera_x = 0;
-    /** @type {HealthBar} Status bar displaying character health */
     statusBarHealth = new HealthBar();
-    /** @type {BottleBar} Status bar displaying collected bottles */
     statusBarBottles = new BottleBar();
-    /** @type {CoinBar} Status bar displaying collected coins */
     statusBarCoins = new CoinBar();
-    /** @type {BossHealthBar} Status bar displaying boss health */
     statusBarBossHealth = new BossHealthBar();
-    /** @type {Coin[]} Array of coin collectibles in the world */
     coins = [];
-    /** @type {SalsaBottle[]} Array of bottle collectibles in the world */
     bottles = [];
-    /** @type {ThrowableObject[]} Array of thrown bottle objects */
     throwableObjects = [];
-    /** @type {boolean} Flag preventing multiple bottle throws */
     bottleThrown = false;
-    /** @type {boolean} Flag indicating if the game is currently running */
     gameRunning = true;
-    /** @type {number} Interval ID for the main game loop */
     gameInterval;
-    /** @type {Buttons} Button manager for UI controls */
     buttons;
-    /** @type {number} Counter for collected coins */
     collectedCoins = 0;
-    /** @type {number} Counter for collected bottles */
     collectedBottles = 0;
-    /** @type {Sounds} Audio manager for game sounds */
     sound = new Sounds();
-    /** @type {CollisionManager} Manager for handling all collision detection */
     collisionManager;
-    /** @type {DrawingManager} Manager for all rendering operations */
     drawingManager;
 
     /**

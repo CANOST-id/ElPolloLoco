@@ -4,21 +4,13 @@
  * @extends {DrawableObject}
  */
 class Buttons extends DrawableObject {
-    /** @type {HTMLElement} Container element for all buttons */
     buttonContainer;
-    /** @type {HTMLButtonElement} Start/Restart game button */
     startButton;
-    /** @type {HTMLButtonElement} Home button to reload page */
     homeButton;
-    /** @type {HTMLButtonElement} Mute/Unmute sound button */
     muteButton;
-    /** @type {HTMLButtonElement} Information dialog button */
     infoButton;
-    /** @type {HTMLButtonElement} Fullscreen toggle button */
     fullscreenButton;
-    /** @type {boolean} Current mute state of the game */
     isMuted = false;
-    /** @type {boolean} Whether the game is currently running */
     gameRunning = false;
 
     /**

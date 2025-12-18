@@ -1,37 +1,21 @@
 /**  * Sounds class to manage game audio elements.
  */
 class Sounds {
-    /** @type {Object} Object storing original volume levels for each sound */
     originalVolumes = {};
-    /** @type {Audio} Background chicken sound */
     chickenBackgroundSound;
-    /** @type {Audio} Sound when endboss gets hurt */
     endbossHurtSound;
-    /** @type {Audio} Sound when character dies */
     deadCharacterSound;
-    /** @type {Audio} Main game background sound */
     gameSound;
-    /** @type {Audio} Sound when character gets hurt */
     hurtSound;
-    /** @type {Audio} Sound during idle state */
     idleSound;
-    /** @type {Audio} Sound when character jumps */
     jumpSound;
-    /** @type {Audio} Sound when game is over */
     gameOverSound;
-    /** @type {Audio} Sound when character is running */
     runingSound;
-    /** @type {Audio} Sound when player wins */
     winSound;
-    /** @type {Audio} Sound when character is snoring */
     snoringSound;
-    /** @type {Audio} Sound when collecting bottles */
     bottleCollectSound;
-    /** @type {Audio} Sound when bottles splash/break */
     bottleSplashSound;
-    /** @type {Audio} Sound when collecting coins */
     coinCollectSound;
-    /** @type {Audio} Sound when chickens die */
     chickenDeadSound;
 
     /**

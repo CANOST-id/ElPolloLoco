@@ -1,13 +1,9 @@
 /** * Endscreen class representing the end screen of the game.
  */
 class Endscreen {
-    /** @type {HTMLCanvasElement} The canvas element for drawing */
     canvas;
-    /** @type {CanvasRenderingContext2D} The 2D rendering context of the canvas */
     ctx;
-    /** @type {boolean} Indicates if the player has won or lost */
     isWin;
-    /** @type {HTMLImageElement} The image element for the endscreen */
     endImage;
 
     /**

@@ -4,13 +4,9 @@
  * @extends {DrawableObject}
  */
 class StatusBar extends DrawableObject {
-    /** @type {number} Current percentage value (0-100) */
     percentage = 100;
-    /** @type {number} Width of the status bar in pixels */
     width = 200;
-    /** @type {number} Height of the status bar in pixels */
     height = 60;
-    /** @type {string[]} Array of image paths for different status levels */
     images;
 
     /**
@@ -83,7 +79,6 @@ class HealthBar extends StatusBar {
  * @extends {StatusBar}
  */
 class CoinBar extends StatusBar {
-    /** @type {number} Current number of coins collected */
     coins = 0;
 
     /**
@@ -123,7 +118,6 @@ class CoinBar extends StatusBar {
  * @extends {StatusBar}
  */
 class BottleBar extends StatusBar {
-    /** @type {number} Current number of bottles collected */
     bottles = 0;
 
     /**
@@ -162,7 +156,6 @@ class BottleBar extends StatusBar {
  * @extends {StatusBar}
  */
 class BossHealthBar extends StatusBar {
-    /** @type {Endboss|null} Reference to the associated endboss object */
     endboss = null;
 
     /**

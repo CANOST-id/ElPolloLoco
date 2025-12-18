@@ -2,21 +2,13 @@
  * @extends {MovableObject}
   */
 class Endboss extends MovableObject {
-    /** @type {number} Index of the current image in animation sequences */
     currentImageIndex = 0;
-    /** @type {number} Health points of the endboss */
     energy = 100;
-    /** @type {boolean} Flag indicating if the endboss is currently hurt */
     isHurting = false;
-    /** @type {boolean} Flag indicating if the endboss is currently dying */
     isDying = false;
-    /** @type {boolean} Flag indicating if the endboss is currently attacking */
     isAttacking = false;
-    /** @type {number} Interval ID for animation loop */
     animationInterval;
-    /** @type {number} Interval ID for movement loop */
     movementInterval;
-    /** @type {boolean} Flag indicating if the endboss is currently moving */
     isMoving = false;
 
     /** * Creates a new Endboss instance.

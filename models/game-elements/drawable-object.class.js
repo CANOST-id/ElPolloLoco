@@ -1,21 +1,13 @@
 /** * DrawableObject class representing a basic drawable game element.
  */
 class DrawableObject {
-    /** @type {HTMLImageElement} The main image element */
     img;
-    /** @type {Object.<string, HTMLImageElement>} Cache for storing loaded images */
     imageCache = [];
-    /** @type {Object.<string, HTMLImageElement>} Cache for storing loaded chicken images */
     imageChickenCache = [];
-    /** @type {number} Index of the current image in animation sequences */
     currentImageIndex = 0;
-    /** @type {number} X-coordinate position of the object */
     x;
-    /** @type {number} Y-coordinate position of the object */
     y;
-    /** @type {number} Width of the object in pixels */
     width;
-    /** @type {number} Height of the object in pixels */
     height;
 
     /**

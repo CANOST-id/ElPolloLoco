@@ -4,30 +4,17 @@
  * @extends {MovableObject}
  */
 class Character extends MovableObject {
-
-    /** @type {number} Y-coordinate position of the character */
     y = 50;
-    /** @type {number} X-coordinate position of the character */
     x = 50;
-    /** @type {number} Height of the character in pixels */
     height = 250;
-    /** @type {number} Width of the character in pixels */
     width = 100;
-    /** @type {World} Reference to the game world object */
     world;
-    /** @type {number} Interval ID for animation loop */
     animationInterval;
-    /** @type {number} Interval ID for movement loop */
     movementInterval;
-    /** @type {boolean} Flag indicating if character is currently dying */
     isDying = false;
-    /** @type {number} Time counter for idle state in seconds */
     idleTime = 0;
-    /** @type {boolean} Flag indicating if idle sound is currently playing */
     isPlayingIdleSound = false;
-    /** @type {boolean} Flag indicating if snoring sound is currently playing */
     isPlayingSnoringSound = false;
-    /** @type {boolean} Flag indicating if running sound is currently playing */
     isPlayingRunningSound = false;
 
     /**

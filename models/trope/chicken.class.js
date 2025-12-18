@@ -3,15 +3,10 @@
  * @extends {MovableObject} 
  */
 class Chicken extends MovableObject {
-    /** @type {number} Movement speed of the chicken */
     speed = 0.25;
-    /** @type {number} Health points of the chicken */
     energy = 20;
-    /** @type {boolean} Flag indicating if the game has started */
     gameStarted = false;
-    /** @type {number} Interval ID for walk animation */
     walkInterval;
-    /** @type {boolean} Flag to prevent multiple death sounds */
     deathSoundPlayed = false;
 
     /** @type {string[]} Image paths for chicken walking animation */

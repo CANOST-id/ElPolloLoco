@@ -4,7 +4,6 @@
  * @extends {MovableObject}
  */
 class Cloud extends MovableObject {
-    /** @type {number} Movement speed of the cloud */
     speed = 0.15;
 
     /**

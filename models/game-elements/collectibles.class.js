@@ -27,9 +27,7 @@ class Collectibles extends MovableObject {
  */
 class Coin extends Collectibles {
 
-    /** @type {number} Original Y position for floating animation */
     originalY;
-    /** @type {number} Current floating offset value */
     floatOffset;
 
     /**
