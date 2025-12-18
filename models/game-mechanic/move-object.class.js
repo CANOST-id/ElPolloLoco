@@ -69,6 +69,7 @@ class MovableObject extends DrawableObject {
      */
     jump() {
         if (this.isAboveGround()) return;
+        this.currentImageIndex = 0;
         this.speedY = 18;
         this.world.sound.playSound(this.world.sound.jumpSound);
     }
