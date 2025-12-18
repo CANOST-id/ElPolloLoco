@@ -97,7 +97,8 @@ class Character extends MovableObject {
     moveInterval() {
         this.movementInterval = setInterval(() => {
             if (!this.isDead()) {
-                let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) || (this.world.keyboard.LEFT && this.x > 70);
+                let isWalking = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) ||
+                    (this.world.keyboard.LEFT && this.x > 70);
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     if (this.canMoveRight()) {
                         this.moveRight();
@@ -106,9 +107,11 @@ class Character extends MovableObject {
                 if (this.world.keyboard.LEFT && this.x > 70) {
                     if (this.canMoveLeft()) {
                         this.moveCharacterLeft();
-                    }}
+                    }
+                }
                 this.handleRunningSound(isWalking);
-            }}, 1000 / 60);
+            }
+        }, 1000 / 60);
     }
 
     /**
@@ -242,7 +245,8 @@ class Character extends MovableObject {
      * Handles walking animation, running sounds, and idle state transitions.
      */
     checkMovement() {
-        let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP || this.world.keyboard.D;
+        let throwMovement = this.world.keyboard.D && this.world.collectedBottles > 0;
+        let isMoving = this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.SPACE || this.world.keyboard.UP || throwMovement;
         let isWalking = this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
 
         if (isMoving) {
@@ -318,10 +322,10 @@ class Character extends MovableObject {
     canMoveRight() {
         let endboss = this.world.level.enemies.find(enemy => enemy instanceof Endboss);
         if (!endboss || endboss.isDead()) return true;
-        
+
         let charMargins = this.getHitboxMargins();
         let endbossMargins = endboss.getHitboxMargins();
-        
+
         let charRightEdge = this.x + this.width - charMargins.right + 7;
         let endbossLeftEdge = endboss.x + endbossMargins.left;
         return charRightEdge < endbossLeftEdge + 60 || this.x > endboss.x;
