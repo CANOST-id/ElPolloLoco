@@ -102,11 +102,11 @@ class CollisionManager {
      * Handles collision detection and collection of coins.
      */
     checkCoinCollisions() {
-        this.world.coins.forEach((coin, index) => {
+        this.world.coins.forEach((coin, coinIndex) => {
             if (this.world.character.isColliding(coin)) {
-                this.world.coins.splice(index, 1);
+                this.world.coins.splice(coinIndex, 1);
                 this.world.collectedCoins += 1;
-                this.world.statusBarCoins.setPercentage((this.world.collectedCoins / 8) * 100);
+                this.world.statusBarCoins.setCoins(this.world.collectedCoins);
                 this.world.sound.playSound(this.world.sound.coinCollectSound);
             }
         });

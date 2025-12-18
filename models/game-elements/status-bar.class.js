@@ -43,11 +43,11 @@ class StatusBar extends DrawableObject {
      * @returns {number} The index of the image corresponding to the current percentage
      */
     resolveImageIndex() {
-        if (this.percentage >= 100) return 5;
-        if (this.percentage >= 80) return 4;
-        if (this.percentage >= 60) return 3;
-        if (this.percentage >= 40) return 2;
-        if (this.percentage >= 20) return 1;
+        if (this.percentage >= 80) return 5;
+        if (this.percentage >= 60) return 4;
+        if (this.percentage >= 40) return 3;
+        if (this.percentage >= 20) return 2;
+        if (this.percentage > 0) return 1;    
         return 0;
     }
 }
@@ -101,6 +101,19 @@ class CoinBar extends StatusBar {
             'assets/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
         ];
         super(images, x, y);
+        this.setCoins(0); // Start with 0 coins explicitly
+    }
+
+    /**
+     * Sets the number of coins and updates the coin bar percentage.
+     * Calculates percentage based on maximum of 8 coins.
+     * @param {number} coins - The current number of coins (0-8)
+     */
+    setCoins(coins) {
+        this.coins = coins;
+        // Calculate percentage: 0 coins = 0%, 8 coins = 100%
+        let percentage = (this.coins / 8) * 100;
+        this.setPercentage(percentage);
     }
 }
 
