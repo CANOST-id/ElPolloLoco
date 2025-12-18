@@ -72,6 +72,14 @@ class Coin extends Collectibles {
         this.floatOffset += 0.1;
         this.y = this.originalY + Math.sin(this.floatOffset) * 15;
     }
+
+    /**
+     * Returns more precise hitbox margins for coin collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     */
+    getHitboxMargins() {
+        return { top: 25, bottom: 25, left: 25, right: 25 };
+    }
 }
 
 /**
@@ -89,5 +97,13 @@ class SalsaBottle extends Collectibles {
     constructor(x, y) {
         super(x, y, 'assets/img_pollo_locco/img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.y = 335;
+    }
+
+    /**
+     * Returns more precise hitbox margins for bottle collision detection.
+     * @returns {Object} An object containing the top, bottom, left, and right margins
+     */
+    getHitboxMargins() {
+        return { top: 15, bottom: 5, left: 20, right: 20 };
     }
 }
