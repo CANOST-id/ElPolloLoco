@@ -36,13 +36,11 @@ header h1 {
 footer a {
     font-family: 'Special Elite', monospace;
     font-size: 32px;
-    color: #662900;
-    text-decoration: none;
+    color: #000000;
 }
 
 footer a:hover {
-    color: #000000;
-    text-decoration: underline;
+    color: #583909;
 }
 
 footer a:active {
