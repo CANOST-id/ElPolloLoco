@@ -192,7 +192,7 @@ dialog {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 15px;
+    gap: 60px;
     z-index: 10;
 }
 
@@ -227,14 +227,12 @@ footer {
 /* footer link style incl. hover and active states */
 footer a {
     font-family: 'Special Elite', monospace;
-    font-size: 24px;
-    color: #662900;
-    text-decoration: none;
+    font-size: 28px;
+    color: #000000;
 }
 
 footer a:hover {
-    color: #000000;
-    text-decoration: underline;
+    color: #583909;
 }
 
 footer a:active {
