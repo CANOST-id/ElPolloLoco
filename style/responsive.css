@@ -60,7 +60,7 @@
 /* height */
 @media (max-height: 830px) {
     .touch-buttons {
-        bottom: 60px;
+        bottom: 100px;
     }
 }
 
@@ -103,7 +103,7 @@
 
 @media (max-height: 650px) {
     .touch-buttons {
-        bottom: 20px;
+        bottom: 40px;
     }
 }
 
