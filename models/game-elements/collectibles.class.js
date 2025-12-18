@@ -104,6 +104,6 @@ class SalsaBottle extends Collectibles {
      * @returns {Object} An object containing the top, bottom, left, and right margins
      */
     getHitboxMargins() {
-        return { top: 15, bottom: 5, left: 20, right: 20 };
+        return { top: 15, bottom: 5, left: 40, right: 30 };
     }
 }
