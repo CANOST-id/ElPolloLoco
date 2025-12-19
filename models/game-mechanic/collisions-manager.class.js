@@ -57,7 +57,8 @@ class CollisionManager {
      */
     handleJumpAttack(enemy) {
         enemy.hit(20);
-        this.world.character.speedY = -15;
+        this.world.character.y = MovableObject.GROUND_LEVEL;
+        this.world.character.speedY = 0;
     }
 
     /**

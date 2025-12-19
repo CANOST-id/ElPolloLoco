@@ -5,6 +5,7 @@
  */
 class MovableObject extends DrawableObject {
 
+    static GROUND_LEVEL = 168;
     speed = 0.5;
     otherDirection = false;
     speedY = 0;
@@ -32,7 +33,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < 164;
+            return this.y < MovableObject.GROUND_LEVEL;
         }
     }
 

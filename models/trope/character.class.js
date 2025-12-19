@@ -4,7 +4,7 @@
  * @extends {MovableObject}
  */
 class Character extends MovableObject {
-    y = 50;
+    y = 168;
     x = 50;
     height = 250;
     width = 100;
@@ -343,7 +343,7 @@ class Character extends MovableObject {
     getHitboxMargins() {
         return {
             top: 110,
-            bottom: 20,
+            bottom: 0,
             left: 30,
             right: 30
         };
