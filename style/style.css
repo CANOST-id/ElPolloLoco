@@ -202,7 +202,7 @@ dialog {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
+    display: none;
     justify-content: space-between;
     z-index: 10;
 }
@@ -255,6 +255,10 @@ footer a:active {
 
 .d_none {
     display: none;
+}
+
+.d_block {
+    display: block;
 }
 
 /* fade in animation */

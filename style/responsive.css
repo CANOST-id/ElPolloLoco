@@ -1,5 +1,5 @@
 /* width */
-@media (min-width: 1369px) {
+@media (min-width: 1367px) {
     .touch-buttons {
         display: none;
     }
@@ -7,7 +7,7 @@
 
 @media (max-width: 895px) {
     header h1 {
-        font-size: 44Px;
+        font-size: 44px;
     }
 }
 
@@ -30,40 +30,13 @@
     }
 }
 
-@media (max-width: 580px) {
-
-    .rotate-device {
-        display: block;
-    }
-
-    canvas {
-        display: none;
-    }
-
-    .touch-buttons {
-        display: none;
-    }
-
-    .end-image {
-        display: none;
-    }
-
-    header nav {
-        display: none;
-    }
-
-    header h1 {
-        font-size: 32px;
+@media (max-width: 530px) {
+    .canvas-button-container {
+        flex-direction: column;
     }
 }
 
 /* height */
-@media (max-height: 830px) {
-    .touch-buttons {
-        bottom: 100px;
-    }
-}
-
 @media (max-height: 858px) {
     header h1 {
         font-size: 38px;
@@ -79,11 +52,6 @@
 }
 
 @media (max-height: 700px) {
-    .touch-btn {
-        width: 70px;
-        height: 50px;
-    }
-
     footer a {
         font-size: 14px;
     }
@@ -94,23 +62,12 @@
         font-size: 32px;
         margin: 8px 0;
     }
-
-    .touch-btn {
-        width: 60px;
-        height: 40px;
-    }
-}
-
-@media (max-height: 650px) {
-    .touch-buttons {
-        bottom: 40px;
-    }
 }
 
 @media (max-height: 610px) {
     canvas {
-        height: 60%;
-        width: auto;
+        height: 63%;
+        width: 60%;
     }
 }
 
@@ -147,5 +104,62 @@
         height: 80%;
         top: 50%;
         overflow: auto;
+    }
+}
+
+/* Desktop */
+@media (hover: hover) and (pointer: fine) {
+    .touch-buttons {
+        display: none;
+    }
+
+    .rotate-device {
+        display: none;
+    }
+}
+
+/* Mobile Portrait */
+@media (hover: none) and (pointer: coarse) and (orientation: portrait) {
+    .rotate-device {
+        display: flex;
+    }
+
+    canvas {
+        display: none;
+    }
+
+    .touch-buttons {
+        display: none;
+    }
+
+    .canvas-button-container {
+        display: none;
+    }
+
+    .end-image {
+        display: none;
+    }
+
+    header nav {
+        display: none;
+    }
+}
+
+/* Mobile Landscape */
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) {
+    .rotate-device {
+        display: none;
+    }
+
+    canvas {
+        display: block;
+    }
+
+    .touch-buttons {
+        display: flex;
+    }
+
+    .canvas-button-container {
+        display: flex;
     }
 }
